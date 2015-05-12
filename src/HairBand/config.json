@@ -1,0 +1,10 @@
+{
+  "AppSettings": {
+    "SiteTitle": "HairBand"
+  },
+  "Data": {
+    "DefaultConnection": {
+      "ConnectionString": "Server=(localdb)\\mssqllocaldb;Database=aspnet5-HairBand-b7aa4cb3-065c-4944-88fc-299cdf47f65c;Trusted_Connection=True;MultipleActiveResultSets=true"
+    }
+  }
+}
