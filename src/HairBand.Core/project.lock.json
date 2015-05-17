@@ -3,7 +3,7 @@
   "version": -9998,
   "projectFileDependencyGroups": {
     "": [
-      "YamlDotNet.Dynamic >= 3.2.3"
+      "CommonMark.NET >= 0.9.0"
     ],
     "DNX,Version=v4.5.1": [],
     "DNXCore,Version=v5.0": [
@@ -14,6 +14,58 @@
     ]
   },
   "libraries": {
+    "CommonMark.NET/0.9.0": {
+      "serviceable": false,
+      "sha": "9AmzU4LmMmq+h/mNDci8bLKzNglyfW7wB9gVNod8X2FxvYbyKStxa/iq2RrYRWZfY5ofnSZ26hiE+4tBk8CAWg==",
+      "frameworks": {
+        "DNX,Version=v4.5.1": {
+          "dependencies": {},
+          "frameworkAssemblies": [],
+          "runtimeAssemblies": [
+            "lib/net45/CommonMark.dll"
+          ],
+          "compileAssemblies": [
+            "lib/net45/CommonMark.dll"
+          ]
+        },
+        "DNXCore,Version=v5.0": {
+          "dependencies": {},
+          "frameworkAssemblies": [],
+          "runtimeAssemblies": [
+            "lib/aspnetcore50/CommonMark.dll"
+          ],
+          "compileAssemblies": [
+            "lib/aspnetcore50/CommonMark.dll"
+          ]
+        }
+      },
+      "files": [
+        "CommonMark.NET.0.9.0.nupkg",
+        "CommonMark.NET.0.9.0.nupkg.sha512",
+        "CommonMark.NET.nuspec",
+        "LICENSE.md",
+        "lib/aspnetcore50/CommonMark.dll",
+        "lib/aspnetcore50/CommonMark.pdb",
+        "lib/aspnetcore50/CommonMark.xml",
+        "lib/net20/CommonMark.dll",
+        "lib/net20/CommonMark.pdb",
+        "lib/net20/CommonMark.xml",
+        "lib/net35-client/CommonMark.dll",
+        "lib/net35-client/CommonMark.pdb",
+        "lib/net35-client/CommonMark.xml",
+        "lib/net40-client/CommonMark.dll",
+        "lib/net40-client/CommonMark.pdb",
+        "lib/net40-client/CommonMark.xml",
+        "lib/net45/CommonMark.dll",
+        "lib/net45/CommonMark.pdb",
+        "lib/net45/CommonMark.xml",
+        "lib/portable-net40+sl50+wp80+win+wpa81+MonoAndroid10+MonoTouch10/CommonMark.dll",
+        "lib/portable-net40+sl50+wp80+win+wpa81+MonoAndroid10+MonoTouch10/CommonMark.pdb",
+        "lib/portable-net40+sl50+wp80+win+wpa81+MonoAndroid10+MonoTouch10/CommonMark.xml",
+        "tools/cmark.exe",
+        "tools/cmark.exe.config"
+      ]
+    },
     "Microsoft.CSharp/4.0.0-beta-22816": {
       "serviceable": false,
       "sha": "FGnaYvmoVLd0QTnOyHfm+C79a9CGqQAoh76Ix9++a4SdeaAB8PgpB2Vi/Uc5jcp491QvPyPQjtXCuhRfqWvNkw==",
@@ -585,69 +637,6 @@
         "lib/contract/System.Threading.Tasks.dll",
         "lib/net45/System.Threading.Tasks.dll",
         "lib/portable-wpa81+wp80+win80+net45+aspnetcore50/System.Threading.Tasks.dll"
-      ]
-    },
-    "YamlDotNet/3.3.0": {
-      "serviceable": false,
-      "sha": "J13dQU7YmQuB518jI3jVIJb1HOpgjYj/xT2FEGb/S0/vIgjGXsVUvAOkMrilnyimRAHRS+92NpD7Pb6CIyOHJg==",
-      "frameworks": {
-        "DNX,Version=v4.5.1": {
-          "dependencies": {},
-          "frameworkAssemblies": [],
-          "runtimeAssemblies": [
-            "lib/net35/YamlDotNet.dll"
-          ],
-          "compileAssemblies": [
-            "lib/net35/YamlDotNet.dll"
-          ]
-        },
-        "DNXCore,Version=v5.0": {
-          "dependencies": {},
-          "frameworkAssemblies": [],
-          "runtimeAssemblies": [],
-          "compileAssemblies": []
-        }
-      },
-      "files": [
-        "YamlDotNet.3.3.0.nupkg",
-        "YamlDotNet.3.3.0.nupkg.sha512",
-        "YamlDotNet.nuspec",
-        "lib/net35/YamlDotNet.dll",
-        "lib/net35/YamlDotNet.pdb",
-        "lib/net35/YamlDotNet.xml"
-      ]
-    },
-    "YamlDotNet.Dynamic/3.2.3": {
-      "serviceable": false,
-      "sha": "BvqlofUiFsSpuY7zkpUFcSTx9CMVjiJLy/1gnna+XsrKb6vnLJjKPCKJe1WGPK99X8lqoupiKo/8A6RJmUgJaA==",
-      "frameworks": {
-        "DNX,Version=v4.5.1": {
-          "dependencies": {
-            "YamlDotNet": "3.3.0"
-          },
-          "frameworkAssemblies": [],
-          "runtimeAssemblies": [
-            "lib/net40/YamlDotNet.Dynamic.dll"
-          ],
-          "compileAssemblies": [
-            "lib/net40/YamlDotNet.Dynamic.dll"
-          ]
-        },
-        "DNXCore,Version=v5.0": {
-          "dependencies": {
-            "YamlDotNet": "3.3.0"
-          },
-          "frameworkAssemblies": [],
-          "runtimeAssemblies": [],
-          "compileAssemblies": []
-        }
-      },
-      "files": [
-        "YamlDotNet.Dynamic.3.2.3.nupkg",
-        "YamlDotNet.Dynamic.3.2.3.nupkg.sha512",
-        "YamlDotNet.Dynamic.nuspec",
-        "lib/net40/YamlDotNet.Dynamic.dll",
-        "lib/net40/YamlDotNet.Dynamic.pdb"
       ]
     }
   }

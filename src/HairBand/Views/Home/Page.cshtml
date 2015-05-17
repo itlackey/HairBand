@@ -1,0 +1,11 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    // ViewBag.Title = "Home Page";
+    ViewBag.Title = "Page";
+}
+<h1>Dynamic Page: @ViewBag.Page</h1>
+@ViewBag.PagePath
+
+@Html.Raw(ViewBag.Html)

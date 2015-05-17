@@ -124,6 +124,10 @@ namespace HairBand
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
+                        name: "Page", template: "{page}.html", defaults: new { controller = "Home", action = "Page" }
+                    );
+
+                routes.MapRoute(
                     name: "default",
                     template: "{controller}/{action}/{id?}",
                     defaults: new { controller = "Home", action = "Index" });

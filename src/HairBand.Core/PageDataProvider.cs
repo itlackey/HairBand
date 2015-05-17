@@ -7,15 +7,19 @@ namespace HairBand.Core
 {
     public class PageDataProvider
     {
-
-        public async Task<dynamic> GetPageData()
+        
+        public async Task<dynamic> GetPageData(string url)
         {
 
-            dynamic yaml = new YamlDotNet.Dynamic.DynamicYaml("");
+            //dynamic yaml = new YamlDotNet.Dynamic.DynamicYaml("");
 
-            var title = yaml.Title;
-          
-            return Task.FromResult(yaml);
+            //var title = yaml.Title;
+
+            //return Task.FromResult(yaml);
+
+            dynamic page = new { Title = "Hello World" };
+
+            return Task.FromResult(page);
 
 
         }
