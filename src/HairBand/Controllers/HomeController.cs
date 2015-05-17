@@ -8,42 +8,38 @@ using Microsoft.AspNet.Hosting;
 namespace HairBand.Controllers
 {
     public class HomeController : Controller
-    {
-        private IHostingEnvironment _host;
+    {        
+        private readonly PageDataProvider _provider;
 
-        public HomeController(IHostingEnvironment host)
+        public HomeController(PageDataProvider provider)
         {
-            this._host = host;
+            this._provider = provider;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+           
             return View();
         }
 
 
-        public IActionResult Page(string page)
+        public async Task<IActionResult> Page(string page)
         {
             ViewBag.Page = page;
 
-            var path = this._host.WebRootPath + "/app_data/" + page + ".md";
+            var model = await this._provider.GetPageData(page);
 
-            var md = System.IO.File.ReadAllText(path);
-
-            var html = CommonMark.CommonMarkConverter.Convert(md);
-
-            ViewBag.PagePath = path;
-
-            ViewBag.Html = html;
-
-            return View();
+            return View(model);
         }
 
-        public IActionResult About()
+        public async Task<IActionResult> About()
         {
+            var pages = await this._provider.GetPageNames();
+
+
             ViewBag.Message = "Your application description page.";
 
-            return View();
+            return View(pages);
         }
 
         public IActionResult Contact()
