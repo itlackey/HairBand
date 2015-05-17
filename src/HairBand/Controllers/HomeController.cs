@@ -34,7 +34,7 @@ namespace HairBand.Controllers
 
         public async Task<IActionResult> About()
         {
-            var pages = await this._provider.GetPageNames();
+            var pages = await this._provider.GetPages();
 
 
             ViewBag.Message = "Your application description page.";

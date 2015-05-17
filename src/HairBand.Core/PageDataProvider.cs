@@ -19,50 +19,61 @@ namespace HairBand
         }
 
 
-        public async Task<IEnumerable<string>> GetPageNames()
+        public async Task<IEnumerable<PageData>> GetPages()
         {
-            var pages = Directory.GetFiles(this._host.WebRootPath + "/app_data/pages/", "*.md")
-                .Select(p => Path.GetFileNameWithoutExtension(p) + ".page");
+            return await Task.Run(async () =>
+            {
+                var urls = Directory.GetFiles(this._host.WebRootPath + "/app_data/pages/", "*.md")
+                               .Select(p => Path.GetFileNameWithoutExtension(p).Replace('-', '/'));
 
+                var pages = new List<PageData>();
 
-            return pages;
+                foreach (var item in urls)
+                {
+                    pages.Add(await GetPageData(item));
+                }
+
+                return pages;
+            });
+
         }
 
         public async Task<PageData> GetPageData(string url)
         {
-
-            var path = this._host.WebRootPath + "/app_data/pages/" + url + ".md";
-
-            if (File.Exists(path))
+            return await Task.Run(() =>
             {
-                var md = File.ReadAllText(path);
+                var path = this._host.WebRootPath + "/app_data/pages/" + url.Replace('/', '-') + ".md";
 
-                var headerString = md.Substring(md.IndexOf("---\r\n"), md.LastIndexOf("---") - 2);
-
-                var settings = new Dictionary<string, string>();
-
-                var settingLines = headerString.Split('\r', '\n');
-
-                foreach (var line in settingLines)
+                if (File.Exists(path))
                 {
-                    if (line.Contains(":"))
+                    var md = File.ReadAllText(path);
+
+                    var headerString = md.Substring(md.IndexOf("---\r\n"), md.LastIndexOf("---") - 2);
+
+                    var settings = new Dictionary<string, string>();
+
+                    var settingLines = headerString.Split('\r', '\n');
+
+                    foreach (var line in settingLines)
                     {
-                        var data = line.Split(':');
+                        if (line.Contains(":"))
+                        {
+                            var data = line.Split(':');
 
-                        settings.Add(data.First(), data.Last());
+                            settings.Add(data.First(), data.Last());
+                        }
                     }
+
+                    var body = md.Substring(md.LastIndexOf("---") + 5);
+
+                    var html = CommonMarkConverter.Convert(body);
+
+                    return new PageData() { Url = url.Replace('-', '/'), Content = html, Settings = settings };
                 }
+                else
+                    throw new FileNotFoundException("This page does not exist");
 
-                var body = md.Substring(md.LastIndexOf("---") + 5);
-
-                var html = CommonMarkConverter.Convert(body);
-
-                return new PageData() { Content = html, Settings = settings };
-            }
-            else
-                throw new FileNotFoundException("This page does not exist");
-
-
+            });
 
         }
 

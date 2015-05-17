@@ -7,7 +7,10 @@ namespace HairBand
 {
     public class PageData
     {
+        public string Url { get; set; }
+
         public IDictionary<string, string> Settings { get; set; }
+
         public string Content { get; set; }
     }
 }
