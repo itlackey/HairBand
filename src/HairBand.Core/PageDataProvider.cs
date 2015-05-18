@@ -9,7 +9,7 @@ using System.Dynamic;
 
 namespace HairBand
 {
-    public class PageDataProvider
+    public class PageDataProvider : IPageDataProvider
     {
         private IHostingEnvironment _host;
 
@@ -54,6 +54,8 @@ namespace HairBand
 
                     var settingLines = headerString.Split('\r', '\n');
 
+                    var metadata = new PageSettings();
+
                     foreach (var line in settingLines)
                     {
                         if (line.Contains(":"))
@@ -61,6 +63,9 @@ namespace HairBand
                             var data = line.Split(':');
 
                             settings.Add(data.First(), data.Last());
+
+                            metadata.AddProperty(data.First(), data.Last());
+
                         }
                     }
 
@@ -68,7 +73,7 @@ namespace HairBand
 
                     var html = CommonMarkConverter.Convert(body);
 
-                    return new PageData() { Url = url.Replace('-', '/'), Content = html, Settings = settings };
+                    return new PageData() { Url = url.Replace('-', '/'), Content = html, Settings = settings, Metadata = metadata };
                 }
                 else
                     throw new FileNotFoundException("This page does not exist");

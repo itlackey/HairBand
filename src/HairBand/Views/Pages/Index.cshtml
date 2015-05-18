@@ -1,0 +1,12 @@
+﻿@model IEnumerable<PageData>
+
+@{
+    ViewBag.Title = "Pages";
+}
+
+@foreach (var page in Model)
+{
+
+    <a href="/pages/@page.Url">@page.Metadata.title</a>
+
+}

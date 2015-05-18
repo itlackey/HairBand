@@ -11,6 +11,8 @@ namespace HairBand
 
         public IDictionary<string, string> Settings { get; set; }
 
+        public dynamic Metadata { get; set; }
+
         public string Content { get; set; }
     }
 }

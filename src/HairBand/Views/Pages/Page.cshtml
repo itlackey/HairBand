@@ -6,9 +6,9 @@
 *@
 @{
     // ViewBag.Title = "Home Page";
-    ViewBag.Title = Model.Settings["title"];
+    ViewBag.Title = Model.Metadata.title;
 }
-<h1>@ViewBag.Title</h1>
+<h1>@Model.Metadata.title</h1>
 
 <div>
     @Html.Raw(Model.Content)

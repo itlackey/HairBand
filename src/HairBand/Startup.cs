@@ -84,7 +84,7 @@ namespace HairBand
             // You will also need to add the Microsoft.AspNet.Mvc.WebApiCompatShim package to the 'dependencies' section of project.json.
             // services.AddWebApiConventions();
 
-            services.Add(new ServiceDescriptor(typeof(PageDataProvider), typeof(PageDataProvider), ServiceLifetime.Transient));
+            services.Add(new ServiceDescriptor(typeof(IPageDataProvider), typeof(PageDataProvider), ServiceLifetime.Singleton));
         }
 
         // Configure is called after ConfigureServices is called.
@@ -130,7 +130,10 @@ namespace HairBand
                 //    );
 
                 routes.MapRoute(
-                     name: "Pages", template: "pages/{*page}", defaults: new { controller = "Home", action = "Page" }
+                     name: "PageList", template: "pages", defaults: new { controller = "Pages", action = "Index" }
+                 );
+                routes.MapRoute(
+                     name: "Pages", template: "pages/{*page}", defaults: new { controller = "Pages", action = "Page" }
                  );
 
                 routes.MapRoute(
