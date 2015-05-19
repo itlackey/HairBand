@@ -1,5 +1,8 @@
 ﻿@model PageData
+@{ 
 
+    Layout = "_TemplateLayout";
+}
 @*
    
     For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
@@ -15,12 +18,12 @@
 </div>
 
 
-@if(Model.Settings.ContainsKey("posted"))
+@*@if(Model.Settings.ContainsKey("posted"))
 {
     <span>
         @(DateTime.Parse(Model.Settings["posted"]).ToLongDateString())
     </span>
-}
+}*@
 
 @if(Model.Settings.ContainsKey("author"))
 {

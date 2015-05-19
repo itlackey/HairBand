@@ -7,6 +7,13 @@ namespace HairBand
 {
     public class AppSettings
     {
+
+        public AppSettings()
+        {
+            this.Theme = "default";
+        }
         public string SiteTitle { get; set; }
+
+        public string Theme { get; set; }
     }
 }

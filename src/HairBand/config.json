@@ -1,6 +1,7 @@
 {
   "AppSettings": {
-    "SiteTitle": "Hair Band"
+    "SiteTitle": "Hair Band",
+    "Theme": "Default"
   },
   "Data": {
     "DefaultConnection": {
