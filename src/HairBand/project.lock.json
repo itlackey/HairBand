@@ -84,6 +84,37 @@
         "tools/cmark.exe.config"
       ]
     },
+    "DotLiquid/1.8.0": {
+      "serviceable": false,
+      "sha": "VZakikO860nzk7pliV7kx2DDFen6PqwOCuSVh3o6t9EkNXPpsXklRMWGK70vltkWhFhhAA29XJuWJKU4ADXKrA==",
+      "frameworks": {
+        "DNX,Version=v4.5.1": {
+          "dependencies": {},
+          "frameworkAssemblies": [],
+          "runtimeAssemblies": [
+            "lib/NET45/DotLiquid.dll"
+          ],
+          "compileAssemblies": [
+            "lib/NET45/DotLiquid.dll"
+          ]
+        },
+        "DNXCore,Version=v5.0": {
+          "dependencies": {},
+          "frameworkAssemblies": [],
+          "runtimeAssemblies": [],
+          "compileAssemblies": []
+        }
+      },
+      "files": [
+        "DotLiquid.1.8.0.nupkg",
+        "DotLiquid.1.8.0.nupkg.sha512",
+        "DotLiquid.nuspec",
+        "LICENSE.txt",
+        "lib/NET35/DotLiquid.dll",
+        "lib/NET40/DotLiquid.dll",
+        "lib/NET45/DotLiquid.dll"
+      ]
+    },
     "EntityFramework/7.0.0-beta4": {
       "serviceable": false,
       "sha": "KTplgz4PBKb33t8O0I5S8yBwkU+l9PTymzoTVav8/FGikck55Amf28EOpOZAqnkGIzCGYD5/k26P7AmVyYyTHw==",
