@@ -31,6 +31,8 @@ namespace HairBand.Controllers
 
         public async Task<IActionResult> Page(string page)
         {
+            
+
             ViewBag.Page = page;
 
             var model = await this._provider.GetPageData(page);

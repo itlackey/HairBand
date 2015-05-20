@@ -6,6 +6,7 @@ using Microsoft.AspNet.Hosting;
 using System.IO;
 using CommonMark;
 using System.Dynamic;
+using Newtonsoft.Json;
 
 namespace HairBand
 {
@@ -16,6 +17,7 @@ namespace HairBand
         public PageDataProvider(IHostingEnvironment host)
         {
             this._host = host;
+          
         }
 
 

@@ -4,14 +4,23 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Mvc;
 using Microsoft.AspNet.Hosting;
+using HairBand.Web;
 
 namespace HairBand.Controllers
 {
     public class HomeController : Controller
-    {   
+    {
+        private DefaultUserStore _store;
+
+        public HomeController(IHostingEnvironment host)
+        {
+            _store = new DefaultUserStore(host);
+
+        }
         public IActionResult Index()
         {
-           
+            var users = _store.Users;
+
             return View();
         }
 
