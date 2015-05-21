@@ -1,6 +1,6 @@
 /*/*/*/App_Data/
-/*/*/*/lib/
-/*/*/*/_*.js
+/*/*/*/lib
+_*.js
 
 
 ## Ignore Visual Studio temporary files, build results, and
