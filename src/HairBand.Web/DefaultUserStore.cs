@@ -10,15 +10,16 @@ using Newtonsoft.Json;
 
 namespace HairBand.Web
 {
-    public class DefaultUserStore : IUserStore<BandMember>, IUserPasswordStore<BandMember>, IQueryableUserStore<BandMember>
+    public class DefaultUserStore : IUserStore<BandMember>, 
+        IUserPasswordStore<BandMember>, 
+        IQueryableUserStore<BandMember>
     {
 
        
         public DefaultUserStore(IHostingEnvironment host)
         {
             this._host = host;
-            this._rootPath = this._host.MapPath("App_Data/secure");
-            _filePath = Path.Combine(this._rootPath, "user.json");
+            this._rootPath = this._host.MapPath("App_Data/secure/users/");
         }
 
 
@@ -28,9 +29,9 @@ namespace HairBand.Web
         {
             get
             {
-                if (this._users == null)
+                if (this._users == null || _users.Count == 0)
                 {
-                    this._users = GetBandMembers();
+                    this._users = new List<BandMember>(GetBandMembers());
                 }
                 return _users.AsQueryable();
             }
@@ -49,7 +50,7 @@ namespace HairBand.Web
             }
 
             this._users.Add(user);
-            SaveBandMembers();
+            SaveBandMember(user);
             return Task.FromResult(IdentityResult.Success);
         }
 
@@ -59,7 +60,9 @@ namespace HairBand.Web
             {
 
                 this._users.Remove(user);
-                SaveBandMembers();
+
+                File.Delete(GetFilePath(user));
+
                 return Task.FromResult(IdentityResult.Success);
             }
 
@@ -74,6 +77,18 @@ namespace HairBand.Web
         {
             var user = _users.FirstOrDefault(u => u.Id.ToString() == userId);
 
+            var userPath = GetFilePathFromId(userId);
+            
+            if (user == null && File.Exists(userPath))
+            {
+                var data = File.ReadAllText(userPath);
+
+                user = JsonConvert.DeserializeObject<BandMember>(data);
+
+                if (user != null)
+                    _users.Add(user);
+            }
+
             return Task.FromResult(user);
         }
 
@@ -81,6 +96,17 @@ namespace HairBand.Web
         {
             var user = _users.FirstOrDefault(u => u.UserName.ToLowerInvariant() == normalizedUserName);
 
+            var userPath = GetFilePathFromUsername(normalizedUserName);
+
+            if (user == null && File.Exists(userPath))
+            {
+                var data = File.ReadAllText(userPath);
+
+                user = JsonConvert.DeserializeObject<BandMember>(data);
+
+                if (user != null)
+                    _users.Add(user);
+            }
             return Task.FromResult(user);
         }
 
@@ -112,13 +138,21 @@ namespace HairBand.Web
 
         public async Task<IdentityResult> UpdateAsync(BandMember user, CancellationToken cancellationToken)
         {
-            var currentUser = await FindByIdAsync(user.Id.ToString(), cancellationToken);
+            try
+            {
+                var currentUser = await FindByIdAsync(user.Id.ToString(), cancellationToken);
 
-            currentUser.UserName = user.UserName;
+                currentUser.UserName = user.UserName;
 
-            SaveBandMembers();
+                SaveBandMember(user);
 
-            return IdentityResult.Success;
+                return IdentityResult.Success;
+            }
+            catch (Exception ex)
+            {
+
+                return IdentityResult.Failed(new IdentityError() { Code = ex.HResult.ToString(), Description = ex.Message });
+            }
 
         }
         #endregion
@@ -178,34 +212,67 @@ namespace HairBand.Web
         #endregion
 
         #region Private Members
-
-        private string _filePath;
+        
 
         private IHostingEnvironment _host;
         private string _rootPath;
         private List<BandMember> _users;
 
 
-        private List<BandMember> GetBandMembers()
+        private string GetFilePath(BandMember user)
         {
-
-            var data = File.ReadAllText(_filePath);
-
-            var users = JsonConvert.DeserializeObject<BandMember[]>(data);
-
-            return users.ToList();
-
+            return  Path.Combine(_rootPath, string.Format("{0}#{1}", user.Id, user.UserName));
         }
 
-        private void SaveBandMembers()
+        private string GetFilePathFromId(string id)
         {
-            var data = JsonConvert.SerializeObject(this._users);
-            File.WriteAllText(_filePath, data);
+          var files = Directory.GetFiles(_rootPath, id + "#");
+
+            if (files.Count() == 1)
+                return Path.Combine(_rootPath, files.First());
+            else
+                return string.Empty;
+            
+        }
+        private string GetFilePathFromUsername(string username)
+        {
+            var files = Directory.GetFiles(_rootPath, "#" + username);
+
+            if (files.Count() == 1)
+                return Path.Combine(_rootPath, files.First());
+            else
+                return string.Empty;
+        }
+
+        private IEnumerable<BandMember> GetBandMembers()
+        {
+            var files = Directory.GetFiles(_rootPath);
+
+            foreach (var file in files)
+            {
+                var data = File.ReadAllText(Path.Combine(_rootPath, file));
+
+                yield return JsonConvert.DeserializeObject<BandMember>(data);
+
+            }
+           
+        }
+
+    
+        private void SaveBandMember(BandMember user)
+        {
+            var data = JsonConvert.SerializeObject(user);
+
+            File.WriteAllText(GetFilePath(user), data);
         }
 
         #endregion
 
 
+
+        #region Empty
+
+        #endregion
 
     }
 }

@@ -21,6 +21,7 @@ using Microsoft.Framework.Logging;
 using Microsoft.Framework.Logging.Console;
 using Microsoft.Framework.Runtime;
 using HairBand.Models;
+using HairBand.Web;
 
 namespace HairBand
 {
@@ -58,9 +59,14 @@ namespace HairBand
                     options.UseSqlServer(Configuration["Data:DefaultConnection:ConnectionString"]));
 
             // Add Identity services to the services container.
-            services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddDefaultTokenProviders();
+            //services.AddIdentity<ApplicationUser, IdentityRole>()
+            //    .AddEntityFrameworkStores<ApplicationDbContext>()
+            //    .AddDefaultTokenProviders();
+
+            services.AddIdentity<BandMember, Role>(options =>
+            {
+
+            }).AddUserStore<DefaultUserStore>().AddRoleStore<DefaultRoleStore>();
 
             // Configure the options for the authentication middleware.
             // You can add options for Google, Twitter and other middleware as shown below.
