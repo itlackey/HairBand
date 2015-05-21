@@ -1,5 +1,4 @@
-﻿/// <binding Clean='clean' />
-
+/// <binding AfterBuild='copy' Clean='clean' />
 var gulp = require("gulp"),
   rimraf = require("rimraf"),
   fs = require("fs");

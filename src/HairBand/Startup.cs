@@ -52,13 +52,13 @@ namespace HairBand
             // Add Application settings to the services container.
             services.Configure<AppSettings>(Configuration.GetSubKey("AppSettings"));
 
-            // Add EF services to the services container.
-            services.AddEntityFramework()
-                .AddSqlServer()
-                .AddDbContext<ApplicationDbContext>(options =>
-                    options.UseSqlServer(Configuration["Data:DefaultConnection:ConnectionString"]));
+            //// Add EF services to the services container.
+            //services.AddEntityFramework()
+            //    .AddSqlServer()
+            //    .AddDbContext<ApplicationDbContext>(options =>
+            //        options.UseSqlServer(Configuration["Data:DefaultConnection:ConnectionString"]));
 
-            // Add Identity services to the services container.
+            //// Add Identity services to the services container.
             //services.AddIdentity<ApplicationUser, IdentityRole>()
             //    .AddEntityFrameworkStores<ApplicationDbContext>()
             //    .AddDefaultTokenProviders();
@@ -66,8 +66,11 @@ namespace HairBand
             services.AddIdentity<BandMember, Role>(options =>
             {
 
-            }).AddUserStore<DefaultUserStore>().AddRoleStore<DefaultRoleStore>();
+            })
+            .AddUserStore<DefaultUserStore>()
+            .AddRoleStore<DefaultRoleStore>();
 
+            
             // Configure the options for the authentication middleware.
             // You can add options for Google, Twitter and other middleware as shown below.
             // For more information see http://go.microsoft.com/fwlink/?LinkID=532715

@@ -4,64 +4,111 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Threading;
+using Microsoft.AspNet.Hosting;
 
 namespace HairBand.Web
 {
-    public class DefaultRoleStore : Microsoft.AspNet.Identity.IRoleStore<Role>
+    public class DefaultRoleStore : FileStoreBase<Role, Guid>, IRoleStore<Role>
     {
-        public Task<IdentityResult> CreateAsync(Role role, CancellationToken cancellationToken)
+        public DefaultRoleStore(IHostingEnvironment host)
+            : base(host, "secure/roles")
         {
-            throw new NotImplementedException();
+
         }
 
-        public Task<IdentityResult> DeleteAsync(Role role, CancellationToken cancellationToken)
+
+
+        public async Task<IdentityResult> CreateAsync(Role role, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            try
+            {
+                role.Id = Guid.NewGuid();
+
+                var item = await base.CreateAsync(role);
+
+                return IdentityResult.Success;
+            }
+            catch (InvalidOperationException)
+            {
+                return IdentityResult.Failed(new IdentityError() { Description = "Role already exists" });
+            }
         }
 
-        public void Dispose()
+        public async Task<IdentityResult> DeleteAsync(Role role, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            try
+            {
+                await base.DeleteAsync(role);
+
+                return IdentityResult.Success;
+            }
+            catch (KeyNotFoundException)
+            {
+                return IdentityResult.Failed(new IdentityError() { Description = "Role not found" });
+            }
         }
 
-        public Task<Role> FindByIdAsync(string roleId, CancellationToken cancellationToken)
+        public async Task<Role> FindByIdAsync(string roleId, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var role = await base.GetItemById(roleId);
+
+            return role;
         }
 
-        public Task<Role> FindByNameAsync(string normalizedRoleName, CancellationToken cancellationToken)
+        public async Task<Role> FindByNameAsync(string normalizedRoleName, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var role = await base.GetItemByName(normalizedRoleName);
+
+            return role;
         }
 
         public Task<string> GetNormalizedRoleNameAsync(Role role, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return Task.FromResult(role.NormalizedName);
         }
 
         public Task<string> GetRoleIdAsync(Role role, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return Task.FromResult(role.Id.ToString());
         }
 
         public Task<string> GetRoleNameAsync(Role role, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return Task.FromResult(role.Name);
         }
 
-        public Task SetNormalizedRoleNameAsync(Role role, string normalizedName, CancellationToken cancellationToken)
+        public async Task SetNormalizedRoleNameAsync(Role role, string normalizedName, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+
+            role.NormalizedName = normalizedName;
+            await base.SaveItemAsync(role);
+
         }
 
-        public Task SetRoleNameAsync(Role role, string roleName, CancellationToken cancellationToken)
+        public async Task SetRoleNameAsync(Role role, string roleName, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            role.Name = roleName;
+            await base.SaveItemAsync(role);
         }
 
-        public Task<IdentityResult> UpdateAsync(Role role, CancellationToken cancellationToken)
+        public async Task<IdentityResult> UpdateAsync(Role role, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var currentRole = await GetItemById(role.Id.ToString());
+
+            if (currentRole == null)
+                return IdentityResult.Failed(new IdentityError() { Description = "Role not found" });
+
+            currentRole.Claims.Clear();
+            foreach (var item in role.Claims)
+                currentRole.Claims.Add(item);
+
+            currentRole.ConcurrencyStamp = role.ConcurrencyStamp;
+
+            //ToDo finish this...
+
+            await SaveItemAsync(currentRole);
+
+            return IdentityResult.Success;
         }
     }
 }

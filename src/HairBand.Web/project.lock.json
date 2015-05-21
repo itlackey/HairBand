@@ -5,7 +5,8 @@
     "": [
       "Microsoft.AspNet.Mvc >= 6.0.0-beta4",
       "Microsoft.AspNet.Identity >= 3.0.0-beta4",
-      "Newtonsoft.Json >= 6.0.8"
+      "Newtonsoft.Json >= 6.0.8",
+      "HairBand.Core >= 1.0.0-*"
     ],
     "DNX,Version=v4.5.1": [],
     "DNXCore,Version=v5.0": [
@@ -16,6 +17,89 @@
     ]
   },
   "libraries": {
+    "CommonMark.NET/0.9.0": {
+      "serviceable": false,
+      "sha": "9AmzU4LmMmq+h/mNDci8bLKzNglyfW7wB9gVNod8X2FxvYbyKStxa/iq2RrYRWZfY5ofnSZ26hiE+4tBk8CAWg==",
+      "frameworks": {
+        "DNX,Version=v4.5.1": {
+          "dependencies": {},
+          "frameworkAssemblies": [],
+          "runtimeAssemblies": [
+            "lib/net45/CommonMark.dll"
+          ],
+          "compileAssemblies": [
+            "lib/net45/CommonMark.dll"
+          ]
+        },
+        "DNXCore,Version=v5.0": {
+          "dependencies": {},
+          "frameworkAssemblies": [],
+          "runtimeAssemblies": [
+            "lib/aspnetcore50/CommonMark.dll"
+          ],
+          "compileAssemblies": [
+            "lib/aspnetcore50/CommonMark.dll"
+          ]
+        }
+      },
+      "files": [
+        "CommonMark.NET.0.9.0.nupkg",
+        "CommonMark.NET.0.9.0.nupkg.sha512",
+        "CommonMark.NET.nuspec",
+        "LICENSE.md",
+        "lib/aspnetcore50/CommonMark.dll",
+        "lib/aspnetcore50/CommonMark.pdb",
+        "lib/aspnetcore50/CommonMark.xml",
+        "lib/net20/CommonMark.dll",
+        "lib/net20/CommonMark.pdb",
+        "lib/net20/CommonMark.xml",
+        "lib/net35-client/CommonMark.dll",
+        "lib/net35-client/CommonMark.pdb",
+        "lib/net35-client/CommonMark.xml",
+        "lib/net40-client/CommonMark.dll",
+        "lib/net40-client/CommonMark.pdb",
+        "lib/net40-client/CommonMark.xml",
+        "lib/net45/CommonMark.dll",
+        "lib/net45/CommonMark.pdb",
+        "lib/net45/CommonMark.xml",
+        "lib/portable-net40+sl50+wp80+win+wpa81+MonoAndroid10+MonoTouch10/CommonMark.dll",
+        "lib/portable-net40+sl50+wp80+win+wpa81+MonoAndroid10+MonoTouch10/CommonMark.pdb",
+        "lib/portable-net40+sl50+wp80+win+wpa81+MonoAndroid10+MonoTouch10/CommonMark.xml",
+        "tools/cmark.exe",
+        "tools/cmark.exe.config"
+      ]
+    },
+    "DotLiquid/1.8.0": {
+      "serviceable": false,
+      "sha": "VZakikO860nzk7pliV7kx2DDFen6PqwOCuSVh3o6t9EkNXPpsXklRMWGK70vltkWhFhhAA29XJuWJKU4ADXKrA==",
+      "frameworks": {
+        "DNX,Version=v4.5.1": {
+          "dependencies": {},
+          "frameworkAssemblies": [],
+          "runtimeAssemblies": [
+            "lib/NET45/DotLiquid.dll"
+          ],
+          "compileAssemblies": [
+            "lib/NET45/DotLiquid.dll"
+          ]
+        },
+        "DNXCore,Version=v5.0": {
+          "dependencies": {},
+          "frameworkAssemblies": [],
+          "runtimeAssemblies": [],
+          "compileAssemblies": []
+        }
+      },
+      "files": [
+        "DotLiquid.1.8.0.nupkg",
+        "DotLiquid.1.8.0.nupkg.sha512",
+        "DotLiquid.nuspec",
+        "LICENSE.txt",
+        "lib/NET35/DotLiquid.dll",
+        "lib/NET40/DotLiquid.dll",
+        "lib/NET45/DotLiquid.dll"
+      ]
+    },
     "Microsoft.AspNet.Authentication/1.0.0-beta4": {
       "serviceable": true,
       "sha": "bF++RlseLYrzDjtzrwNsLlftnj65Gctg6AkW6QMmk3W5EcNCktynbfjZrAn/1JRr7jri5XAJ546kvoayYKMjEg==",

@@ -17,15 +17,15 @@ namespace HairBand.Controllers
     [Authorize]
     public class AccountController : Controller
     {
-        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+        public AccountController(UserManager<BandMember> userManager, SignInManager<BandMember> signInManager)
         {
             UserManager = userManager;
             SignInManager = signInManager;
         }
 
-        public UserManager<ApplicationUser> UserManager { get; private set; }
+        public UserManager<BandMember> UserManager { get; private set; }
 
-        public SignInManager<ApplicationUser> SignInManager { get; private set; }
+        public SignInManager<BandMember> SignInManager { get; private set; }
 
         //
         // GET: /Account/Login
@@ -91,7 +91,7 @@ namespace HairBand.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var user = new BandMember { UserName = model.Email, Email = model.Email };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
@@ -190,7 +190,7 @@ namespace HairBand.Controllers
                 {
                     return View("ExternalLoginFailure");
                 }
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var user = new BandMember { UserName = model.Email, Email = model.Email };
                 var result = await UserManager.CreateAsync(user);
                 if (result.Succeeded)
                 {
@@ -427,7 +427,7 @@ namespace HairBand.Controllers
             }
         }
 
-        private async Task<ApplicationUser> GetCurrentUserAsync()
+        private async Task<BandMember> GetCurrentUserAsync()
         {
             return await UserManager.FindByIdAsync(Context.User.GetUserId());
         }

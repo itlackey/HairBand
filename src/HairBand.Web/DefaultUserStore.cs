@@ -1,26 +1,24 @@
-﻿using Microsoft.AspNet.Identity;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Threading;
 using Microsoft.AspNet.Hosting;
-using System.IO;
-using Newtonsoft.Json;
+using Microsoft.AspNet.Identity;
+using System.Threading;
 
 namespace HairBand.Web
 {
-    public class DefaultUserStore : IUserStore<BandMember>, 
-        IUserPasswordStore<BandMember>, 
+    public class DefaultUserStore : FileStoreBase<BandMember, Guid>,
+        IUserStore<BandMember>,
+        IUserPasswordStore<BandMember>,
         IQueryableUserStore<BandMember>
     {
 
-       
         public DefaultUserStore(IHostingEnvironment host)
+            : base(host, "secure/users")
         {
-            this._host = host;
-            this._rootPath = this._host.MapPath("App_Data/secure/users/");
         }
+
 
 
 
@@ -29,90 +27,60 @@ namespace HairBand.Web
         {
             get
             {
-                if (this._users == null || _users.Count == 0)
-                {
-                    this._users = new List<BandMember>(GetBandMembers());
-                }
-                return _users.AsQueryable();
+                return base.Items.AsQueryable();
             }
         }
         #endregion
 
         #region IUserStore
 
-        public Task<IdentityResult> CreateAsync(BandMember user, CancellationToken cancellationToken)
+        public async Task<IdentityResult> CreateAsync(BandMember user, CancellationToken cancellationToken)
         {
             if (this.Users.Contains(user))
             {
-                return Task.FromResult(
-                    IdentityResult.Failed(
-                        new IdentityError() { Code = "Exists", Description = "User already exists" }));
+                return IdentityResult.Failed(
+                        new IdentityError() { Code = "Exists", Description = "User already exists" });
             }
 
-            this._users.Add(user);
-            SaveBandMember(user);
-            return Task.FromResult(IdentityResult.Success);
+
+            user.Id = Guid.NewGuid();
+
+            await base.CreateAsync(user);
+
+            return IdentityResult.Success;
         }
 
-        public Task<IdentityResult> DeleteAsync(BandMember user, CancellationToken cancellationToken)
+        public async Task<IdentityResult> DeleteAsync(BandMember user, CancellationToken cancellationToken)
         {
             if (this.Users.Contains(user))
             {
-
-                this._users.Remove(user);
-
-                File.Delete(GetFilePath(user));
-
-                return Task.FromResult(IdentityResult.Success);
+                await base.DeleteAsync(user);
+                return IdentityResult.Success;
             }
 
 
-            return Task.FromResult(
-                IdentityResult.Failed(
-                    new IdentityError() { Code = "NotFound", Description = "User does not exists" }));
+            return IdentityResult.Failed(
+                    new IdentityError() { Code = "NotFound", Description = "User does not exists" });
 
         }
 
-        public Task<BandMember> FindByIdAsync(string userId, CancellationToken cancellationToken)
+        public async Task<BandMember> FindByIdAsync(string userId, CancellationToken cancellationToken)
         {
-            var user = _users.FirstOrDefault(u => u.Id.ToString() == userId);
+            var item = await base.GetItemById(userId);
 
-            var userPath = GetFilePathFromId(userId);
-            
-            if (user == null && File.Exists(userPath))
-            {
-                var data = File.ReadAllText(userPath);
-
-                user = JsonConvert.DeserializeObject<BandMember>(data);
-
-                if (user != null)
-                    _users.Add(user);
-            }
-
-            return Task.FromResult(user);
+            return item;
         }
 
-        public Task<BandMember> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
+        public async Task<BandMember> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
         {
-            var user = _users.FirstOrDefault(u => u.UserName.ToLowerInvariant() == normalizedUserName);
+            var item = await base.GetItemByName(normalizedUserName);
 
-            var userPath = GetFilePathFromUsername(normalizedUserName);
-
-            if (user == null && File.Exists(userPath))
-            {
-                var data = File.ReadAllText(userPath);
-
-                user = JsonConvert.DeserializeObject<BandMember>(data);
-
-                if (user != null)
-                    _users.Add(user);
-            }
-            return Task.FromResult(user);
+            return item;
         }
 
         public Task<string> GetNormalizedUserNameAsync(BandMember user, CancellationToken cancellationToken)
         {
-            return Task.FromResult(user.UserName.ToLowerInvariant());
+            return Task.FromResult(user.NormalizedUserName);
         }
 
         public Task<string> GetUserIdAsync(BandMember user, CancellationToken cancellationToken)
@@ -127,8 +95,8 @@ namespace HairBand.Web
 
         public Task SetNormalizedUserNameAsync(BandMember user, string normalizedName, CancellationToken cancellationToken)
         {
-            return Task.Run(() => user.UserName = normalizedName);
-    
+            return Task.Run(() => user.NormalizedUserName = normalizedName);
+
         }
 
         public Task SetUserNameAsync(BandMember user, string userName, CancellationToken cancellationToken)
@@ -144,7 +112,9 @@ namespace HairBand.Web
 
                 currentUser.UserName = user.UserName;
 
-                SaveBandMember(user);
+                //ToDo map other properties
+
+                await base.SaveItemAsync(user);
 
                 return IdentityResult.Success;
             }
@@ -158,120 +128,21 @@ namespace HairBand.Web
         #endregion
 
         #region IUserPasswordStore
-        public Task SetPasswordHashAsync(BandMember user, string passwordHash, CancellationToken cancellationToken)
+        public async Task SetPasswordHashAsync(BandMember user, string passwordHash, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            user.PasswordHash = passwordHash;
+            await base.SaveItemAsync(user);
         }
 
         public Task<string> GetPasswordHashAsync(BandMember user, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return Task.FromResult(user.PasswordHash);
         }
 
         public Task<bool> HasPasswordAsync(BandMember user, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return Task.FromResult(!String.IsNullOrEmpty(user.PasswordHash));
         }
-        #endregion
-
-        #region IDisposable Support
-        private bool disposedValue = false; // To detect redundant calls
-      
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposedValue)
-            {
-                if (disposing)
-                {
-                    // TODO: dispose managed state (managed objects).
-                }
-
-                // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
-                // TODO: set large fields to null.
-
-                disposedValue = true;
-            }
-        }
-
-        // TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
-        // ~DefaultUserStore() {
-        //   // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-        //   Dispose(false);
-        // }
-
-        // This code added to correctly implement the disposable pattern.
-        public void Dispose()
-        {
-            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-            Dispose(true);
-            // TODO: uncomment the following line if the finalizer is overridden above.
-            // GC.SuppressFinalize(this);
-        }
-
-
-        #endregion
-
-        #region Private Members
-        
-
-        private IHostingEnvironment _host;
-        private string _rootPath;
-        private List<BandMember> _users;
-
-
-        private string GetFilePath(BandMember user)
-        {
-            return  Path.Combine(_rootPath, string.Format("{0}#{1}", user.Id, user.UserName));
-        }
-
-        private string GetFilePathFromId(string id)
-        {
-          var files = Directory.GetFiles(_rootPath, id + "#");
-
-            if (files.Count() == 1)
-                return Path.Combine(_rootPath, files.First());
-            else
-                return string.Empty;
-            
-        }
-        private string GetFilePathFromUsername(string username)
-        {
-            var files = Directory.GetFiles(_rootPath, "#" + username);
-
-            if (files.Count() == 1)
-                return Path.Combine(_rootPath, files.First());
-            else
-                return string.Empty;
-        }
-
-        private IEnumerable<BandMember> GetBandMembers()
-        {
-            var files = Directory.GetFiles(_rootPath);
-
-            foreach (var file in files)
-            {
-                var data = File.ReadAllText(Path.Combine(_rootPath, file));
-
-                yield return JsonConvert.DeserializeObject<BandMember>(data);
-
-            }
-           
-        }
-
-    
-        private void SaveBandMember(BandMember user)
-        {
-            var data = JsonConvert.SerializeObject(user);
-
-            File.WriteAllText(GetFilePath(user), data);
-        }
-
-        #endregion
-
-
-
-        #region Empty
-
         #endregion
 
     }
