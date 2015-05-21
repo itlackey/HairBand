@@ -3,8 +3,6 @@
   "version": -9998,
   "projectFileDependencyGroups": {
     "": [
-      "EntityFramework.SqlServer >= 7.0.0-beta4",
-      "EntityFramework.Commands >= 7.0.0-beta4",
       "Microsoft.AspNet.Mvc >= 6.0.0-beta4",
       "Microsoft.AspNet.Mvc.TagHelpers >= 6.0.0-beta4",
       "Microsoft.AspNet.Authentication.Cookies >= 1.0.0-beta4",
@@ -13,8 +11,6 @@
       "Microsoft.AspNet.Authentication.MicrosoftAccount >= 1.0.0-beta4",
       "Microsoft.AspNet.Authentication.Twitter >= 1.0.0-beta4",
       "Microsoft.AspNet.Diagnostics >= 1.0.0-beta4",
-      "Microsoft.AspNet.Diagnostics.Entity >= 7.0.0-beta4",
-      "Microsoft.AspNet.Identity.EntityFramework >= 3.0.0-beta4",
       "Microsoft.AspNet.Server.IIS >= 1.0.0-beta4",
       "Microsoft.AspNet.Server.WebListener >= 1.0.0-beta4",
       "Microsoft.AspNet.StaticFiles >= 1.0.0-beta4",
@@ -1289,54 +1285,6 @@
         "lib/dnxcore50/Microsoft.AspNet.Diagnostics.xml"
       ]
     },
-    "Microsoft.AspNet.Diagnostics.Entity/7.0.0-beta4": {
-      "serviceable": true,
-      "sha": "QYPFAO+F1IlSmKYVxpIqU0t4ZQovnZ4NS5GqpZ1KYckdtHcvoH5k7OrpuxyoHtwUzwke97FOjHboQ78yNZ7chA==",
-      "frameworks": {
-        "DNX,Version=v4.5.1": {
-          "dependencies": {
-            "Microsoft.AspNet.Diagnostics": "1.0.0-beta4",
-            "EntityFramework.Relational": "7.0.0-beta4"
-          },
-          "frameworkAssemblies": [
-            "System.Configuration",
-            "mscorlib",
-            "System",
-            "System.Core",
-            "Microsoft.CSharp"
-          ],
-          "runtimeAssemblies": [
-            "lib/dnx451/Microsoft.AspNet.Diagnostics.Entity.dll"
-          ],
-          "compileAssemblies": [
-            "lib/dnx451/Microsoft.AspNet.Diagnostics.Entity.dll"
-          ]
-        },
-        "DNXCore,Version=v5.0": {
-          "dependencies": {
-            "Microsoft.AspNet.Diagnostics": "1.0.0-beta4",
-            "EntityFramework.Relational": "7.0.0-beta4",
-            "System.Threading": "4.0.10-beta-22816"
-          },
-          "frameworkAssemblies": [],
-          "runtimeAssemblies": [
-            "lib/dnxcore50/Microsoft.AspNet.Diagnostics.Entity.dll"
-          ],
-          "compileAssemblies": [
-            "lib/dnxcore50/Microsoft.AspNet.Diagnostics.Entity.dll"
-          ]
-        }
-      },
-      "files": [
-        "Microsoft.AspNet.Diagnostics.Entity.7.0.0-beta4.nupkg",
-        "Microsoft.AspNet.Diagnostics.Entity.7.0.0-beta4.nupkg.sha512",
-        "Microsoft.AspNet.Diagnostics.Entity.nuspec",
-        "lib/dnx451/Microsoft.AspNet.Diagnostics.Entity.dll",
-        "lib/dnx451/Microsoft.AspNet.Diagnostics.Entity.xml",
-        "lib/dnxcore50/Microsoft.AspNet.Diagnostics.Entity.dll",
-        "lib/dnxcore50/Microsoft.AspNet.Diagnostics.Entity.xml"
-      ]
-    },
     "Microsoft.AspNet.Diagnostics.Interfaces/1.0.0-beta4": {
       "serviceable": true,
       "sha": "25/Rs8HIc+Za9lQcDx2dTw5DffY1y2SvKaPLGJcNufJX0/prnJi0psdEagPbqVBJppRxbFZc3u8MdUILzHJqsA==",
@@ -1949,68 +1897,6 @@
         "lib/dnx451/Microsoft.AspNet.Identity.xml",
         "lib/dnxcore50/Microsoft.AspNet.Identity.dll",
         "lib/dnxcore50/Microsoft.AspNet.Identity.xml"
-      ]
-    },
-    "Microsoft.AspNet.Identity.EntityFramework/3.0.0-beta4": {
-      "serviceable": true,
-      "sha": "laWVCsRsr33LwF6VR73lq5SUy73+ZL4P9zpH/KQ0vrZaxIRNOC2cCUJEJ1l2IkoHWPfxTaTM3FrQimhmP7Svig==",
-      "frameworks": {
-        "DNX,Version=v4.5.1": {
-          "dependencies": {
-            "Microsoft.AspNet.Identity": "3.0.0-beta4",
-            "EntityFramework.SqlServer": "7.0.0-beta4"
-          },
-          "frameworkAssemblies": [
-            "mscorlib",
-            "System",
-            "System.Core",
-            "Microsoft.CSharp"
-          ],
-          "runtimeAssemblies": [
-            "lib/dnx451/Microsoft.AspNet.Identity.EntityFramework.dll"
-          ],
-          "compileAssemblies": [
-            "lib/dnx451/Microsoft.AspNet.Identity.EntityFramework.dll"
-          ]
-        },
-        "DNXCore,Version=v5.0": {
-          "dependencies": {
-            "Microsoft.AspNet.Identity": "3.0.0-beta4",
-            "EntityFramework.SqlServer": "7.0.0-beta4",
-            "System.Collections": "4.0.10-beta-22816",
-            "System.ComponentModel": "4.0.0-beta-22816",
-            "System.Diagnostics.Debug": "4.0.10-beta-22816",
-            "System.Diagnostics.Tools": "4.0.0-beta-22816",
-            "System.Globalization": "4.0.10-beta-22816",
-            "System.Linq": "4.0.0-beta-22816",
-            "System.Linq.Expressions": "4.0.10-beta-22816",
-            "System.Linq.Queryable": "4.0.0-beta-22816",
-            "System.Reflection": "4.0.10-beta-22816",
-            "System.Resources.ResourceManager": "4.0.0-beta-22816",
-            "System.Runtime": "4.0.20-beta-22816",
-            "System.Runtime.Extensions": "4.0.10-beta-22816",
-            "System.Security.Claims": "4.0.0-beta-22816",
-            "System.Security.Principal": "4.0.0-beta-22816",
-            "System.Text.Encoding": "4.0.10-beta-22816",
-            "System.Threading.Tasks": "4.0.10-beta-22816"
-          },
-          "frameworkAssemblies": [],
-          "runtimeAssemblies": [
-            "lib/dnxcore50/Microsoft.AspNet.Identity.EntityFramework.dll"
-          ],
-          "compileAssemblies": [
-            "lib/dnxcore50/Microsoft.AspNet.Identity.EntityFramework.dll"
-          ]
-        }
-      },
-      "files": [
-        "Microsoft.AspNet.Identity.EntityFramework.3.0.0-beta4.nupkg",
-        "Microsoft.AspNet.Identity.EntityFramework.3.0.0-beta4.nupkg.sha512",
-        "Microsoft.AspNet.Identity.EntityFramework.nuspec",
-        "lib/dnx451/Microsoft.AspNet.Identity.EntityFramework.dll",
-        "lib/dnx451/Microsoft.AspNet.Identity.EntityFramework.xml",
-        "lib/dnxcore50/Microsoft.AspNet.Identity.EntityFramework.dll",
-        "lib/dnxcore50/Microsoft.AspNet.Identity.EntityFramework.xml"
       ]
     },
     "Microsoft.AspNet.JsonPatch/1.0.0-beta4": {
