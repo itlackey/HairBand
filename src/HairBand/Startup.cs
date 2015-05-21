@@ -132,9 +132,7 @@ namespace HairBand
             // Add MVC to the request pipeline.
             app.UseMvc(routes =>
             {
-                //routes.MapRoute(
-                //        name: "Page", template: "{page}.page", defaults: new { controller = "Home", action = "Page" }
-                //    );
+                
 
                 routes.MapRoute(
                      name: "PageList", template: "pages", defaults: new { controller = "Pages", action = "Index" }

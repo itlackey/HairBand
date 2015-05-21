@@ -1,11 +1,6 @@
 {
   "AppSettings": {
     "SiteTitle": "Hair Band",
-    "Theme": "Default"
-  },
-  "Data": {
-    "DefaultConnection": {
-      "ConnectionString": "Server=(localdb)\\mssqllocaldb;Database=HairBand;Trusted_Connection=True;MultipleActiveResultSets=true"
-    }
+    "Theme": "Happy"
   }
 }
