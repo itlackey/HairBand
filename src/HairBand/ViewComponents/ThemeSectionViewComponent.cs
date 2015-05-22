@@ -25,7 +25,7 @@ namespace HairBand.ViewComponents
             if (!file.EndsWith(".html"))
                 file += ".html";
 
-            var themePath = this.Host.WebRootPath + "/Themes/" + this.AppSettings.Options.Theme;
+            var themePath = this.Host.WebRootPath + "/themes/" + this.AppSettings.Options.Theme;
 
             var templateHtml = System.IO.File.ReadAllText(themePath + "/" + file);
 
@@ -43,6 +43,8 @@ namespace HairBand.ViewComponents
 
         private string ReplaceTokens(string templateHtml)
         {
+            //ToDo replace with dotLiquid
+
             return templateHtml
                               .Replace("{{PageTitle}}", ViewBag.Title)
                               .Replace("{{SiteTitle}}", this.AppSettings.Options.SiteTitle)

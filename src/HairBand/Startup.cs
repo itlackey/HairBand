@@ -68,7 +68,7 @@ namespace HairBand
             .AddUserStore<DefaultUserStore>()
             .AddRoleStore<DefaultRoleStore>();
 
-            
+
             // Configure the options for the authentication middleware.
             // You can add options for Google, Twitter and other middleware as shown below.
             // For more information see http://go.microsoft.com/fwlink/?LinkID=532715
@@ -107,7 +107,7 @@ namespace HairBand
             {
                 app.UseBrowserLink();
                 app.UseErrorPage(ErrorPageOptions.ShowAll);
-               // app.UseDatabaseErrorPage(DatabaseErrorPageOptions.ShowAll);
+                // app.UseDatabaseErrorPage(DatabaseErrorPageOptions.ShowAll);
             }
             else
             {
@@ -132,19 +132,36 @@ namespace HairBand
             // Add MVC to the request pipeline.
             app.UseMvc(routes =>
             {
-                
+
+                //routes.MapRoute(
+                //                  name: "default",
+                //                  template: "{controller}/{action}/{id?}",
+                //                  defaults: new { controller = "Home", action = "Index" });
+
+
+                routes.MapRoute(
+                                name: "account",
+                                template: "account/{action}/{id?}",
+                                defaults: new { controller = "Account", action = "Index" });
+
+                routes.MapRoute(
+                                name: "home",
+                                template: "",
+                                defaults: new { controller = "Home", action = "Index" });
+
+                routes.MapRoute(
+                        name: "about",
+                        template: "about",
+                        defaults: new { controller = "Home", action = "About" });
 
                 routes.MapRoute(
                      name: "PageList", template: "pages", defaults: new { controller = "Pages", action = "Index" }
                  );
                 routes.MapRoute(
-                     name: "Pages", template: "pages/{*page}", defaults: new { controller = "Pages", action = "Page" }
+                     name: "Pages", template: "{*page}", defaults: new { controller = "Pages", action = "Page" }
                  );
 
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller}/{action}/{id?}",
-                    defaults: new { controller = "Home", action = "Index" });
+
 
                 // Uncomment the following line to add a route for porting Web API 2 controllers.
                 // routes.MapWebApiRoute("DefaultApi", "api/{controller}/{id?}");

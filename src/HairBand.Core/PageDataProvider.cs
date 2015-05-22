@@ -44,7 +44,8 @@ namespace HairBand
         {
             return await Task.Run(() =>
             {
-                var path = this._host.WebRootPath + "/app_data/pages/" + url.Replace('/', '-') + ".md";
+
+                var path = this._host.WebRootPath + "/app_data/pages/" + url.TrimEnd('/').Replace('/', '-') + ".md";
 
                 if (File.Exists(path))
                 {
