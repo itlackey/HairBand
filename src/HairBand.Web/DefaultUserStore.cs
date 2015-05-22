@@ -5,22 +5,25 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.Hosting;
 using Microsoft.AspNet.Identity;
 using System.Threading;
+using System.Security.Claims;
 
 namespace HairBand.Web
 {
     public class DefaultUserStore : FileStoreBase<BandMember, Guid>,
         IUserStore<BandMember>,
         IUserPasswordStore<BandMember>,
-        IQueryableUserStore<BandMember>
+        IQueryableUserStore<BandMember>,
+        IUserPhoneNumberStore<BandMember>,
+        IUserTwoFactorStore<BandMember>,
+        IUserLoginStore<BandMember>,
+        IUserClaimStore<BandMember>,
+        IUserRoleStore<BandMember>
     {
 
         public DefaultUserStore(IHostingEnvironment host)
             : base(host, "secure/users")
         {
         }
-
-
-
 
         #region IQueryableUserStore
         public IQueryable<BandMember> Users
@@ -143,6 +146,158 @@ namespace HairBand.Web
         {
             return Task.FromResult(!String.IsNullOrEmpty(user.PasswordHash));
         }
+        #endregion
+
+        #region IUserPhoneNumberStore
+        public async Task SetPhoneNumberAsync(BandMember user, string phoneNumber, CancellationToken cancellationToken)
+        {
+            user.PhoneNumber = phoneNumber;
+            await base.SaveItemAsync(user);
+        }
+
+        public Task<string> GetPhoneNumberAsync(BandMember user, CancellationToken cancellationToken)
+        {
+            return Task.FromResult(user.PhoneNumber);
+        }
+
+        public Task<bool> GetPhoneNumberConfirmedAsync(BandMember user, CancellationToken cancellationToken)
+        {
+            return Task.FromResult(user.PhoneNumberConfirmed);
+        }
+
+        public async Task SetPhoneNumberConfirmedAsync(BandMember user, bool confirmed, CancellationToken cancellationToken)
+        {
+            user.PhoneNumberConfirmed = confirmed;
+            await base.SaveItemAsync(user);
+        }
+
+        #endregion
+
+        #region ITwoFactorUserStore
+        public async Task SetTwoFactorEnabledAsync(BandMember user, bool enabled, CancellationToken cancellationToken)
+        {
+            user.TwoFactorEnabled = enabled;
+            await base.SaveItemAsync(user);
+        }
+
+        public Task<bool> GetTwoFactorEnabledAsync(BandMember user, CancellationToken cancellationToken)
+        {
+            return Task.FromResult(user.TwoFactorEnabled);
+        }
+
+        #endregion
+
+        #region IUserLoginStore
+        public async Task AddLoginAsync(BandMember user, UserLoginInfo login, CancellationToken cancellationToken)
+        {
+            user.Logins.Add(login);
+            await base.SaveItemAsync(user);
+        }
+
+        public async Task RemoveLoginAsync(BandMember user, string loginProvider, string providerKey, CancellationToken cancellationToken)
+        {
+            var login = user.Logins.FirstOrDefault(l => l.LoginProvider == loginProvider && l.ProviderKey == providerKey);
+
+            if (login != null)
+            {
+                user.Logins.Remove(login);
+                await base.SaveItemAsync(user);
+            }
+        }
+
+        public async Task<IList<UserLoginInfo>> GetLoginsAsync(BandMember user, CancellationToken cancellationToken)
+        {
+            var logins = await Task.Run(() => user.Logins ?? new List<UserLoginInfo>());
+
+            return logins.ToList();
+        }
+
+        public Task<BandMember> FindByLoginAsync(string loginProvider, string providerKey, CancellationToken cancellationToken)
+        {
+
+            var user = base.Items
+                .Where(u => u.Logins.Any(l => l.LoginProvider == loginProvider && l.ProviderKey == providerKey))
+                .FirstOrDefault();
+
+            return Task.FromResult(user);
+
+
+        }
+        #endregion
+
+        #region IUserClaimsStore
+        public Task<IList<Claim>> GetClaimsAsync(BandMember user, CancellationToken cancellationToken)
+        {
+            return Task.FromResult<IList<Claim>>(user.Claims.ToList());
+        }
+
+        public async Task AddClaimsAsync(BandMember user, IEnumerable<Claim> claims, CancellationToken cancellationToken)
+        {
+            foreach (var claim in claims)
+            {
+                user.Claims.Add(claim);
+            }
+
+            await base.SaveItemAsync(user);
+        }
+
+        public async Task ReplaceClaimAsync(BandMember user, Claim claim, Claim newClaim, CancellationToken cancellationToken)
+        {
+
+            user.Claims.Remove(claim);
+            user.Claims.Add(newClaim);
+
+            await base.SaveItemAsync(user);
+
+        }
+
+        public async Task RemoveClaimsAsync(BandMember user, IEnumerable<Claim> claims, CancellationToken cancellationToken)
+        {
+            foreach (var claim in claims)
+            {
+                user.Claims.Remove(claim);
+            }
+
+            await base.SaveItemAsync(user);
+        }
+
+        public Task<IList<BandMember>> GetUsersForClaimAsync(Claim claim, CancellationToken cancellationToken)
+        {
+            var users = this.Items.Where(u => u.Claims.Contains(claim)).ToList();
+
+            return Task.FromResult<IList<BandMember>>(users);
+        }
+
+        #endregion
+
+        #region IUserRoleStore
+        public async Task AddToRoleAsync(BandMember user, string roleName, CancellationToken cancellationToken)
+        {
+            user.Roles.Add(roleName);
+            await SaveItemAsync(user);
+        }
+
+        public async Task RemoveFromRoleAsync(BandMember user, string roleName, CancellationToken cancellationToken)
+        {
+            user.Roles.Remove(roleName);
+            await SaveItemAsync(user);
+        }
+
+        public Task<IList<string>> GetRolesAsync(BandMember user, CancellationToken cancellationToken)
+        {
+            return Task.FromResult<IList<string>>(user.Roles.ToList());
+        }
+
+        public Task<bool> IsInRoleAsync(BandMember user, string roleName, CancellationToken cancellationToken)
+        {
+            return Task.FromResult(user.Roles.Contains(roleName));
+        }
+
+        public Task<IList<BandMember>> GetUsersInRoleAsync(string roleName, CancellationToken cancellationToken)
+        {
+            return Task.FromResult<IList<BandMember>>(Items.Where(i => i.Roles.Contains(roleName)).ToList());
+        }
+
         #endregion
 
     }

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.AspNet.Identity;
+using System.Security.Claims;
 
 namespace HairBand
 {
@@ -7,7 +9,9 @@ namespace HairBand
     {
         public BandMember()
         {
-
+            this.Claims = new List<Claim>();
+            this.Roles = new List<string>();
+            this.Logins = new List<UserLoginInfo>();
         }
 
         //
@@ -43,7 +47,7 @@ namespace HairBand
         //
         // Summary:
         //     Navigation property for users logins
-        public virtual ICollection<BandMemberLogin> Logins { get; }
+        public virtual ICollection<UserLoginInfo> Logins { get; }
 
         public virtual string NormalizedEmail { get; set; }
         public virtual string NormalizedUserName { get; set; }
@@ -62,7 +66,7 @@ namespace HairBand
         //
         // Summary:
         //     Navigation property for users in the role
-        public virtual ICollection<BandMemberRole> Roles { get; }
+        public virtual ICollection<string> Roles { get; }
         //
         // Summary:
         //     A random value that should change whenever a users credentials change (password
