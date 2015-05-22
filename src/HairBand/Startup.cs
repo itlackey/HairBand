@@ -140,26 +140,41 @@ namespace HairBand
 
 
                 routes.MapRoute(
-                                name: "account",
-                                template: "account/{action}/{id?}",
-                                defaults: new { controller = "Account", action = "Index" });
+                    name: "account",
+                    template: "account/{action}/{id?}",
+                    defaults: new { controller = "Account", action = "Login" });
+
 
                 routes.MapRoute(
-                                name: "home",
-                                template: "",
-                                defaults: new { controller = "Home", action = "Index" });
+                    name: "account",
+                    template: "manage/{action}/{id?}",
+                    defaults: new { controller = "Manage", action = "Index" });
+
 
                 routes.MapRoute(
-                        name: "about",
-                        template: "about",
-                        defaults: new { controller = "Home", action = "About" });
+                    name: "home",
+                    template: "",
+                    defaults: new { controller = "Home", action = "Index" });
 
                 routes.MapRoute(
-                     name: "PageList", template: "pages", defaults: new { controller = "Pages", action = "Index" }
-                 );
+                    name: "about",
+                    template: "about",
+                    defaults: new { controller = "Home", action = "About" });
+
                 routes.MapRoute(
-                     name: "Pages", template: "{*page}", defaults: new { controller = "Pages", action = "Page" }
-                 );
+                   name: "error",
+                   template: "home/error",
+                   defaults: new { controller = "Home", action = "Error" });
+
+                routes.MapRoute(
+                     name: "PageList", 
+                     template: "pages", 
+                     defaults: new { controller = "Pages", action = "Index" });
+
+                routes.MapRoute(
+                     name: "Pages", 
+                     template: "{*page}",
+                     defaults: new { controller = "Pages", action = "Page" } );
 
 
 
