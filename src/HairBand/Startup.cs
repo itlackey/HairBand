@@ -138,11 +138,16 @@ namespace HairBand
                 //                  template: "{controller}/{action}/{id?}",
                 //                  defaults: new { controller = "Home", action = "Index" });
 
-
+                
                 routes.MapRoute(
                                 name: "account",
                                 template: "account/{action}/{id?}",
                                 defaults: new { controller = "Account", action = "Index" });
+
+                routes.MapRoute(
+                                name: "manage",
+                                template: "manage/{action}/{id?}",
+                                defaults: new { controller = "Manage", action = "Index" });
 
                 routes.MapRoute(
                                 name: "home",
