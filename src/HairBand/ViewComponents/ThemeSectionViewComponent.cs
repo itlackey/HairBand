@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNet.Hosting;
+﻿using DotLiquid;
+using Microsoft.AspNet.Hosting;
 using Microsoft.AspNet.Mvc;
 using Microsoft.Framework.OptionsModel;
 using System;
@@ -38,12 +39,16 @@ namespace HairBand.ViewComponents
             var html = this.GetHtml(file);
 
             return View("ThemeSection", html);
-                
+
         }
 
         private string ReplaceTokens(string templateHtml)
         {
             //ToDo replace with dotLiquid
+            var template = Template.Parse(templateHtml);
+
+            var output = template.Render(new Hash());
+
 
             return templateHtml
                               .Replace("{{PageTitle}}", ViewBag.Title)
