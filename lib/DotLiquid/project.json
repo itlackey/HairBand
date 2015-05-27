@@ -1,0 +1,44 @@
+{
+  "version": "1.8.0",
+  "dependencies": {
+    "System.Collections": "4.0.0-beta-22816",
+    "System.Diagnostics.Debug": "4.0.0-beta-22816",
+    "System.Globalization.Extensions": "4.0.0-beta-22816",
+    "System.IO": "4.0.0-beta-22816",
+    "System.IO.FileSystem": "4.0.0-beta-22816",
+    "System.Linq": "4.0.0-beta-22816",
+    "System.Linq.Expressions": "4.0.0-beta-22816",
+    "System.Reflection": "4.0.0-beta-22816",
+    "System.Reflection.Extensions": "4.0.0-beta-22816",
+    "System.Reflection.TypeExtensions": "4.0.0-beta-22816",
+    "System.Resources.ResourceManager": "4.0.0-beta-22816",
+    "System.Runtime": "4.0.0-beta-22816",
+    "System.Runtime.Serialization.Primitives": "4.0.0-beta-22816",
+    "System.Text.RegularExpressions": "4.0.0-beta-22816"
+  },
+  "resource": [
+    "Properties/Resources.resx"
+  ],
+  "exclude": [
+    "bin/**/*.*",
+    "obj/**/*.*",
+    "Properties/Resources.Designer.cs",
+    "Properties/Resources.*.Designer.cs"
+  ],
+  "frameworks": {
+    "aspnetcore50": {
+      "compilationOptions": {
+        "define": [
+          "NETCore"
+        ]
+      }
+    },
+    "net451": {
+      "wrappedProject": "DotLiquid.csproj",
+      "bin": {
+        "assembly": "obj/{configuration}/DotLiquid.dll",
+        "pdb": "obj/{configuration}/DotLiquid.pdb"
+      }
+    }
+  }
+}

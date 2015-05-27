@@ -4,7 +4,7 @@
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>@ViewBag.Title - @AppSettings.Options.SiteTitle</title>
+        <title>@ViewBag.Title - @AppSettings.Options.Title</title>
 
         <environment names="Development">
             <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.css" />
@@ -30,7 +30,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a asp-controller="Home" asp-action="Index" class="navbar-brand">@AppSettings.Options.SiteTitle</a>
+                    <a asp-controller="Home" asp-action="Index" class="navbar-brand">@AppSettings.Options.Title</a>
                 </div>
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
@@ -46,7 +46,7 @@
             @RenderBody()
             <hr />
             <footer>
-                <p>&copy; 2015 - @AppSettings.Options.SiteTitle</p>
+                <p>&copy; 2015 - @AppSettings.Options.Title</p>
             </footer>
         </div>
 

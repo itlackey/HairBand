@@ -5,7 +5,6 @@
     "": [
       "CommonMark.NET >= 0.9.0",
       "Microsoft.AspNet.Hosting.Interfaces >= 1.0.0-beta4",
-      "DotLiquid >= 1.8.0",
       "Newtonsoft.Json >= 6.0.8",
       "Microsoft.AspNet.Identity >= 3.0.0-beta4"
     ],
@@ -68,37 +67,6 @@
         "lib/portable-net40+sl50+wp80+win+wpa81+MonoAndroid10+MonoTouch10/CommonMark.xml",
         "tools/cmark.exe",
         "tools/cmark.exe.config"
-      ]
-    },
-    "DotLiquid/1.8.0": {
-      "serviceable": false,
-      "sha": "VZakikO860nzk7pliV7kx2DDFen6PqwOCuSVh3o6t9EkNXPpsXklRMWGK70vltkWhFhhAA29XJuWJKU4ADXKrA==",
-      "frameworks": {
-        "DNX,Version=v4.5.1": {
-          "dependencies": {},
-          "frameworkAssemblies": [],
-          "runtimeAssemblies": [
-            "lib/NET45/DotLiquid.dll"
-          ],
-          "compileAssemblies": [
-            "lib/NET45/DotLiquid.dll"
-          ]
-        },
-        "DNXCore,Version=v5.0": {
-          "dependencies": {},
-          "frameworkAssemblies": [],
-          "runtimeAssemblies": [],
-          "compileAssemblies": []
-        }
-      },
-      "files": [
-        "DotLiquid.1.8.0.nupkg",
-        "DotLiquid.1.8.0.nupkg.sha512",
-        "DotLiquid.nuspec",
-        "LICENSE.txt",
-        "lib/NET35/DotLiquid.dll",
-        "lib/NET40/DotLiquid.dll",
-        "lib/NET45/DotLiquid.dll"
       ]
     },
     "Microsoft.AspNet.Authentication/1.0.0-beta4": {

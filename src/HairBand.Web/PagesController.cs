@@ -37,6 +37,8 @@ namespace HairBand.Controllers
 
             var model = await this._provider.GetPageData(page);
 
+            ViewBag.PageData = model;
+
             return View(model);
         }
 

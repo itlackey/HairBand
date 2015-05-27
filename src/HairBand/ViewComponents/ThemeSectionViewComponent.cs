@@ -44,17 +44,32 @@ namespace HairBand.ViewComponents
 
         private string ReplaceTokens(string templateHtml)
         {
+
+            Template.RegisterSafeType(typeof(AppSettings), new string[] { "Title", "Theme" });
+
             //ToDo replace with dotLiquid
             var template = Template.Parse(templateHtml);
 
-            var output = template.Render(new Hash());
+            var hash = Hash.FromAnonymousObject(new
+            {
+                page = (ViewBag.PageData as PageData).Settings,
+                site = this.AppSettings.Options,
+                theme_folder = "/themes/" + this.AppSettings.Options.Theme,
+                current_date = DateTime.Now
+            });
+           
+
+            var output = template.Render(hash);
+
+            return output;
 
 
-            return templateHtml
-                              .Replace("{{PageTitle}}", ViewBag.Title)
-                              .Replace("{{SiteTitle}}", this.AppSettings.Options.SiteTitle)
-                              .Replace("{{ThemeFolder}}", "/themes/" + this.AppSettings.Options.Theme)
-                              .Replace("{{Year}}", DateTime.Now.Year.ToString());
+
+            //return templateHtml
+            //                  .Replace("{{PageTitle}}", ViewBag.Title)
+            //                  .Replace("{{SiteTitle}}", this.AppSettings.Options.SiteTitle)
+            //                  .Replace("{{ThemeFolder}}", "/themes/" + this.AppSettings.Options.Theme)
+            //                  .Replace("{{Year}}", DateTime.Now.Year.ToString());
         }
 
     }

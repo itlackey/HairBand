@@ -11,8 +11,9 @@ namespace HairBand
         public AppSettings()
         {
             this.Theme = "default";
+            this.Title = "Hair Band (Default)";
         }
-        public string SiteTitle { get; set; }
+        public string Title { get; set; }
 
         public string Theme { get; set; }
     }
