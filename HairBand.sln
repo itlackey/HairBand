@@ -17,9 +17,9 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "HairBand.Core", "src\HairBa
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "HairBand.Web", "src\HairBand.Web\HairBand.Web.xproj", "{7D8D54FE-72F7-4F87-84B7-2E679325332D}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "DotLiquid-Core", "..\dotliquid\src\DotLiquid\DotLiquid-Core.xproj", "{498A1B1F-FD7F-496A-8B56-67918DF80971}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "DotLiquid-Core", "lib\DotLiquid\DotLiquid-Core.xproj", "{498A1B1F-FD7F-496A-8B56-67918DF80971}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotLiquid", "..\dotliquid\src\DotLiquid\DotLiquid.csproj", "{CB9372CD-9C1D-47AB-92D8-702D4D68324F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotLiquid", "lib\DotLiquid\DotLiquid.csproj", "{CB9372CD-9C1D-47AB-92D8-702D4D68324F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{F786FCAD-E4CC-482B-8110-FBB156F0F5C9}"
 EndProject

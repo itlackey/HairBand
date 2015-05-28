@@ -6,7 +6,7 @@
   </PropertyGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>498a1b1f-fd7f-496a-8b56-67918df80971</ProjectGuid>
-    <RootNamespace>DotLiquid</RootNamespace>
+    <RootNamespace>DotLiquid-Core</RootNamespace>
     <BaseIntermediateOutputPath Condition="'$(BaseIntermediateOutputPath)'=='' ">obj\core\</BaseIntermediateOutputPath>
     <OutputPath Condition="'$(OutputPath)'=='' ">bin\core\</OutputPath>
   </PropertyGroup>

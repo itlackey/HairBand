@@ -47,8 +47,7 @@ namespace HairBand.ViewComponents
 
             Template.RegisterSafeType(typeof(AppSettings), new string[] { "Title", "Theme" });
 
-            //ToDo replace with dotLiquid
-            var template = Template.Parse(templateHtml);
+             var template = Template.Parse(templateHtml);
 
             var hash = Hash.FromAnonymousObject(new
             {

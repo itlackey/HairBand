@@ -20,6 +20,7 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\dotliquid\src\DotLiquid\DotLiquid.csproj" />
+    <ProjectReference Include="..\..\lib\DotLiquid\DotLiquid.csproj" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\DNX\Microsoft.DNX.targets" Condition="'$(VSToolsPath)' != ''" />
 </Project>

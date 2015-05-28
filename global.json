@@ -1,5 +1,5 @@
 {
-    "projects": [ "src", "test", "../dotliquid/src" ],
+    "projects": [ "src", "test", "../dotliquid/src", "lib" ],
     "sdk": {
         "version": "1.0.0-beta4"
     }
