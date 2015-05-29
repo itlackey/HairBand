@@ -64,13 +64,15 @@ namespace HairBand.Controllers
             //if (!file.EndsWith(".html"))
             //    file += ".html";
 
-            this.ThemePath = this.Host.WebRootPath + "/themes/" + this.AppSettings.Options.Theme;
+            this.ThemePath = this.Host.WebRootPath + "\\themes\\" + this.AppSettings.Options.Theme;
 
             var templateHtml = System.IO.File.ReadAllText(ThemePath + "/default.html"); // + file);
        
             Template.RegisterSafeType(typeof(AppSettings), new string[] { "Title", "Theme" });
 
-            Template.FileSystem = new LocalFileSystem(this.ThemePath);
+            Template.FileSystem = new LocalFileSystem(
+                //"/themes/" + this.AppSettings.Options.Theme); 
+                this.ThemePath);
 
             //var context = new DotLiquid.Context();
 
@@ -90,12 +92,12 @@ namespace HairBand.Controllers
             });
 
 
-            var themeFiles = Directory.GetFiles(ThemePath);
+            //var themeFiles = Directory.GetFiles(ThemePath);
 
-            foreach (var file in themeFiles)
-            {
-                hash.Add(Path.GetFileNameWithoutExtension(file), file);
-            }
+            //foreach (var file in themeFiles)
+            //{
+            //    hash.Add(Path.GetFileNameWithoutExtension(file), file);
+            //}
 
             var output = template.Render(hash);
 

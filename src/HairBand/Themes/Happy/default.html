@@ -1,28 +1,33 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{{page.title}} - {{site.title}}</title>
-
-    <link rel="stylesheet" href="{{theme_folder}}/lib/bootstrap/css/bootstrap.css" />
-    <link rel="stylesheet" href="{{theme_folder}}/lib/bootstrap-touch-carousel/css/bootstrap-touch-carousel.css" />
-    <link rel="stylesheet" href="{{theme_folder}}/css/site.css" />
-
+    {% include 'head' %}
 </head>
 <body>
-   HAPPY:
-    {{content}}
-
-    <hr />
-    <footer>
-        <p>&copy; My Year {{current_date}} - {{site.title}}</p>
-    </footer>
-
-    <script src="{{theme_folder}}/lib/jquery/jquery.js"></script>
-    <script src="{{theme_folder}}/lib/bootstrap/js/bootstrap.js"></script>
-    <script src="{{theme_folder}}/lib/hammer.js/hammer.js"></script>
-    <script src="{{theme_folder}}/lib/bootstrap-touch-carousel/js/bootstrap-touch-carousel.js"></script>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a asp-controller="Home" asp-action="Index" class="navbar-brand">{{site.title}}</a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href="/home">Home</a></li>
+                    <li><a href="/about">About</a></li>
+                    <li><a asp-controller="Home" asp-action="Contact">Contact</a></li>
+                </ul>
+                @await Html.PartialAsync("_LoginPartial")
+            </div>
+        </div>
+    </div>
+    <div class="container body-content">
+        {{content}}
+        {% include 'footer' %}
+    </div>
 </body>
 </html>
 
