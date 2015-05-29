@@ -84,11 +84,12 @@ namespace HairBand.Controllers
 
             var hash = Hash.FromAnonymousObject(new
             {
-                page = page.Settings,
+                page = page,
                 site = this.AppSettings.Options,
                 theme_folder = "/themes/" + this.AppSettings.Options.Theme,
                 current_date = DateTime.Now,
-                content = page.Content
+                content = page.Content,
+                user = this.User.Identity.Name
             });
 
 
