@@ -1,4 +1,4 @@
-﻿@model IEnumerable<PageData>
+﻿@model IEnumerable<IDictionary<string, object>>
 
 @{
     ViewBag.Title = "Pages";
@@ -7,6 +7,6 @@
 @foreach (var page in Model)
 {
 
-    <a href="/@page.Url">@page.Metadata.title</a>
+    <a href="/@page["url"]">@page["title"]</a>
 
 }

@@ -21,18 +21,18 @@ namespace HairBand
         }
 
 
-        public async Task<IEnumerable<PageData>> GetPages()
+        public async Task<IEnumerable<IDictionary<string, object>>> GetPages()
         {
             return await Task.Run(async () =>
             {
                 var urls = Directory.GetFiles(this._host.WebRootPath + "/app_data/pages/", "*.md")
                                .Select(p => Path.GetFileNameWithoutExtension(p).Replace('-', '/'));
 
-                var pages = new List<PageData>();
+                var pages = new List<IDictionary<string, object>>();
 
                 foreach (var item in urls)
                 {
-                    pages.Add(await GetPageData(item));
+                    pages.Add(await GetData(item));
                 }
 
                 return pages;
@@ -40,7 +40,7 @@ namespace HairBand
 
         }
 
-        public async Task<PageData> GetPageData(string url)
+        public async Task<IDictionary<string, object>> GetData(string url)
         {
             return await Task.Run(() =>
             {
@@ -53,12 +53,11 @@ namespace HairBand
 
                     var headerString = md.Substring(md.IndexOf("---\r\n"), md.LastIndexOf("---") - 2);
 
-                    var settings = new Dictionary<string, string>();
+                    var settings = new Dictionary<string, object>();
 
                     var settingLines = headerString.Split('\r', '\n');
 
-                    var metadata = new PageSettings();
-
+                  
                     foreach (var line in settingLines)
                     {
                         if (line.Contains(":"))
@@ -67,8 +66,6 @@ namespace HairBand
 
                             settings.Add(data.First(), data.Last());
 
-                            metadata.AddProperty(data.First(), data.Last());
-
                         }
                     }
 
@@ -76,7 +73,12 @@ namespace HairBand
 
                     var html = CommonMarkConverter.Convert(body);
 
-                    return new PageData() { Url = url.Replace('-', '/'), Content = html, Settings = settings, Metadata = metadata };
+                    settings.Add("content", html);
+
+                    if (!settings.ContainsKey("date"))
+                        settings.Add("date", DateTime.Now);
+
+                    return  settings;
                 }
                 else
                     throw new FileNotFoundException("This page does not exist");
@@ -84,6 +86,52 @@ namespace HairBand
             });
 
         }
+
+
+        //public async Task<PageData> GetPageData(string url)
+        //{
+        //    return await Task.Run(() =>
+        //    {
+
+        //        var path = this._host.WebRootPath + "/app_data/pages/" + url.TrimEnd('/').Replace('/', '-') + ".md";
+
+        //        if (File.Exists(path))
+        //        {
+        //            var md = File.ReadAllText(path);
+
+        //            var headerString = md.Substring(md.IndexOf("---\r\n"), md.LastIndexOf("---") - 2);
+
+        //            var settings = new Dictionary<string, object>();
+
+        //            var settingLines = headerString.Split('\r', '\n');
+
+        //            var metadata = new PageSettings();
+
+        //            foreach (var line in settingLines)
+        //            {
+        //                if (line.Contains(":"))
+        //                {
+        //                    var data = line.Split(':');
+
+        //                    settings.Add(data.First(), data.Last());
+
+        //                    metadata.AddProperty(data.First(), data.Last());
+
+        //                }
+        //            }
+
+        //            var body = md.Substring(md.LastIndexOf("---") + 5);
+
+        //            var html = CommonMarkConverter.Convert(body);
+
+        //            return new PageData() { Url = url.Replace('-', '/'), Content = html, Settings = settings, Metadata = metadata };
+        //        }
+        //        else
+        //            throw new FileNotFoundException("This page does not exist");
+
+        //    });
+
+        //}
 
     }
 }

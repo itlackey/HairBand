@@ -5,7 +5,10 @@ namespace HairBand
 {
     public interface IPageDataProvider
     {
-        Task<PageData> GetPageData(string url);
-        Task<IEnumerable<PageData>> GetPages();
+        //Task<PageData> GetPageData(string url);
+
+        Task<IDictionary<string, object>> GetData(string url);
+
+        Task<IEnumerable<IDictionary<string, object>>> GetPages();
     }
 }

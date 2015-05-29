@@ -48,69 +48,48 @@ namespace HairBand.Controllers
 
             ViewBag.Page = page;
 
-            var model = await this._provider.GetPageData(page);
+            var model = await this._provider.GetData(page);
 
             ViewBag.PageData = model;
 
 
-            ViewBag.Content = this.GetHtml(model);
+            ViewBag.Content =  this.GetHtml(model);
 
 
             return View(model);
         }
 
-        private string GetHtml(PageData page)
+        private string GetHtml(IDictionary<string, object> pageData)
         {
-            //if (!file.EndsWith(".html"))
-            //    file += ".html";
-
             this.ThemePath = this.Host.WebRootPath + "\\themes\\" + this.AppSettings.Options.Theme;
 
             var templateHtml = System.IO.File.ReadAllText(ThemePath + "/default.html"); // + file);
        
             Template.RegisterSafeType(typeof(AppSettings), new string[] { "Title", "Theme" });
 
-            Template.FileSystem = new LocalFileSystem(
+            
+           Template.FileSystem = new LocalFileSystem(
                 //"/themes/" + this.AppSettings.Options.Theme); 
                 this.ThemePath);
 
-            //var context = new DotLiquid.Context();
-
-            //var html = Template.FileSystem.ReadTemplateFile(context, "app_data/themes/happy/default.html");
-
-
-
+            
             var template = Template.Parse(templateHtml);
 
             var hash = Hash.FromAnonymousObject(new
             {
-                page = page,
-                site = this.AppSettings.Options,
+                page = pageData,
+                site =  this.AppSettings.Options,
                 theme_folder = "/themes/" + this.AppSettings.Options.Theme,
                 current_date = DateTime.Now,
-                content = page.Content,
+                content = pageData["content"],
                 user = this.User.Identity.Name
             });
-
-
-            //var themeFiles = Directory.GetFiles(ThemePath);
-
-            //foreach (var file in themeFiles)
-            //{
-            //    hash.Add(Path.GetFileNameWithoutExtension(file), file);
-            //}
+            
 
             var output = template.Render(hash);
 
             return output;
-
-
-
-            //return templateHtml
-            //                  .Replace("{{PageTitle}}", ViewBag.Title)
-            //                  .Replace("{{SiteTitle}}", this.AppSettings.Options.SiteTitle)
-            //                  .Replace("{{ThemeFolder}}", "/themes/" + this.AppSettings.Options.Theme)
-            //                  .Replace("{{Year}}", DateTime.Now.Year.ToString());
+            
         }
 
     }
