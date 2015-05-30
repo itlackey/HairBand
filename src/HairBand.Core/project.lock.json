@@ -6,7 +6,8 @@
       "CommonMark.NET >= 0.9.0",
       "Microsoft.AspNet.Hosting.Interfaces >= 1.0.0-beta4",
       "Newtonsoft.Json >= 6.0.8",
-      "Microsoft.AspNet.Identity >= 3.0.0-beta4"
+      "Microsoft.AspNet.Identity >= 3.0.0-beta4",
+      "YamlDotNet >= 3.6.0"
     ],
     "DNX,Version=v4.5.1": [],
     "DNXCore,Version=v5.0": [
@@ -3789,6 +3790,43 @@
         "lib/contract/System.Xml.XDocument.dll",
         "lib/net45/System.Xml.XDocument.dll",
         "lib/portable-wpa81+wp80+win80+net45+aspnetcore50/System.Xml.XDocument.dll"
+      ]
+    },
+    "YamlDotNet/3.6.0": {
+      "serviceable": false,
+      "sha": "b7XlllMpZVYaLhBtEMtIwCLMZb41SNhcpa3WWlMOvn2F7sVBUaXmk0O3Gdt6/zIXGA1VvuXLavdT1hDvd1dc8Q==",
+      "frameworks": {
+        "DNX,Version=v4.5.1": {
+          "dependencies": {},
+          "frameworkAssemblies": [],
+          "runtimeAssemblies": [
+            "lib/net35/YamlDotNet.dll"
+          ],
+          "compileAssemblies": [
+            "lib/net35/YamlDotNet.dll"
+          ]
+        },
+        "DNXCore,Version=v5.0": {
+          "dependencies": {},
+          "frameworkAssemblies": [],
+          "runtimeAssemblies": [
+            "lib/portable-net45+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1/YamlDotNet.dll"
+          ],
+          "compileAssemblies": [
+            "lib/portable-net45+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1/YamlDotNet.dll"
+          ]
+        }
+      },
+      "files": [
+        "YamlDotNet.3.6.0.nupkg",
+        "YamlDotNet.3.6.0.nupkg.sha512",
+        "YamlDotNet.nuspec",
+        "lib/net35/YamlDotNet.dll",
+        "lib/net35/YamlDotNet.pdb",
+        "lib/net35/YamlDotNet.xml",
+        "lib/portable-net45+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1/YamlDotNet.dll",
+        "lib/portable-net45+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1/YamlDotNet.pdb",
+        "lib/portable-net45+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1/YamlDotNet.xml"
       ]
     }
   }

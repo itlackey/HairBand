@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace HairBand
 {
-    public class Site 
+    public class Site : DynamicObject
     {
         public string Name { get; set; }
 
@@ -34,6 +34,15 @@ namespace HairBand
         public IDictionary<string, PostData> Tags { get; set; }
 
 
+        public override bool TryGetMember(GetMemberBinder binder, out object result)
+        {
+            return base.TryGetMember(binder, out result);
+        }
+
+        public override bool TrySetMember(SetMemberBinder binder, object value)
+        {
+            return base.TrySetMember(binder, value);
+        }
 
 
     }

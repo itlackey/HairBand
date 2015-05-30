@@ -10,7 +10,8 @@
         "CommonMark.NET": "0.9.0",
         "Microsoft.AspNet.Hosting.Interfaces": "1.0.0-beta4",
         "Newtonsoft.Json": "6.0.8",
-        "Microsoft.AspNet.Identity": "3.0.0-beta4"
+        "Microsoft.AspNet.Identity": "3.0.0-beta4",
+        "YamlDotNet": "3.6.0"
     },
 
     "frameworks": {

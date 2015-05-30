@@ -64,7 +64,7 @@ namespace HairBand.ViewComponents
 
             var hash = Hash.FromAnonymousObject(new
             {
-                page = (ViewBag.PageData as PageData).Settings,
+                page = (ViewBag.PageData as PageData)._settings,
                 site = this.AppSettings.Options,
                 theme_folder = "/themes/" + this.AppSettings.Options.Theme,
                 current_date = DateTime.Now

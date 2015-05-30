@@ -44,7 +44,14 @@ namespace HairBand.Controllers
 
         public async Task<IActionResult> Page(string page)
         {
-            
+
+            var des = new YamlDotNet.Serialization.Deserializer
+                (new YamlDotNet.Serialization.ObjectFactories.DefaultObjectFactory(), 
+                new YamlDotNet.Serialization.NamingConventions.UnderscoredNamingConvention(), 
+                false);
+
+            var s = des.Deserialize(new StringReader(""));
+
 
             ViewBag.Page = page;
 
@@ -55,7 +62,7 @@ namespace HairBand.Controllers
 
             ViewBag.Content =  this.GetHtml(model);
 
-
+          
             return View(model);
         }
 
@@ -64,6 +71,7 @@ namespace HairBand.Controllers
             this.ThemePath = this.Host.WebRootPath + "\\themes\\" + this.AppSettings.Options.Theme;
 
             var templateHtml = System.IO.File.ReadAllText(ThemePath + "/default.html"); // + file);
+
        
             Template.RegisterSafeType(typeof(AppSettings), new string[] { "Title", "Theme" });
 
