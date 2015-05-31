@@ -92,6 +92,8 @@ namespace HairBand
             // services.AddWebApiConventions();
 
             services.Add(new ServiceDescriptor(typeof(IPageDataProvider), typeof(PageDataProvider), ServiceLifetime.Singleton));
+            services.Add(new ServiceDescriptor(typeof(ISiteDataProvider), typeof(SiteDataProvider), ServiceLifetime.Singleton));
+
         }
 
         // Configure is called after ConfigureServices is called.

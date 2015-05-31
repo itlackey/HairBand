@@ -17,10 +17,12 @@ namespace HairBand.Controllers
     {
 
         private readonly IPageDataProvider _provider;
+        private ISiteDataProvider _siteProvider;
 
-        public PagesController(IPageDataProvider provider, IOptions<AppSettings> appSettings, IHostingEnvironment host)
+        public PagesController(IPageDataProvider provider, ISiteDataProvider siteProvider, IOptions<AppSettings> appSettings, IHostingEnvironment host)
         {
             this._provider = provider;
+            this._siteProvider = siteProvider;
 
             this.AppSettings = appSettings;
             this.Host = host;
@@ -45,59 +47,46 @@ namespace HairBand.Controllers
         public async Task<IActionResult> Page(string page)
         {
 
-            var des = new YamlDotNet.Serialization.Deserializer
-                (new YamlDotNet.Serialization.ObjectFactories.DefaultObjectFactory(), 
-                new YamlDotNet.Serialization.NamingConventions.UnderscoredNamingConvention(), 
-                false);
-
-            var s = des.Deserialize(new StringReader(""));
-
-
-            ViewBag.Page = page;
-
             var model = await this._provider.GetData(page);
 
-            ViewBag.PageData = model;
+            var siteData =  await this._siteProvider.GetSiteDataAsync();
 
+           // ViewBag.Content = this.GetHtml(model, siteData);
 
-            ViewBag.Content =  this.GetHtml(model);
+            //ToDo change to use HtmlRender
 
-          
             return View(model);
         }
 
-        private string GetHtml(IDictionary<string, object> pageData)
+        private string GetHtml(IDictionary<string, object> pageData, IDictionary<string, object> siteData)
         {
-            this.ThemePath = this.Host.WebRootPath + "\\themes\\" + this.AppSettings.Options.Theme;
+            this.ThemePath = this.Host.WebRootPath + "\\themes\\" + siteData["theme"]; // this.AppSettings.Options.Theme;
 
             var templateHtml = System.IO.File.ReadAllText(ThemePath + "/default.html"); // + file);
 
-       
+
             Template.RegisterSafeType(typeof(AppSettings), new string[] { "Title", "Theme" });
 
-            
-           Template.FileSystem = new LocalFileSystem(
-                //"/themes/" + this.AppSettings.Options.Theme); 
-                this.ThemePath);
+            Template.FileSystem = new LocalFileSystem(this.ThemePath);
 
-            
+
             var template = Template.Parse(templateHtml);
 
             var hash = Hash.FromAnonymousObject(new
             {
                 page = pageData,
-                site =  this.AppSettings.Options,
+                site = siteData,
                 theme_folder = "/themes/" + this.AppSettings.Options.Theme,
                 current_date = DateTime.Now,
                 content = pageData["content"],
                 user = this.User.Identity.Name
             });
-            
+
 
             var output = template.Render(hash);
 
             return output;
-            
+
         }
 
     }

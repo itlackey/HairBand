@@ -1,7 +1,7 @@
-﻿@model PageData
+﻿@model IDictionary<string, object>
 @{ 
 
     Layout = "";
-    ViewBag.Title = Model.Metadata.title;
+    ViewBag.Title = Model["title"];
 }
 @Html.Raw(ViewBag.Content as String)

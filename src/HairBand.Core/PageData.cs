@@ -9,36 +9,122 @@ namespace HairBand
 {
     public class PageData : DynamicObject //, IDictionary<string, object>
     {
-        public IDictionary<string, object> _settings;
 
         public PageData()
         {
-            this._settings = new Dictionary<string, object>();
+            this.Content = string.Empty;
+            this.Title = string.Empty;
+            this.Exceprt = string.Empty;
+            this.Url = string.Empty;
             this.Date = DateTime.Now;
+            this.Id = string.Empty;
+            this.Categories = new List<string>();
+            this.Tags = new List<string>();
+            this.Path = string.Empty;
+            this.Next = null;
+            this.Previous = null;
+
         }
 
-        public string Content { get; set; }
+        public string Content
+        {
+            get { return this["content"].ToString(); }
+            set { this["content"] = value; }
+        }
 
-        public string Title { get; set; }
+        public string Title
+        {
+            get { return this["title"].ToString(); }
+            set { this["title"] = value; }
+        }
 
-        public string Exceprt { get; set; }
+        public string Exceprt
+        {
+            get { return this["exceprt"].ToString(); }
+            set { this["exceprt"] = value; }
+        }
 
-        public string Url { get; set; }
+        public string Url
+        {
+            get { return this["url"].ToString(); }
+            set { this["url"] = value; }
+        }
 
-        public DateTime Date { get; set; }
+        public DateTime Date {
+            get
+            {
+                return Convert.ToDateTime(this["date"]);
+            }
+            set { this["date"] = value; }
+        }
 
-        public string Id { get; set; }
+        public string Id
+        {
+            get { return this["id"].ToString(); }
+            set { this["id"] = value; }
+        }
 
-        public IEnumerable<string> Categories { get; set; }
+        public ICollection<string> Categories {
+            get
+            {
+                return this["categories"] as ICollection<string>;
+            }
+            set { this["categories"] = value; }
+        }
 
-        public IEnumerable<string> Tags { get; set; }
+        public ICollection<string> Tags {
+            get
+            {
+                return this["tags"] as ICollection<string>;
+            }
+            set { this["tags"] = value; }
+        }
 
-        public string Path { get; set; }
+        public string Path
+        {
+            get { return this["path"].ToString(); }
+            set { this["path"] = value; }
+        }
 
-        public PostData Next { get; set; }
+        public PostData Next
+        {
+            get
+            {
+                return this["next"] as PostData;
+            }
+            set { this["next"] = value; }
+        }
 
-        public PostData Previous { get; set; }
+        public PostData Previous
+        {
+            get
+            {
+                return this["previous"] as PostData;
+            }
+            set { this["previous"] = value; }
+        }
 
+
+        #region Dictionary
+        public Dictionary<string, object> _settings = new Dictionary<string, object>();
+
+        public object this[string key]
+        {
+            get
+            {
+              
+                return this._settings[key.ToLower()];
+            }
+
+            set
+            {
+
+                if (this._settings.ContainsKey(key.ToLower()))
+                    this._settings[key.ToLower()] = value;
+                else
+                    this._settings.Add(key.ToLower(), value);
+            }
+        }
 
         public IDictionary<string, object> ToDictionary()
         {
@@ -61,6 +147,7 @@ namespace HairBand
 
         public override bool TrySetMember(SetMemberBinder binder, object value)
         {
+
 
             this._settings.Add(binder.Name.ToLower(), value);
 
@@ -117,6 +204,8 @@ namespace HairBand
             var index = indexes[0].ToString();
             return _settings.TryGetValue(index, out result);
         }
+        
+        #endregion
 
 
         //#region IDictionary

@@ -8,7 +8,8 @@ eval("var project = " + fs.readFileSync("./project.json"));
 var paths = {
     bower: "./bower_components/",
     lib: "./" + project.webroot + "/lib/",
-    themes: "./" + project.webroot + "/themes/"
+    themes: "./" + project.webroot + "/themes/",
+    data_root: "./" + project.webroot + "/app_data/"
 };
 
 gulp.task("clean", function (cb) {
@@ -38,4 +39,13 @@ gulp.task("clean_themes", function (cb) {
 gulp.task("copy_themes", function () {
     gulp.src("./themes/**")
         .pipe(gulp.dest(paths.themes));
+});
+
+gulp.task("clean_site_data", function (cb) {
+    rimraf(paths.data_root, cb);
+});
+
+gulp.task("copy_site_data", function () {
+    gulp.src("./app_data/**")
+        .pipe(gulp.dest(paths.data_root));
 });

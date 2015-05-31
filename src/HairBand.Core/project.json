@@ -11,7 +11,8 @@
         "Microsoft.AspNet.Hosting.Interfaces": "1.0.0-beta4",
         "Newtonsoft.Json": "6.0.8",
         "Microsoft.AspNet.Identity": "3.0.0-beta4",
-        "YamlDotNet": "3.6.0"
+        "YamlDotNet": "3.6.0",
+        "DotLiquid": "1.8.0"
     },
 
     "frameworks": {

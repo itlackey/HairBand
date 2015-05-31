@@ -1,6 +1,7 @@
 {
   "AppSettings": {
     "Title": "Hair Band",
-    "Theme": "Happy"
+    "Theme": "Happy",
+    "Example": "Example test"
   }
 }
