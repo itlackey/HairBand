@@ -8,6 +8,7 @@ using Microsoft.AspNet.Hosting;
 using DotLiquid;
 using DotLiquid.FileSystems;
 using System.IO;
+using Microsoft.AspNet.Identity;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -19,13 +20,15 @@ namespace HairBand.Controllers
         private readonly IPageDataProvider _provider;
         private IPageHtmlRender _renderer;
         private ISiteDataProvider _siteProvider;
+        private IUserStore<BandMember> _userStore;
 
         public PagesController(
             IPageHtmlRender renderer,
-            IPageDataProvider provider, 
+            IUserStore<BandMember> userStore,
+            IPageDataProvider provider,
             ISiteDataProvider siteProvider) //, 
-            //IOptions<AppSettings> appSettings, 
-            //IHostingEnvironment host)
+                                            //IOptions<AppSettings> appSettings, 
+                                            //IHostingEnvironment host)
         {
             this._provider = provider;
             this._siteProvider = siteProvider;
@@ -34,6 +37,7 @@ namespace HairBand.Controllers
             //this.Host = host;
 
             this._renderer = renderer;
+            this._userStore = userStore;
 
         }
 
@@ -54,14 +58,17 @@ namespace HairBand.Controllers
 
         public async Task<IActionResult> Page(string page)
         {
+            BandMember user = null;
+
+            if (User.Identity.IsAuthenticated)
+                user = await _userStore.FindByNameAsync(User.Identity.Name, System.Threading.CancellationToken.None);
 
             //var model = await this._provider.GetData(page);
-            
-            var html = await this._renderer.GetHtmlAsync(page);
+            var html = await this._renderer.GetHtmlAsync(page, user);
 
             //ViewBag.Content = html;
 
-            return View(model:html);
+            return View(model: html);
         }
 
         //private string GetHtml(IDictionary<string, object> pageData, IDictionary<string, object> siteData)

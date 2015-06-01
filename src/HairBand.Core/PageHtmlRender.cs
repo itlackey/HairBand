@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using DotLiquid;
 using DotLiquid.FileSystems;
 using System.IO;
+using System.Threading;
 
 namespace HairBand
 {
@@ -21,6 +22,14 @@ namespace HairBand
 
         public async Task<string> GetHtmlAsync(string url)
         {
+
+            return await GetHtmlAsync(url, null);
+
+
+        }
+
+        public async Task<string> GetHtmlAsync(string url, BandMember currentUser)
+        {
             var pageData = await this._pageDataProvider.GetData(url);
 
             var siteData = await this._siteDataProvider.GetSiteDataAsync();
@@ -32,21 +41,27 @@ namespace HairBand
             Template.FileSystem = new LocalFileSystem(themePath);
 
             var template = Template.Parse(templateHtml);
+            Template.RegisterSafeType(typeof(BandMember), new string[] { "UserName" });
+            Hash userHash = null;
+
+            if (currentUser != null)
+               userHash =  Hash.FromAnonymousObject(new { name = currentUser.UserName });
 
             var hash = Hash.FromAnonymousObject(new
             {
-                page = pageData.ToDictionary(),
-                site = siteData.ToDictionary(),
+                page = pageData,
+                site = siteData,
                 theme_folder = "/themes/" + siteData["theme"],
                 current_date = DateTime.Now,
-                content = pageData["content"]
+                content = pageData.Content, // pageData["content"],
+                user = userHash
+
             });
 
 
             var output = template.Render(hash);
 
             return output;
-
         }
     }
 }

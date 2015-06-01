@@ -10,6 +10,11 @@
        more: {{page.more_stuff}}
         <h1>{{page.title}}</h1>
         {{content}}
+
+        {% for item in site.pages %}
+         PAGE: {{item.title}}<br />
+        {% endfor %}
+
         {% include 'footer' %}
     </div>
 </body>

@@ -4,10 +4,11 @@ using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
 using System.Threading.Tasks;
+using DotLiquid;
 
 namespace HairBand
 {
-    public abstract class DynamicDictionaryObject : DynamicObject, IDictionary<string, object>
+    public abstract class DynamicDictionaryObject : DynamicObject, IDictionary<string, object>, DotLiquid.ILiquidizable
     {
 
         public Dictionary<string, object> _properties = new Dictionary<string, object>();
@@ -24,6 +25,14 @@ namespace HairBand
                 this[item.Key] = item.Value;
 
         }
+
+        #region Liquid
+        object ILiquidizable.ToLiquid()
+        {
+            return ToDictionary();
+        }
+
+        #endregion
 
         #region Dynamic
         public override bool TryGetMember(GetMemberBinder binder, out object result)
@@ -211,9 +220,8 @@ namespace HairBand
 
 
 
-
-
         #endregion
+    
 
     }
 }

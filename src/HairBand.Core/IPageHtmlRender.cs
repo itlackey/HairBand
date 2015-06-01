@@ -8,5 +8,7 @@ namespace HairBand
     public interface IPageHtmlRender
     {
         Task<string> GetHtmlAsync(string url);
+
+        Task<string> GetHtmlAsync(string url, BandMember currentUser);
     }
 }

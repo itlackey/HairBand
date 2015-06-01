@@ -13,13 +13,15 @@ namespace HairBand
     public class SiteDataProvider : ISiteDataProvider
     {
         private IHostingEnvironment _host;
+        private IPageDataProvider _pageProvider;
 
-        public SiteDataProvider(IHostingEnvironment host)
+        public SiteDataProvider(IHostingEnvironment host, IPageDataProvider pageProvider)
         {
             this._host = host;
+            this._pageProvider = pageProvider;
         }
 
-        public Task<SiteData> GetSiteDataAsync()
+        public async Task<SiteData> GetSiteDataAsync()
         {
 
             //Todo caching, static_files, pages, posts, related_posts, html_page, data, documents, categories, tags
@@ -41,18 +43,11 @@ namespace HairBand
            
             data.RootPath = this._host.WebRootPath;
 
-            //var urls = Directory.GetFiles(this._host.WebRootPath + "/app_data/pages/", "*.md")
-            //                  .Select(p => Path.GetFileNameWithoutExtension(p).Replace('-', '/'));
+            var pages = await _pageProvider.GetPages();
 
-            //var pages = new List<IDictionary<string, object>>();
-
-            //foreach (var item in urls)
-            //{
-            //    pages.Add(await GetData(item));
-            //}
-
-
-            return Task.FromResult(data);
+            data.Pages = pages.ToList();
+            
+            return data;
 
         }
     }

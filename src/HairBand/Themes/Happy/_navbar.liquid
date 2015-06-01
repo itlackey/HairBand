@@ -1,23 +1,34 @@
-﻿ <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a asp-controller="Home" asp-action="Index" class="navbar-brand">{{site.title}}</a>
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li><a href="/home">Home - NAV</a></li>
-                    <li><a href="/about">About</a></li>
-                    <li><a asp-controller="Home" asp-action="Contact">Contact</a></li>
-                    <!--{for c_page in site.pages }
-                        <li>{c_page.title}</li>
-                    {endfor}-->
+﻿<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a href="/" class="navbar-brand">{{site.name}}</a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                {% for c_page in site.pages %}
+                <li><a href="{{c_page.url}}">{{c_page.title}}</a></li>
+                {% endfor %}
+            </ul>
+            {% if user != null %}
+            <form action="/_account/logoff" method="post" id="logoutForm" class="navbar-right">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/_manage" title="Manage">Hello {{user.name}})!</a>
+                    </li>
+                    <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
                 </ul>
-                @await Html.PartialAsync("_LoginPartial")
-            </div>
+            </form>
+            {%  else %}
+            <ul class="nav navbar-nav navbar-right">
+                <li><a id="registerLink" href="/_account/register">Register</a></li>
+                <li><a id="loginLink" href="/_account/login">Log in</a></li>
+            </ul>
+            {% endif %}
         </div>
     </div>
+</div>
