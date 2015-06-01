@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using YamlDotNet.Serialization;
+using YamlDotNet.Serialization.NamingConventions;
+using YamlDotNet.Serialization.ObjectFactories;
 
 namespace HairBand
 {
@@ -18,23 +21,34 @@ namespace HairBand
 
         public Task<SiteData> GetSiteDataAsync()
         {
+
+            //Todo caching, static_files, pages, posts, related_posts, html_page, data, documents, categories, tags
+           
             var path = this._host.WebRootPath + "/app_data/_config.yml";
 
-            var des = new YamlDotNet.Serialization.Deserializer(
-                new YamlDotNet.Serialization.ObjectFactories.DefaultObjectFactory(),
-                new YamlDotNet.Serialization.NamingConventions.PascalCaseNamingConvention(), true);
-            
+            var des = new Deserializer(new DefaultObjectFactory(), new PascalCaseNamingConvention(), true);
+
             var s = des.Deserialize(new StringReader(File.ReadAllText(path))) as Dictionary<object, object>;
 
-
-            var result = new Dictionary<string, object>();
+            var data = new SiteData();
 
             foreach (var item in s)
-            {
-                result.Add(item.Key.ToString(), item.Value);
-            }
+                data[item.Key.ToString()] = item.Value;
 
-            var data = new SiteData(result);
+            if (String.IsNullOrEmpty(data.Name))
+                throw new ArgumentNullException("Site name must be set.");
+
+
+            //var urls = Directory.GetFiles(this._host.WebRootPath + "/app_data/pages/", "*.md")
+            //                  .Select(p => Path.GetFileNameWithoutExtension(p).Replace('-', '/'));
+
+            //var pages = new List<IDictionary<string, object>>();
+
+            //foreach (var item in urls)
+            //{
+            //    pages.Add(await GetData(item));
+            //}
+
 
             return Task.FromResult(data);
 

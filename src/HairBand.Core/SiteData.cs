@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace HairBand
 {
-    public class SiteData : DynamicObject
+    public class SiteData : DynamicDictionaryObject
     {
 
         public SiteData()
@@ -24,14 +24,6 @@ namespace HairBand
             this.Categories = new Dictionary<string, PostData>();
             this.Tags = new Dictionary<string, PostData>();
             this.RootPath = string.Empty;
-        }
-
-        public SiteData(IDictionary<string, object> values)
-            :this()
-        {
-            this._settings = new Dictionary<string, object>(values);
-
-            //ToDo set defaults...
         }
 
         public string Name
@@ -145,62 +137,6 @@ namespace HairBand
 
         #endregion
 
-        #region Dictionary
-
-        private Dictionary<string, object> _settings = new Dictionary<string, object>();
-
-        public object this[string key]
-        {
-            get
-            {
-                return this._settings[key.ToLower()];
-            }
-
-            set
-            {
-
-                if (this._settings.ContainsKey(key.ToLower()))
-                    this._settings[key.ToLower()] = value;
-                else
-                    this._settings.Add(key.ToLower(), value);
-            }
-        }
-
-        public IDictionary<string, object> ToDictionary()
-        {
-            return this._settings;
-        }
-
-        public override bool TryGetMember(GetMemberBinder binder, out object result)
-        {
-
-            if (this._settings.ContainsKey(binder.Name.ToLower()))
-            {
-                result = this[binder.Name.ToLower()];
-                return true;
-            }
-            else
-            {
-                result = null;
-                return false;
-            }
-
-        }
-
-        public override bool TrySetMember(SetMemberBinder binder, object value)
-        {
-            if (this._settings.ContainsKey(binder.Name.ToLower()))
-            {
-                this[binder.Name.ToLower()] = value;
-            }
-            else
-            {
-                this._settings.Add(binder.Name.ToLower(), value);
-            }
-            return true;
-        }
-
-        #endregion
 
     }
 }

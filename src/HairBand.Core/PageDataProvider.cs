@@ -7,6 +7,9 @@ using System.IO;
 using CommonMark;
 using System.Dynamic;
 using Newtonsoft.Json;
+using YamlDotNet.Serialization;
+using YamlDotNet.Serialization.ObjectFactories;
+using YamlDotNet.Serialization.NamingConventions;
 
 namespace HairBand
 {
@@ -21,14 +24,15 @@ namespace HairBand
         }
 
 
-        public async Task<IEnumerable<IDictionary<string, object>>> GetPages()
+        public async Task<IEnumerable<PageData>> GetPages()
         {
+            //ToDo does this move to site?
             return await Task.Run(async () =>
             {
                 var urls = Directory.GetFiles(this._host.WebRootPath + "/app_data/pages/", "*.md")
                                .Select(p => Path.GetFileNameWithoutExtension(p).Replace('-', '/'));
 
-                var pages = new List<IDictionary<string, object>>();
+                var pages = new List<PageData>();
 
                 foreach (var item in urls)
                 {
@@ -40,7 +44,7 @@ namespace HairBand
 
         }
 
-        public async Task<IDictionary<string, object>> GetData(string url)
+        public async Task<PageData> GetData(string url)
         {
             return await Task.Run(() =>
             {
@@ -53,16 +57,15 @@ namespace HairBand
 
                     var headerString = md.Substring(md.IndexOf("---\r\n"), md.LastIndexOf("---") - 2);
 
-                    var des = new YamlDotNet.Serialization.Deserializer(
-                        new YamlDotNet.Serialization.ObjectFactories.DefaultObjectFactory(),
-                        new YamlDotNet.Serialization.NamingConventions.UnderscoredNamingConvention(),
+                    var des = new Deserializer(
+                        new DefaultObjectFactory(),
+                        new UnderscoredNamingConvention(),
                         false);
 
                     var s = des.Deserialize(new StringReader(headerString));
 
 
-
-                    var settings = new Dictionary<string, object>();
+                    var settings = new PageData();
 
                     var settingLines = headerString.Split('\r', '\n');
 
@@ -74,7 +77,7 @@ namespace HairBand
                         {
                             var data = line.Split(':');
 
-                            settings.Add(data.First(), data.Last());
+                            settings[data.First()] = data.Last();
 
                         }
                     }
@@ -85,7 +88,7 @@ namespace HairBand
 
                     settings.Add("content", html);
 
-                    SetRequiredProperties(url, settings);
+                    //SetRequiredProperties(url, settings);
 
                     return settings;
                 }
@@ -96,34 +99,34 @@ namespace HairBand
 
         }
 
-        protected void SetRequiredProperties(string url, Dictionary<string, object> settings)
-        {
-            SetDefaultValue(settings, "title", String.Empty);
+        //protected void SetRequiredProperties(string url, Dictionary<string, object> settings)
+        //{
+        //    SetDefaultValue(settings, "title", String.Empty);
 
-            SetDefaultValue(settings, "excerpt", String.Empty);
+        //    SetDefaultValue(settings, "excerpt", String.Empty);
 
-            SetDefaultValue(settings, "url", url);
+        //    SetDefaultValue(settings, "url", url);
 
-            SetDefaultValue(settings, "date", DateTime.Now);
+        //    SetDefaultValue(settings, "date", DateTime.Now);
 
-            SetDefaultValue(settings, "id", url);
+        //    SetDefaultValue(settings, "id", url);
 
-            SetDefaultValue(settings, "categories", new string[0]);
+        //    SetDefaultValue(settings, "categories", new string[0]);
 
-            SetDefaultValue(settings, "tags", new string[0]);
+        //    SetDefaultValue(settings, "tags", new string[0]);
 
-            SetDefaultValue(settings, "path", url);
+        //    SetDefaultValue(settings, "path", url);
 
-            SetDefaultValue(settings, "next", null);
+        //    SetDefaultValue(settings, "next", null);
 
-            SetDefaultValue(settings, "previous", null);
-        }
+        //    SetDefaultValue(settings, "previous", null);
+        //}
 
-        protected void SetDefaultValue(IDictionary<string, object> settings, string key, object defaultValue)
-        {
-            if (!settings.ContainsKey(key))
-                settings.Add(key, defaultValue);
-        }
+        //protected void SetDefaultValue(IDictionary<string, object> settings, string key, object defaultValue)
+        //{
+        //    if (!settings.ContainsKey(key))
+        //        settings.Add(key, defaultValue);
+        //}
 
         //public async Task<PageData> GetPageData(string url)
         //{

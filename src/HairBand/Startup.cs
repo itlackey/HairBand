@@ -93,6 +93,7 @@ namespace HairBand
 
             services.Add(new ServiceDescriptor(typeof(IPageDataProvider), typeof(PageDataProvider), ServiceLifetime.Singleton));
             services.Add(new ServiceDescriptor(typeof(ISiteDataProvider), typeof(SiteDataProvider), ServiceLifetime.Singleton));
+            services.Add(new ServiceDescriptor(typeof(IPageHtmlRender), typeof(PageHtmlRender), ServiceLifetime.Singleton));
 
         }
 

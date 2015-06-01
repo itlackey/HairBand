@@ -17,22 +17,30 @@ namespace HairBand.Controllers
     {
 
         private readonly IPageDataProvider _provider;
+        private IPageHtmlRender _renderer;
         private ISiteDataProvider _siteProvider;
 
-        public PagesController(IPageDataProvider provider, ISiteDataProvider siteProvider, IOptions<AppSettings> appSettings, IHostingEnvironment host)
+        public PagesController(
+            IPageHtmlRender renderer,
+            IPageDataProvider provider, 
+            ISiteDataProvider siteProvider) //, 
+            //IOptions<AppSettings> appSettings, 
+            //IHostingEnvironment host)
         {
             this._provider = provider;
             this._siteProvider = siteProvider;
 
-            this.AppSettings = appSettings;
-            this.Host = host;
+            //this.AppSettings = appSettings;
+            //this.Host = host;
+
+            this._renderer = renderer;
 
         }
 
-        public IOptions<AppSettings> AppSettings { get; private set; }
-        public IHostingEnvironment Host { get; private set; }
+        //public IOptions<AppSettings> AppSettings { get; private set; }
+        //public IHostingEnvironment Host { get; private set; }
 
-        public string ThemePath { get; private set; }
+        //public string ThemePath { get; private set; }
 
         // GET: /<controller>/
         public async Task<IActionResult> Index()
@@ -48,46 +56,44 @@ namespace HairBand.Controllers
         {
 
             var model = await this._provider.GetData(page);
+            
+            var html = await this._renderer.GetHtmlAsync(page);
 
-            var siteData =  await this._siteProvider.GetSiteDataAsync();
-
-           // ViewBag.Content = this.GetHtml(model, siteData);
-
-            //ToDo change to use HtmlRender
+            ViewBag.Content = html;
 
             return View(model);
         }
 
-        private string GetHtml(IDictionary<string, object> pageData, IDictionary<string, object> siteData)
-        {
-            this.ThemePath = this.Host.WebRootPath + "\\themes\\" + siteData["theme"]; // this.AppSettings.Options.Theme;
+        //private string GetHtml(IDictionary<string, object> pageData, IDictionary<string, object> siteData)
+        //{
+        //    this.ThemePath = this.Host.WebRootPath + "\\themes\\" + siteData["theme"]; // this.AppSettings.Options.Theme;
 
-            var templateHtml = System.IO.File.ReadAllText(ThemePath + "/default.html"); // + file);
-
-
-            Template.RegisterSafeType(typeof(AppSettings), new string[] { "Title", "Theme" });
-
-            Template.FileSystem = new LocalFileSystem(this.ThemePath);
+        //    var templateHtml = System.IO.File.ReadAllText(ThemePath + "/default.html"); // + file);
 
 
-            var template = Template.Parse(templateHtml);
+        //    Template.RegisterSafeType(typeof(AppSettings), new string[] { "Title", "Theme" });
 
-            var hash = Hash.FromAnonymousObject(new
-            {
-                page = pageData,
-                site = siteData,
-                theme_folder = "/themes/" + this.AppSettings.Options.Theme,
-                current_date = DateTime.Now,
-                content = pageData["content"],
-                user = this.User.Identity.Name
-            });
+        //    Template.FileSystem = new LocalFileSystem(this.ThemePath);
 
 
-            var output = template.Render(hash);
+        //    var template = Template.Parse(templateHtml);
 
-            return output;
+        //    var hash = Hash.FromAnonymousObject(new
+        //    {
+        //        page = pageData,
+        //        site = siteData,
+        //        theme_folder = "/themes/" + this.AppSettings.Options.Theme,
+        //        current_date = DateTime.Now,
+        //        content = pageData["content"],
+        //        user = this.User.Identity.Name
+        //    });
 
-        }
+
+        //    var output = template.Render(hash);
+
+        //    return output;
+
+        //}
 
     }
 }
