@@ -70,7 +70,6 @@ namespace HairBand
                     var settingLines = headerString.Split('\r', '\n');
 
 
-
                     foreach (var line in settingLines)
                     {
                         if (line.Contains(":"))
@@ -81,12 +80,13 @@ namespace HairBand
 
                         }
                     }
+                    
 
                     var body = md.Substring(md.LastIndexOf("---") + 5);
 
                     var html = CommonMarkConverter.Convert(body);
 
-                    settings.Add("content", html);
+                    settings["content"] = html;
 
                     //SetRequiredProperties(url, settings);
 

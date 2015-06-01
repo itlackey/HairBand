@@ -55,13 +55,13 @@ namespace HairBand.Controllers
         public async Task<IActionResult> Page(string page)
         {
 
-            var model = await this._provider.GetData(page);
+            //var model = await this._provider.GetData(page);
             
             var html = await this._renderer.GetHtmlAsync(page);
 
-            ViewBag.Content = html;
+            //ViewBag.Content = html;
 
-            return View(model);
+            return View(model:html);
         }
 
         //private string GetHtml(IDictionary<string, object> pageData, IDictionary<string, object> siteData)

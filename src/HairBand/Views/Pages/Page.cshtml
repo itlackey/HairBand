@@ -1,7 +1,5 @@
-﻿@model IDictionary<string, object>
+﻿@model string
 @{ 
-
     Layout = "";
-    ViewBag.Title = Model["title"];
 }
-@Html.Raw(ViewBag.Content as String)
+@Html.Raw(Model)

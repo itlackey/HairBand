@@ -38,6 +38,8 @@ namespace HairBand
             if (String.IsNullOrEmpty(data.Name))
                 throw new ArgumentNullException("Site name must be set.");
 
+           
+            data.RootPath = this._host.WebRootPath;
 
             //var urls = Directory.GetFiles(this._host.WebRootPath + "/app_data/pages/", "*.md")
             //                  .Select(p => Path.GetFileNameWithoutExtension(p).Replace('-', '/'));

@@ -1,0 +1,23 @@
+﻿ <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a asp-controller="Home" asp-action="Index" class="navbar-brand">{{site.title}}</a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href="/home">Home - NAV</a></li>
+                    <li><a href="/about">About</a></li>
+                    <li><a asp-controller="Home" asp-action="Contact">Contact</a></li>
+                    <!--{for c_page in site.pages }
+                        <li>{c_page.title}</li>
+                    {endfor}-->
+                </ul>
+                @await Html.PartialAsync("_LoginPartial")
+            </div>
+        </div>
+    </div>

@@ -35,8 +35,8 @@ namespace HairBand
 
             var hash = Hash.FromAnonymousObject(new
             {
-                page = pageData,
-                site = siteData,
+                page = pageData.ToDictionary(),
+                site = siteData.ToDictionary(),
                 theme_folder = "/themes/" + siteData["theme"],
                 current_date = DateTime.Now,
                 content = pageData["content"]

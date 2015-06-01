@@ -156,7 +156,7 @@ namespace HairBand
 
                 routes.MapRoute(
                     name: "home",
-                    template: "",
+                    template: "home/index",
                     defaults: new { controller = "Home", action = "Index" });
 
                 routes.MapRoute(
@@ -177,7 +177,7 @@ namespace HairBand
                 routes.MapRoute(
                      name: "Pages", 
                      template: "{*page}",
-                     defaults: new { controller = "Pages", action = "Page" } );
+                     defaults: new { controller = "Pages", action = "Page", page="home" } );
 
 
 
