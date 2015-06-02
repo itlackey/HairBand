@@ -17,6 +17,11 @@ namespace HairBand
     {
         private IHostingEnvironment _host;
 
+        private string _rootDataDirectory = "/app_data/";
+        private string _pageDirectory = "/_pages/";
+        private string _postDirectory = "/_posts/";
+        private string _adminDirectory = "/_admin/";
+
         public PageDataProvider(IHostingEnvironment host)
         {
             this._host = host;
@@ -29,7 +34,7 @@ namespace HairBand
             //ToDo does this move to site?
             return await Task.Run(async () =>
             {
-                var urls = Directory.GetFiles(this._host.WebRootPath + "/app_data/pages/", "*.md")
+                var urls = Directory.GetFiles(GetDirectoryPath("page"), "*.md")
                                .Select(p => Path.GetFileNameWithoutExtension(p).Replace('-', '/'));
 
                 var pages = new List<PageData>();
@@ -44,12 +49,16 @@ namespace HairBand
 
         }
 
+        private string GetDirectoryPath(string pageType)
+        {
+            return this._host.WebRootPath + "/app_data/_pages/";
+        }
+
         public async Task<PageData> GetData(string url)
         {
             return await Task.Run(() =>
             {
-
-                var path = this._host.WebRootPath + "/app_data/pages/" + url.TrimEnd('/').Replace('/', '-') + ".md";
+                var path = GetFilePath(url);
 
                 if (File.Exists(path))
                 {
@@ -80,7 +89,7 @@ namespace HairBand
 
                         }
                     }
-                    
+
 
                     var body = md.Substring(md.LastIndexOf("---") + 5);
 
@@ -97,6 +106,17 @@ namespace HairBand
 
             });
 
+        }
+
+        private string GetFilePath(string url)
+        {
+            var pageDirectory = "_pages/";
+
+            if (url.StartsWith("_admin"))
+                pageDirectory = string.Empty;
+
+            var path = this._host.WebRootPath + "/app_data/" + pageDirectory + url.TrimEnd('/').Replace('/', '-') + ".md";
+            return path;
         }
 
         //protected void SetRequiredProperties(string url, Dictionary<string, object> settings)

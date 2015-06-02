@@ -9,6 +9,7 @@ using DotLiquid;
 using DotLiquid.FileSystems;
 using System.IO;
 using Microsoft.AspNet.Identity;
+using System.Threading;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -58,10 +59,14 @@ namespace HairBand.Controllers
 
         public async Task<IActionResult> Page(string page)
         {
+
+            if (page.StartsWith("_") || page.StartsWith("app_data"))
+                return HttpNotFound();
+
             BandMember user = null;
 
             if (User.Identity.IsAuthenticated)
-                user = await _userStore.FindByNameAsync(User.Identity.Name, System.Threading.CancellationToken.None);
+                user = await _userStore.FindByNameAsync(User.Identity.Name, CancellationToken.None);
 
             //var model = await this._provider.GetData(page);
             var html = await this._renderer.GetHtmlAsync(page, user);
@@ -71,36 +76,22 @@ namespace HairBand.Controllers
             return View(model: html);
         }
 
-        //private string GetHtml(IDictionary<string, object> pageData, IDictionary<string, object> siteData)
-        //{
-        //    this.ThemePath = this.Host.WebRootPath + "\\themes\\" + siteData["theme"]; // this.AppSettings.Options.Theme;
+      
+        public async Task<IActionResult> Admin()
+        {
+            BandMember user = null;
 
-        //    var templateHtml = System.IO.File.ReadAllText(ThemePath + "/default.html"); // + file);
-
-
-        //    Template.RegisterSafeType(typeof(AppSettings), new string[] { "Title", "Theme" });
-
-        //    Template.FileSystem = new LocalFileSystem(this.ThemePath);
+            if (User.Identity.IsAuthenticated)
+                user = await _userStore.FindByNameAsync(User.Identity.Name, CancellationToken.None);
 
 
-        //    var template = Template.Parse(templateHtml);
+            //var model = await this._provider.GetData(page);
+            var html = await this._renderer.GetHtmlAsync("_admin/home", user);
 
-        //    var hash = Hash.FromAnonymousObject(new
-        //    {
-        //        page = pageData,
-        //        site = siteData,
-        //        theme_folder = "/themes/" + this.AppSettings.Options.Theme,
-        //        current_date = DateTime.Now,
-        //        content = pageData["content"],
-        //        user = this.User.Identity.Name
-        //    });
+            //ViewBag.Content = html;
 
+            return View(model: html);
 
-        //    var output = template.Render(hash);
-
-        //    return output;
-
-        //}
-
+        }
     }
 }

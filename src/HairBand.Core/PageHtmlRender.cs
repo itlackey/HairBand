@@ -22,10 +22,7 @@ namespace HairBand
 
         public async Task<string> GetHtmlAsync(string url)
         {
-
             return await GetHtmlAsync(url, null);
-
-
         }
 
         public async Task<string> GetHtmlAsync(string url, BandMember currentUser)
@@ -41,7 +38,7 @@ namespace HairBand
             Template.FileSystem = new LocalFileSystem(themePath);
 
             var template = Template.Parse(templateHtml);
-            Template.RegisterSafeType(typeof(BandMember), new string[] { "UserName" });
+            Template.RegisterSafeType(typeof(BandMember), new string[] { "UserName", "Name", "Email" });
             Hash userHash = null;
 
             if (currentUser != null)
@@ -53,7 +50,7 @@ namespace HairBand
                 site = siteData,
                 theme_folder = "/themes/" + siteData["theme"],
                 current_date = DateTime.Now,
-                content = pageData.Content, // pageData["content"],
+                content = pageData.Content,
                 user = userHash
 
             });

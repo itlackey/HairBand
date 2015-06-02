@@ -135,6 +135,8 @@ namespace HairBand
             set { this["root_path"] = value; }
         }
 
+        public string Theme { get; set; }
+
         #endregion
 
 

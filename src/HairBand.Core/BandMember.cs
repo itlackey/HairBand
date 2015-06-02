@@ -5,7 +5,7 @@ using System.Security.Claims;
 
 namespace HairBand
 {
-    public class BandMember : IItem<Guid>, IEquatable<Guid>
+    public class BandMember :  IItem<Guid>, IEquatable<Guid>
     {
         public BandMember()
         {
