@@ -34,6 +34,7 @@ namespace HairBand.Controllers
         public IActionResult Login(string returnUrl = null)
         {
             ViewBag.ReturnUrl = returnUrl;
+            
             return View();
         }
 

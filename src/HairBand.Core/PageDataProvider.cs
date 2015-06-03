@@ -32,90 +32,127 @@ namespace HairBand
         public async Task<IEnumerable<PageData>> GetPages()
         {
             //ToDo does this move to site?
-            return await Task.Run(async () =>
+
+            var pages = new List<PageData>();
+
+            var files = _host.WebRootFileProvider.GetDirectoryContents(_rootDataDirectory + _pageDirectory);
+
+            //var urls = Directory.GetFiles(GetDirectoryPath("page"), "*.md")
+            //               .Select(p => Path.GetFileNameWithoutExtension(p).Replace('-', '/'));
+
+            foreach (var item in files)
             {
-                var urls = Directory.GetFiles(GetDirectoryPath("page"), "*.md")
-                               .Select(p => Path.GetFileNameWithoutExtension(p).Replace('-', '/'));
 
-                var pages = new List<PageData>();
+                var page = await GetData(Path.GetFileNameWithoutExtension(item.Name).Replace('-', '/'));
 
-                foreach (var item in urls)
-                {
-                    pages.Add(await GetData(item));
-                }
+                page.Date = item.LastModified.Date;
+                page.Path = item.PhysicalPath;
 
-                return pages;
-            });
+                pages.Add(page);
+            }
+
+            return pages;
+
 
         }
 
-        private string GetDirectoryPath(string pageType)
+        private string GetDirectoryPath(string url)
         {
-            return this._host.WebRootPath + "/app_data/_pages/";
+            var pageType = url.TrimStart('/', '_');
+
+
+            if (pageType.StartsWith("admin"))
+            {
+                return _rootDataDirectory;
+                // return String.Format("{0}{1}", this._rootDataDirectory, this._adminDirectory);
+            }
+            else if (pageType.StartsWith("post"))
+            {
+                return String.Format("{0}{1}", this._rootDataDirectory, this._postDirectory);
+            }
+            else
+            {
+                return String.Format("{0}{1}", this._rootDataDirectory, this._pageDirectory);
+            }
         }
 
         public async Task<PageData> GetData(string url)
         {
-            return await Task.Run(() =>
+
+            var file = _host.WebRootFileProvider.GetFileInfo(GetFilePath(url));
+
+            if (file.Exists) // File.Exists(path))
             {
-                var path = GetFilePath(url);
 
-                if (File.Exists(path))
+                string markdown = string.Empty;
+                using (var reader = new StreamReader(file.CreateReadStream()))
                 {
-                    var md = File.ReadAllText(path);
 
-                    var headerString = md.Substring(md.IndexOf("---\r\n"), md.LastIndexOf("---") - 2);
+                    markdown = await reader.ReadToEndAsync();
 
-                    var des = new Deserializer(
-                        new DefaultObjectFactory(),
-                        new UnderscoredNamingConvention(),
-                        false);
-
-                    var s = des.Deserialize(new StringReader(headerString));
-
-
-                    var settings = new PageData();
-
-                    var settingLines = headerString.Split('\r', '\n');
-
-
-                    foreach (var line in settingLines)
-                    {
-                        if (line.Contains(":"))
-                        {
-                            var data = line.Split(':');
-
-                            settings[data.First()] = data.Last();
-
-                        }
-                    }
-
-
-                    var body = md.Substring(md.LastIndexOf("---") + 5);
-
-                    var html = CommonMarkConverter.Convert(body);
-
-                    settings["content"] = html;
-
-                    //SetRequiredProperties(url, settings);
-
-                    return settings;
                 }
-                else
-                    throw new FileNotFoundException("This page does not exist");
 
-            });
+                //var markdown = File.ReadAllText(file.PhysicalPath);
+
+                var headerString = markdown.Substring(markdown.IndexOf("---\r\n"), markdown.LastIndexOf("---") - 2);
+
+                var des = new Deserializer(
+                    new DefaultObjectFactory(),
+                    new UnderscoredNamingConvention(),
+                    false);
+
+                var s = des.Deserialize(new StringReader(headerString));
+
+
+                var settings = new PageData();
+
+                var settingLines = headerString.Split('\r', '\n');
+
+
+                foreach (var line in settingLines)
+                {
+                    if (line.Contains(":"))
+                    {
+                        var data = line.Split(':');
+
+                        settings[data.First()] = data.Last();
+
+                    }
+                }
+
+
+                var body = markdown.Substring(markdown.LastIndexOf("---") + 5);
+
+                var html = CommonMarkConverter.Convert(body);
+
+                settings["content"] = html;
+
+                //SetRequiredProperties(url, settings);
+
+                return settings;
+            }
+            else
+                throw new FileNotFoundException("This page does not exist: " + file.PhysicalPath);
+
 
         }
 
         private string GetFilePath(string url)
         {
-            var pageDirectory = "_pages/";
+            //var pageDirectory = "_pages/";
 
-            if (url.StartsWith("_admin"))
-                pageDirectory = string.Empty;
+            //if (url.StartsWith("_admin"))
+            //    pageDirectory = string.Empty;
+            var fileName = url.TrimEnd('/');
 
-            var path = this._host.WebRootPath + "/app_data/" + pageDirectory + url.TrimEnd('/').Replace('/', '-') + ".md";
+            if (!url.StartsWith("_"))
+                fileName = fileName.Replace('/', '-');
+
+            if (!Path.HasExtension(fileName))
+                fileName += ".md";
+
+            var path = this.GetDirectoryPath(url) + fileName;
+
             return path;
         }
 

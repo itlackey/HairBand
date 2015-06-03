@@ -10,6 +10,7 @@ using DotLiquid.FileSystems;
 using System.IO;
 using Microsoft.AspNet.Identity;
 using System.Threading;
+using Microsoft.AspNet.Authorization;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -77,6 +78,7 @@ namespace HairBand.Controllers
         }
 
       
+        //[Authorize(Roles = "Administrators")]
         public async Task<IActionResult> Admin()
         {
             BandMember user = null;
@@ -90,8 +92,26 @@ namespace HairBand.Controllers
 
             //ViewBag.Content = html;
 
-            return View(model: html);
+            return View("Page", model: html);
 
         }
+
+        //public string RenderRazorViewToString(string viewName, object model)
+        //{
+        //    ViewData.Model = model;
+        //    using (var sw = new StringWriter())
+        //    {
+          
+        //        var viewResult = ViewEngines.Engines.FindPartialView(ControllerContext, viewName);
+
+        //        var viewContext = new ViewContext(ControllerContext, viewResult.View, ViewData, TempData, sw);
+
+        //        viewResult.View.Render(viewContext, sw);
+
+        //        viewResult.ViewEngine.ReleaseView(ControllerContext, viewResult.View);
+
+        //        return sw.GetStringBuilder().ToString();
+        //    }
+        //}
     }
 }
