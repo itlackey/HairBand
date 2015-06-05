@@ -11,27 +11,43 @@ namespace HairBand.Web
 {
     internal class HairBandView : IView
     {
-        public HairBandView(string path, PageData page, SiteData site, BandMember user)
+        public HairBandView(string path)
         {
-            this.Page = page;
-            this.Site = site;
-            this.User = user;
             this.Path = path;
         }
+        
 
-        public PageData Page { get; private set; }
         public string Path { get; private set; }
-        public SiteData Site { get; private set; }
-        public BandMember User { get; private set; }
-
+       
         public async Task RenderAsync(ViewContext context)
         {
-
-           // await context.Writer.WriteAsync("Hair band!!");
 
             if (context == null)
                 throw new ArgumentNullException("viewContext");
 
+            RenderParameters renderParams = GetTemplateParameters(context);
+
+            var themePath = System.IO.Path.GetDirectoryName(Path); // siteData.RootPath + "\\themes\\" + siteData["theme"];
+
+            Template.FileSystem = new LocalFileSystem(themePath);
+
+            //// Render the template
+
+            string fileContents = GetTemplateConents();
+
+            var template = Template.Parse(fileContents);
+
+            //template.Render(context.Writer, renderParams);
+            var html = template.Render(renderParams);
+
+            await context.Writer.WriteAsync(html);
+
+
+
+        }
+
+        private static RenderParameters GetTemplateParameters(ViewContext context)
+        {
             // Copy data from the view context over to DotLiquid
             var localVars = new Hash();
 
@@ -57,16 +73,33 @@ namespace HairBand.Web
             foreach (var item in context.TempData)
                 localVars.Add(Template.NamingConvention.GetMemberName(item.Key), item.Value);
 
+            localVars.Add("current_date", DateTime.Now);
+
+            var siteData = context.ViewBag.Site as SiteData;
+            var pageData = context.ViewBag.Page as PageData;
+
+            if (siteData != null)
+                localVars.Add("theme_folder", "/themes/" + siteData.Theme);
+
+
+            if (pageData != null)
+                localVars.Add("content", pageData.Content);
+
             var renderParams = new RenderParameters
             {
                 LocalVariables = Hash.FromDictionary(localVars)
             };
 
-            // Render the template
-            var fileContents = ""; // VirtualPathProviderHelper.Load(ViewPath);
-            var template = Template.Parse(fileContents);
-            template.Render(context.Writer, renderParams);
+            return renderParams;
+        }
 
+        private string GetTemplateConents()
+        {
+            var templateHtml = File.ReadAllText(Path); // themePath + "/default.html");
+
+            var fileContents = templateHtml; // VirtualPathProviderHelper.Load(ViewPath);
+
+            return fileContents;
         }
 
         //public async Task<string> GetHtmlAsync(string url, BandMember currentUser)

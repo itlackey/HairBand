@@ -29,7 +29,7 @@ namespace HairBand
         {
             var pageData = await this._pageDataProvider.GetData(url);
 
-            var siteData = await this._siteDataProvider.GetSiteDataAsync();
+            var siteData =  this._siteDataProvider.GetSiteData();
 
             var themePath = siteData.RootPath + "\\themes\\" + siteData["theme"];
 

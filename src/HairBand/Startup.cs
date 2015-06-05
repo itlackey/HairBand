@@ -89,7 +89,7 @@ namespace HairBand
             services.AddMvc()
                 .Configure<MvcOptions>(options => 
                 {
-                    options.ViewEngines.Clear();
+                    //options.ViewEngines.Clear();
                     options.ViewEngines.Add(typeof(HairBandViewEngine));
 
                 });
@@ -166,7 +166,7 @@ namespace HairBand
                 routes.MapRoute(
                     name: "admin",
                     template: "_admin/{action}/{id?}",
-                    defaults: new { controller = "Pages", action = "Admin" });
+                    defaults: new { controller = "Pages", action = "Admin", page = "home" });
 
 
                 //routes.MapRoute(

@@ -20,12 +20,12 @@ namespace HairBand.Controllers
     {
 
         private readonly IPageDataProvider _provider;
-        private IPageHtmlRender _renderer;
+       // private IPageHtmlRender _renderer;
         private ISiteDataProvider _siteProvider;
         private IUserStore<BandMember> _userStore;
 
         public PagesController(
-            IPageHtmlRender renderer,
+            //IPageHtmlRender renderer,
             IUserStore<BandMember> userStore,
             IPageDataProvider provider,
             ISiteDataProvider siteProvider) //, 
@@ -38,7 +38,7 @@ namespace HairBand.Controllers
             //this.AppSettings = appSettings;
             //this.Host = host;
 
-            this._renderer = renderer;
+            //this._renderer = renderer;
             this._userStore = userStore;
 
         }
@@ -69,12 +69,17 @@ namespace HairBand.Controllers
             if (User.Identity.IsAuthenticated)
                 user = await _userStore.FindByNameAsync(User.Identity.Name, CancellationToken.None);
 
-            //var model = await this._provider.GetData(page);
-            var html = await this._renderer.GetHtmlAsync(page, user);
+            var model = await this._provider.GetData(page);
+            var site = this._siteProvider.GetSiteData();
+          //  var html = await this._renderer.GetHtmlAsync(page, user);
 
             //ViewBag.Content = html;
 
-            return View(model: html);
+
+            ViewBag.Page = model;
+            ViewBag.User = user;
+            ViewBag.Site = site;
+            return View("default.html"); // model: html);
         }
 
       
@@ -88,11 +93,11 @@ namespace HairBand.Controllers
 
 
             //var model = await this._provider.GetData(page);
-            var html = await this._renderer.GetHtmlAsync("_admin/home", user);
+            //var html = await this._renderer.GetHtmlAsync("_admin/home", user);
 
             //ViewBag.Content = html;
 
-            return View("Page", model: html);
+            return View(); // model: html);
 
         }
 

@@ -135,7 +135,11 @@ namespace HairBand
             set { this["root_path"] = value; }
         }
 
-        public string Theme { get; set; }
+        public string Theme
+        {
+            get { return this["theme"].ToString(); }
+            set { this["theme"] = value; }
+        }
 
         #endregion
 
