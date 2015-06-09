@@ -83,7 +83,7 @@ namespace HairBand.Web
 
 
             if (pageData != null)
-                localVars.Add("content", pageData.Content);
+                localVars.Add("content", GetContent(pageData, localVars));
 
             var renderParams = new RenderParameters
             {
@@ -91,6 +91,13 @@ namespace HairBand.Web
             };
 
             return renderParams;
+        }
+
+        private static string GetContent(PageData pageData, Hash localVars)
+        {
+            var contentTemplate = Template.Parse(pageData.Content);
+            var html = contentTemplate.Render(localVars);
+            return html; // pageData.Content;
         }
 
         private string GetTemplateConents()

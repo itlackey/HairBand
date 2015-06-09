@@ -7,4 +7,8 @@ more_stuff: more more more
 
 Pages are working...
 
+test test
+
 {{user.email}}
+
+Site: {{site.name}}
