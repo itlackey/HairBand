@@ -12,13 +12,13 @@ namespace HairBand.Controllers
 {
     public class BlogController : Controller
     {
-        private readonly IPageDataProvider _provider;
+        private readonly IPostDataProvider _provider;
         private ISiteDataProvider _siteProvider;
         private IUserStore<BandMember> _userStore;
 
         public BlogController(
             IUserStore<BandMember> userStore,
-            IPageDataProvider provider,
+            IPostDataProvider provider,
             ISiteDataProvider siteProvider)
         {
             this._provider = provider;

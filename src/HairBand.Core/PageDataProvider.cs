@@ -13,7 +13,7 @@ using YamlDotNet.Serialization.NamingConventions;
 
 namespace HairBand
 {
-    public class PageDataProvider : IPageDataProvider
+    public class PageDataProvider : IPageDataProvider, IPostDataProvider
     {
         private IHostingEnvironment _host;
 
@@ -154,6 +154,90 @@ namespace HairBand
             var path = this.GetDirectoryPath(url) + fileName;
 
             return path;
+        }
+
+        public async Task<PostData> GetPost(string url)
+        {
+            var file = _host.WebRootFileProvider.GetFileInfo(GetFilePath(url));
+
+            if (file.Exists) // File.Exists(path))
+            {
+
+                string markdown = string.Empty;
+                using (var reader = new StreamReader(file.CreateReadStream()))
+                {
+
+                    markdown = await reader.ReadToEndAsync();
+
+                }
+
+                //var markdown = File.ReadAllText(file.PhysicalPath);
+
+                var headerString = markdown.Substring(markdown.IndexOf("---\r\n"), markdown.LastIndexOf("---") - 2);
+
+                var des = new Deserializer(
+                    new DefaultObjectFactory(),
+                    new UnderscoredNamingConvention(),
+                    false);
+
+                var s = des.Deserialize(new StringReader(headerString));
+
+
+                var settings = new PostData();
+
+                var settingLines = headerString.Split('\r', '\n');
+
+
+                foreach (var line in settingLines)
+                {
+                    if (line.Contains(":"))
+                    {
+                        var data = line.Split(':');
+
+                        settings[data.First()] = data.Last();
+
+                    }
+                }
+
+
+                var body = markdown.Substring(markdown.LastIndexOf("---") + 5);
+
+                var html = CommonMarkConverter.Convert(body);
+
+                settings["content"] = html;
+
+                //SetRequiredProperties(url, settings);
+
+                return settings;
+            }
+            else
+                throw new FileNotFoundException("This post does not exist: " + file.PhysicalPath);
+
+        }
+
+        public async Task<IEnumerable<PostData>> GetPosts()
+        {
+            //ToDo does this move to site?
+
+            var posts = new List<PostData>();
+
+            var files = _host.WebRootFileProvider.GetDirectoryContents(_rootDataDirectory + _postDirectory);
+
+            //var urls = Directory.GetFiles(GetDirectoryPath("page"), "*.md")
+            //               .Select(p => Path.GetFileNameWithoutExtension(p).Replace('-', '/'));
+
+            foreach (var item in files)
+            {
+
+                var post = await GetPost(Path.GetFileNameWithoutExtension(item.Name).Replace('-', '/'));
+
+                post.Date = item.LastModified.Date;
+                post.Path = item.PhysicalPath;
+
+                posts.Add(post);
+            }
+
+            return posts;
         }
 
         //protected void SetRequiredProperties(string url, Dictionary<string, object> settings)
