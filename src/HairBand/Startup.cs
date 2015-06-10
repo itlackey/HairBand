@@ -144,11 +144,7 @@ namespace HairBand
             app.UseMvc(routes =>
             {
 
-                //routes.MapRoute(
-                //                  name: "default",
-                //                  template: "{controller}/{action}/{id?}",
-                //                  defaults: new { controller = "Home", action = "Index" });
-
+             
 
                 routes.MapRoute(
                     name: "account",
@@ -169,20 +165,22 @@ namespace HairBand
                     defaults: new { controller = "Pages", action = "Admin", page = "home" });
 
 
-                //routes.MapRoute(
-                //    name: "home",
-                //    template: "home/index",
-                //    defaults: new { controller = "Home", action = "Index" });
-
-                //routes.MapRoute(
-                //    name: "about",
-                //    template: "about",
-                //    defaults: new { controller = "Home", action = "About" });
-
+   
                 routes.MapRoute(
                    name: "error",
                    template: "_error",
                    defaults: new { controller = "Home", action = "Error" });
+
+                routes.MapRoute(
+                  name: "PostList",
+                  template: "blog",
+                  defaults: new { controller = "Blog", action = "Index" });
+
+                routes.MapRoute(
+                  name: "Post",
+                  template: "blog/{post}",
+                  defaults: new { controller = "Blog", action = "Post" });
+
 
                 routes.MapRoute(
                      name: "PageList", 

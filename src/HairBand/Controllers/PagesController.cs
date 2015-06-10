@@ -71,18 +71,39 @@ namespace HairBand.Controllers
 
             var model = await this._provider.GetData(page);
             var site = this._siteProvider.GetSiteData();
-          //  var html = await this._renderer.GetHtmlAsync(page, user);
+  
+            ViewBag.Page = model;
+            ViewBag.User = user;
+            ViewBag.Site = site;
+            return View(); 
+        }
 
-            //ViewBag.Content = html;
+
+
+        public async Task<IActionResult> Posts(string page)
+        {
+
+            if (page.StartsWith("_") || page.StartsWith("app_data"))
+                return HttpNotFound();
+
+            BandMember user = null;
+
+            if (User.Identity.IsAuthenticated)
+                user = await _userStore.FindByNameAsync(User.Identity.Name, CancellationToken.None);
+
+            var model = await this._provider.GetData(page);
+            var site = this._siteProvider.GetSiteData();
+
 
 
             ViewBag.Page = model;
             ViewBag.User = user;
             ViewBag.Site = site;
-            return View(); // model: html);
+            return View(); 
         }
 
-      
+
+
         //[Authorize(Roles = "Administrators")]
         public async Task<IActionResult> Admin()
         {

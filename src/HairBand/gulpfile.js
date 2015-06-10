@@ -9,7 +9,8 @@ var paths = {
     bower: "./bower_components/",
     lib: "./" + project.webroot + "/lib/",
     themes: "./" + project.webroot + "/themes/",
-    data_root: "./" + project.webroot + "/" //app_data/"
+    data_root: "./" + project.webroot + "/app_data/",
+    pages: "./" + project.webroot + "/_pages/",
 };
 
 gulp.task("clean", function (cb) {
