@@ -6,26 +6,36 @@ using Microsoft.Framework.Internal;
 using System.IO;
 using DotLiquid;
 using DotLiquid.FileSystems;
+using YamlDotNet.Serialization;
+using YamlDotNet.Serialization.ObjectFactories;
+using YamlDotNet.Serialization.NamingConventions;
+using System.Collections.Generic;
+using System.Text;
 
 namespace HairBand.Web
 {
     internal class HairBandView : IView
     {
+        public HairBandView()
+        {
+            this.Path = "default";
+        }
+
         public HairBandView(string path)
         {
             this.Path = path;
         }
-        
+
 
         public string Path { get; private set; }
-       
+
         public async Task RenderAsync(ViewContext context)
         {
 
             if (context == null)
                 throw new ArgumentNullException("viewContext");
 
-            RenderParameters renderParams = GetTemplateParameters(context);
+            var renderParams = GetTemplateParameters(context);
 
             var themePath = System.IO.Path.GetDirectoryName(Path); // siteData.RootPath + "\\themes\\" + siteData["theme"];
 
@@ -33,7 +43,15 @@ namespace HairBand.Web
 
             //// Render the template
 
-            string fileContents = GetTemplateConents();
+            //if (!File.Exists(templatePath))
+            //{
+            //    this.Path = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(templatePath), "default.html");
+
+            //    if (!File.Exists(Path))
+            //        throw new FileNotFoundException("Cannot locate view file");
+            //} 
+
+            string fileContents = GetTemplateConents(this.Path);
 
             var template = Template.Parse(fileContents);
 
@@ -41,8 +59,6 @@ namespace HairBand.Web
             var html = template.Render(renderParams);
 
             await context.Writer.WriteAsync(html);
-
-
 
         }
 
@@ -100,13 +116,51 @@ namespace HairBand.Web
             return html; // pageData.Content;
         }
 
-        private string GetTemplateConents()
+        private string GetTemplateConents(string templatePath)
         {
-            var templateHtml = File.ReadAllText(Path); // themePath + "/default.html");
 
-            var fileContents = templateHtml; // VirtualPathProviderHelper.Load(ViewPath);
+            //if (!File.Exists(templatePath))
+            //{
+            //    this.Path = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(templatePath), "default.html");
 
-            return fileContents;
+            //    if (!File.Exists(Path))
+            //        throw new FileNotFoundException("Cannot locate view file");
+            //} 
+
+            var templateContent = new StringBuilder();
+
+            var fileContents = File.ReadAllText(Path); // themePath + "/default.html");
+
+
+            if (fileContents.Contains("---\r\n"))
+            {
+
+                var headerString = fileContents.Substring(0, fileContents.LastIndexOf("---") - 2);
+
+                var des = new Deserializer(
+                    new DefaultObjectFactory(),
+                    new UnderscoredNamingConvention(),
+                    false);
+
+                var meta = des.Deserialize(new StringReader(headerString));
+
+                var d = meta as Dictionary<object, object>;
+
+                if (d.ContainsKey("layout"))
+                {
+                    Console.WriteLine("has layout");
+                }
+
+                ///Merge with parent layout... (recursive)
+
+            }
+            else
+            {
+                templateContent.Append(fileContents);
+            }
+            //var templateHtml = fileContents; // VirtualPathProviderHelper.Load(ViewPath);
+
+            return templateContent.ToString();
         }
 
         //public async Task<string> GetHtmlAsync(string url, BandMember currentUser)

@@ -1,5 +1,6 @@
-﻿layout: default
-----
-This is the page template
-<hr />
-{{content}}
+﻿{% extends 'default' %}
+
+{% block content %}
+    This is the page template
+   {{content}}
+{% endblock %}

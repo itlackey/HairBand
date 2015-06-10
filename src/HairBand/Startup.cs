@@ -89,7 +89,7 @@ namespace HairBand
             services.AddMvc()
                 .Configure<MvcOptions>(options => 
                 {
-                    //options.ViewEngines.Clear();
+                    options.ViewEngines.Clear();
                     options.ViewEngines.Add(typeof(HairBandViewEngine));
 
                 });

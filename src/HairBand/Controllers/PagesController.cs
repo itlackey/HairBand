@@ -79,7 +79,7 @@ namespace HairBand.Controllers
             ViewBag.Page = model;
             ViewBag.User = user;
             ViewBag.Site = site;
-            return View("default.html"); // model: html);
+            return View(); // model: html);
         }
 
       
