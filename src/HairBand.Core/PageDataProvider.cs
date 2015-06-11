@@ -17,10 +17,10 @@ namespace HairBand
     {
         private IHostingEnvironment _host;
 
-        private string _rootDataDirectory = "/app_data/";
-        private string _pageDirectory = "/_pages/";
-        private string _postDirectory = "/_posts/";
-        private string _adminDirectory = "/_admin/";
+        private string _rootDataDirectory = "/app_data";
+        private string _pageDirectory = "/_pages";
+        private string _postDirectory = "/_posts";
+        private string _adminDirectory = "/_admin";
 
         public PageDataProvider(IHostingEnvironment host)
         {
@@ -79,7 +79,12 @@ namespace HairBand
         public async Task<PageData> GetData(string url)
         {
 
-            var file = _host.WebRootFileProvider.GetFileInfo(GetFilePath(url));
+            var fileName = GetFilename(url);
+
+            var path = String.Format("{0}/{1}/{2}", this._rootDataDirectory, this._pageDirectory, fileName);
+
+
+            var file = _host.WebRootFileProvider.GetFileInfo(path);
 
             if (file.Exists) // File.Exists(path))
             {
@@ -158,61 +163,78 @@ namespace HairBand
 
         public async Task<PostData> GetPost(string url)
         {
-            var file = _host.WebRootFileProvider.GetFileInfo(GetFilePath(url));
+            var fileName = GetFilename(url);
+
+            var path = String.Format("{0}/{1}/{2}", this._rootDataDirectory, this._postDirectory, fileName);
+
+            var file = _host.WebRootFileProvider.GetFileInfo(path);
 
             if (file.Exists) // File.Exists(path))
             {
 
-                string markdown = string.Empty;
-                using (var reader = new StreamReader(file.CreateReadStream()))
-                {
-
-                    markdown = await reader.ReadToEndAsync();
-
-                }
-
-                //var markdown = File.ReadAllText(file.PhysicalPath);
-
-                var headerString = markdown.Substring(markdown.IndexOf("---\r\n"), markdown.LastIndexOf("---") - 2);
-
-                var des = new Deserializer(
-                    new DefaultObjectFactory(),
-                    new UnderscoredNamingConvention(),
-                    false);
-
-                var s = des.Deserialize(new StringReader(headerString));
-
-
                 var settings = new PostData();
 
-                var settingLines = headerString.Split('\r', '\n');
-
-
-                foreach (var line in settingLines)
-                {
-                    if (line.Contains(":"))
-                    {
-                        var data = line.Split(':');
-
-                        settings[data.First()] = data.Last();
-
-                    }
-                }
-
-
-                var body = markdown.Substring(markdown.LastIndexOf("---") + 5);
-
-                var html = CommonMarkConverter.Convert(body);
-
-                settings["content"] = html;
-
-                //SetRequiredProperties(url, settings);
+                await PopulateData(file, settings);
 
                 return settings;
             }
             else
                 throw new FileNotFoundException("This post does not exist: " + file.PhysicalPath);
 
+        }
+
+        private static async Task PopulateData(Microsoft.AspNet.FileProviders.IFileInfo file, DynamicDictionaryObject settings)
+        {
+            string markdown = string.Empty;
+            using (var reader = new StreamReader(file.CreateReadStream()))
+            {
+
+                markdown = await reader.ReadToEndAsync();
+
+            }
+
+            var headerString = markdown.Substring(markdown.IndexOf("---\r\n"), markdown.LastIndexOf("---") - 2);
+
+            var des = new Deserializer(
+                new DefaultObjectFactory(),
+                new UnderscoredNamingConvention(),
+                false);
+
+            var s = des.Deserialize(new StringReader(headerString));
+
+
+            var settingLines = headerString.Split('\r', '\n');
+
+
+            foreach (var line in settingLines)
+            {
+                if (line.Contains(":"))
+                {
+                    var data = line.Split(':');
+
+                    settings[data.First()] = data.Last();
+
+                }
+            }
+
+
+            var body = markdown.Substring(markdown.LastIndexOf("---") + 5);
+
+            var html = CommonMarkConverter.Convert(body);
+
+            settings["content"] = html;
+        }
+
+        private static string GetFilename(string url)
+        {
+            var fileName = url.TrimEnd('/');
+
+            if (!url.StartsWith("_"))
+                fileName = fileName.Replace('/', '-');
+
+            if (!Path.HasExtension(fileName))
+                fileName += ".md";
+            return fileName;
         }
 
         public async Task<IEnumerable<PostData>> GetPosts()

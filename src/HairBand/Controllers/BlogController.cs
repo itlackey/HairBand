@@ -45,7 +45,7 @@ namespace HairBand.Controllers
             if (User.Identity.IsAuthenticated)
                 user = await _userStore.FindByNameAsync(User.Identity.Name, CancellationToken.None);
 
-            var model = await this._provider.GetData(post);
+            var model = await this._provider.GetPost(post);
             var site = this._siteProvider.GetSiteData();
 
             ViewBag.Page = model;

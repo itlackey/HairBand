@@ -37,25 +37,15 @@ namespace HairBand.Web
 
             var renderParams = GetTemplateParameters(context);
 
-            var themePath = System.IO.Path.GetDirectoryName(Path); // siteData.RootPath + "\\themes\\" + siteData["theme"];
+            var themePath = System.IO.Path.GetDirectoryName(Path); 
 
-            Template.FileSystem = new LocalFileSystem(themePath);
+            Template.FileSystem = new LocalThemeFileSystem(themePath);
 
-            //// Render the template
-
-            //if (!File.Exists(templatePath))
-            //{
-            //    this.Path = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(templatePath), "default.html");
-
-            //    if (!File.Exists(Path))
-            //        throw new FileNotFoundException("Cannot locate view file");
-            //} 
 
             string fileContents = GetTemplateConents(this.Path);
 
             var template = Template.Parse(fileContents);
 
-            //template.Render(context.Writer, renderParams);
             var html = template.Render(renderParams);
 
             await context.Writer.WriteAsync(html);
@@ -119,17 +109,9 @@ namespace HairBand.Web
         private string GetTemplateConents(string templatePath)
         {
 
-            //if (!File.Exists(templatePath))
-            //{
-            //    this.Path = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(templatePath), "default.html");
-
-            //    if (!File.Exists(Path))
-            //        throw new FileNotFoundException("Cannot locate view file");
-            //} 
-
             var templateContent = new StringBuilder();
 
-            var fileContents = File.ReadAllText(Path); // themePath + "/default.html");
+            var fileContents = File.ReadAllText(Path);
 
 
             if (fileContents.Contains("---\r\n"))
@@ -158,45 +140,8 @@ namespace HairBand.Web
             {
                 templateContent.Append(fileContents);
             }
-            //var templateHtml = fileContents; // VirtualPathProviderHelper.Load(ViewPath);
 
             return templateContent.ToString();
         }
-
-        //public async Task<string> GetHtmlAsync(string url, BandMember currentUser)
-        //{
-        //    //var pageData = await this._pageDataProvider.GetData(url);
-
-        //    //var siteData = await this._siteDataProvider.GetSiteDataAsync();
-
-        //    var themePath = siteData.RootPath + "\\themes\\" + siteData["theme"];
-
-        //    var templateHtml = File.ReadAllText(themePath + "/default.html");
-
-        //    Template.FileSystem = new LocalFileSystem(themePath);
-
-        //    var template = Template.Parse(templateHtml);
-        //    Template.RegisterSafeType(typeof(BandMember), new string[] { "UserName", "Name", "Email" });
-        //    Hash userHash = null;
-
-        //    if (currentUser != null)
-        //        userHash = Hash.FromAnonymousObject(new { name = currentUser.UserName });
-
-        //    var hash = Hash.FromAnonymousObject(new
-        //    {
-        //        page = pageData,
-        //        site = siteData,
-        //        theme_folder = "/themes/" + siteData["theme"],
-        //        current_date = DateTime.Now,
-        //        content = pageData.Content,
-        //        user = userHash
-
-        //    });
-
-
-        //    var output = template.Render(hash);
-
-        //    return output;
-        //}
-    }
+ }
 }

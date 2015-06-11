@@ -1,4 +1,4 @@
-/// <binding AfterBuild='copy, copy_themes' Clean='clean, clean_themes' />
+/// <binding AfterBuild='copy, copy_themes, copy_site_data' Clean='clean, clean_themes, clean_site_data' />
 var gulp = require("gulp"),
   rimraf = require("rimraf"),
   fs = require("fs");
@@ -9,8 +9,7 @@ var paths = {
     bower: "./bower_components/",
     lib: "./" + project.webroot + "/lib/",
     themes: "./" + project.webroot + "/themes/",
-    data_root: "./" + project.webroot + "/app_data/",
-    pages: "./" + project.webroot + "/_pages/",
+    data_root: "./" + project.webroot + "/app_data/"
 };
 
 gulp.task("clean", function (cb) {
