@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.Mvc;
 using Microsoft.AspNet.Identity;
 using System.Threading;
+using System.IO;
 
 namespace HairBand.Web
 {
@@ -22,9 +23,6 @@ namespace HairBand.Web
 
         public ViewEngineResult FindPartialView(ActionContext context, string partialViewName)
         {
-            //if (context.RouteData.Values["controller"].ToString() != "Pages")
-            //    return ViewEngineResult.NotFound(partialViewName, new string[] { });
-
             var view = this.CreateView(context, partialViewName);
 
             return ViewEngineResult.Found(partialViewName, view);
@@ -32,10 +30,6 @@ namespace HairBand.Web
 
         public ViewEngineResult FindView(ActionContext context, string viewName)
         {
-
-            //if (context.RouteData.Values["controller"].ToString() != "Pages")
-            //    return ViewEngineResult.NotFound(viewName, new string[] { });
-
             var view = this.CreateView(context, viewName);
 
             return ViewEngineResult.Found(viewName, view);
@@ -45,22 +39,46 @@ namespace HairBand.Web
         {
 
             var siteData = _siteDataProvider.GetSiteData();
+            var themePath = String.Format("{0}/themes/{1}/", siteData.RootPath, siteData.Theme ?? "Default");
+            var path = string.Empty;
 
-            if (viewName != "default.html")
-            {
-                if (!viewName.StartsWith("_"))
-                    viewName = String.Format("_{0}", viewName);
 
-                if (!viewName.EndsWith(".liquid") || !viewName.EndsWith(".html"))
-                    viewName += ".liquid";
+            if (File.Exists(Path.Combine(themePath, viewName)))
+                path = Path.Combine(themePath, viewName);
 
-            }
+            else if (File.Exists(Path.Combine(themePath, viewName + ".html")))
+                path = Path.Combine(themePath, viewName + ".html");
 
-            var path = String.Format("{0}/themes/{1}/{2}", siteData.RootPath, siteData.Theme ?? "Default", viewName);
+            else if (File.Exists(Path.Combine(themePath, "_" + viewName)))
+                path = Path.Combine(themePath, "_" + viewName);
 
-            var view = new HairBandView(path);
+            else if (File.Exists(Path.Combine(themePath, "_" + viewName + ".liquid")))
+                path = Path.Combine(themePath, "_" + viewName + ".liquid");
 
-            return view;
+            else
+                throw new FileNotFoundException("View cannot be located.");
+
+
+            //if (viewName.EndsWith(".html"))
+            //{
+
+            //}
+            //else
+            ////if (viewName != "default.html")
+            //{
+            //    if (!viewName.StartsWith("_"))
+            //        viewName = String.Format("_{0}", viewName);
+
+            //    if (!viewName.EndsWith(".liquid") || !viewName.EndsWith(".html"))
+            //        viewName += ".liquid";
+
+            //}
+
+
+
+
+
+            return new HairBandView(path);
         }
 
 

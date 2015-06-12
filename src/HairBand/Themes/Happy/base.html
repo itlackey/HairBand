@@ -4,18 +4,10 @@
 <body>
     {% include 'navbar' %}
     <div class="container body-content">
-
         <h1>{{page.title}}</h1>
-        <h2>html</h2>
         {% block content %}
         {{content}}
         {%endblock%}
-
-        Pages:<br />
-        {% for item in site.pages %}
-        PAGE: {{item.title}}<br />
-        {% endfor %}
-
         {% include 'footer' %}
     </div>
 </body>

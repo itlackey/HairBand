@@ -43,10 +43,25 @@ namespace HairBand
             foreach (var item in files)
             {
 
-                var page = await GetData(Path.GetFileNameWithoutExtension(item.Name).Replace('-', '/'));
+                var page = await GetData(Path.GetFileNameWithoutExtension(item.Name).Replace('_', '/'));
 
                 page.Date = item.LastModified.Date;
                 page.Path = item.PhysicalPath;
+
+                var defaultUrl = Path.GetFileNameWithoutExtension(page.Path).Replace('_', '/');
+
+                if (page.Url == null || !page.Url.Contains(defaultUrl))
+                {
+                    var urls = new List<string>();
+
+                    urls.Add(defaultUrl);
+
+                    if (page.Url != null)
+                        urls.AddRange(page.Url);
+
+                    page.Url = urls;
+                }
+
 
                 pages.Add(page);
             }
@@ -56,25 +71,25 @@ namespace HairBand
 
         }
 
-        private string GetDirectoryPath(string url)
-        {
-            var pageType = url.TrimStart('/', '_');
+        //private string GetDirectoryPath(string url)
+        //{
+        //    var pageType = url.TrimStart('/', '_');
 
 
-            if (pageType.StartsWith("admin"))
-            {
-                return _rootDataDirectory;
-                // return String.Format("{0}{1}", this._rootDataDirectory, this._adminDirectory);
-            }
-            else if (pageType.StartsWith("post"))
-            {
-                return String.Format("{0}{1}", this._rootDataDirectory, this._postDirectory);
-            }
-            else
-            {
-                return String.Format("{0}{1}", this._rootDataDirectory, this._pageDirectory);
-            }
-        }
+        //    if (pageType.StartsWith("admin"))
+        //    {
+        //        return _rootDataDirectory;
+        //        // return String.Format("{0}{1}", this._rootDataDirectory, this._adminDirectory);
+        //    }
+        //    else if (pageType.StartsWith("post"))
+        //    {
+        //        return String.Format("{0}{1}", this._rootDataDirectory, this._postDirectory);
+        //    }
+        //    else
+        //    {
+        //        return String.Format("{0}{1}", this._rootDataDirectory, this._pageDirectory);
+        //    }
+        //}
 
         public async Task<PageData> GetData(string url)
         {
@@ -96,6 +111,9 @@ namespace HairBand
                     markdown = await reader.ReadToEndAsync();
 
                 }
+
+                if (!markdown.Contains("---\r\n"))
+                    throw new ArgumentException("This is not a valid page. Page's must conain metadata.");
 
                 //var markdown = File.ReadAllText(file.PhysicalPath);
 
@@ -142,24 +160,24 @@ namespace HairBand
 
         }
 
-        private string GetFilePath(string url)
-        {
-            //var pageDirectory = "_pages/";
+        //private string GetFilePath(string url)
+        //{
+        //    //var pageDirectory = "_pages/";
 
-            //if (url.StartsWith("_admin"))
-            //    pageDirectory = string.Empty;
-            var fileName = url.TrimEnd('/');
+        //    //if (url.StartsWith("_admin"))
+        //    //    pageDirectory = string.Empty;
+        //    var fileName = url.TrimEnd('/');
 
-            if (!url.StartsWith("_"))
-                fileName = fileName.Replace('/', '-');
+        //    if (!url.StartsWith("_"))
+        //        fileName = fileName.Replace('/', '-');
 
-            if (!Path.HasExtension(fileName))
-                fileName += ".md";
+        //    if (!Path.HasExtension(fileName))
+        //        fileName += ".md";
 
-            var path = this.GetDirectoryPath(url) + fileName;
+        //    var path = this.GetDirectoryPath(url) + fileName;
 
-            return path;
-        }
+        //    return path;
+        //}
 
         public async Task<PostData> GetPost(string url)
         {
@@ -230,10 +248,13 @@ namespace HairBand
             var fileName = url.TrimEnd('/');
 
             if (!url.StartsWith("_"))
-                fileName = fileName.Replace('/', '-');
+                fileName = fileName.Replace('/', '_');
 
             if (!Path.HasExtension(fileName))
                 fileName += ".md";
+            else if (Path.HasExtension(fileName) && Path.GetExtension(fileName) == ".html")
+                fileName = Path.ChangeExtension(fileName, ".md");
+
             return fileName;
         }
 

@@ -70,7 +70,7 @@ namespace HairBand.Controllers
                 user = await _userStore.FindByNameAsync(User.Identity.Name, CancellationToken.None);
 
             var model = await this._provider.GetData(page);
-            var site = this._siteProvider.GetSiteData();
+            var site = await this._siteProvider.GetSiteDataAsync();
   
             ViewBag.Page = model;
             ViewBag.User = user;
@@ -80,27 +80,27 @@ namespace HairBand.Controllers
 
 
 
-        public async Task<IActionResult> Posts(string page)
-        {
+        //public async Task<IActionResult> Posts(string page)
+        //{
 
-            if (page.StartsWith("_") || page.StartsWith("app_data"))
-                return HttpNotFound();
+        //    if (page.StartsWith("_") || page.StartsWith("app_data"))
+        //        return HttpNotFound();
 
-            BandMember user = null;
+        //    BandMember user = null;
 
-            if (User.Identity.IsAuthenticated)
-                user = await _userStore.FindByNameAsync(User.Identity.Name, CancellationToken.None);
+        //    if (User.Identity.IsAuthenticated)
+        //        user = await _userStore.FindByNameAsync(User.Identity.Name, CancellationToken.None);
 
-            var model = await this._provider.GetData(page);
-            var site = this._siteProvider.GetSiteData();
+        //    var model = await this._provider.GetData(page);
+        //    var site = this._siteProvider.GetSiteData();
 
 
 
-            ViewBag.Page = model;
-            ViewBag.User = user;
-            ViewBag.Site = site;
-            return View(); 
-        }
+        //    ViewBag.Page = model;
+        //    ViewBag.User = user;
+        //    ViewBag.Site = site;
+        //    return View(); 
+        //}
 
 
 

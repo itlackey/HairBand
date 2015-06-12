@@ -14,6 +14,7 @@ using HairBand.Models;
 
 namespace HairBand.Controllers
 {
+    [Area("Account")]
     [Authorize]
     public class AccountController : Controller
     {

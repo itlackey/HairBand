@@ -15,7 +15,7 @@ namespace HairBand
             this.Content = string.Empty;
             this.Title = string.Empty;
             this.Exceprt = string.Empty;
-            this.Url = string.Empty;
+            this.Url = new List<string>();
             this.Date = DateTime.Now;
             this.Id = string.Empty;
             this.Categories = new List<string>();
@@ -44,9 +44,9 @@ namespace HairBand
             set { this["exceprt"] = value; }
         }
 
-        public string Url
+        public IEnumerable<string> Url
         {
-            get { return this["url"].ToString(); }
+            get { return this["url"] as IEnumerable<string>; }
             set { this["url"] = value; }
         }
 

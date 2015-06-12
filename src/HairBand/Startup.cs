@@ -21,6 +21,7 @@ using Microsoft.Framework.Runtime;
 using HairBand.Models;
 using HairBand.Web;
 using Microsoft.AspNet.Mvc;
+using Microsoft.AspNet.StaticFiles;
 
 namespace HairBand
 {
@@ -87,14 +88,14 @@ namespace HairBand
 
             // Add MVC services to the services container.
             services.AddMvc()
-                .Configure<MvcOptions>(options => 
+                .Configure<MvcOptions>(options =>
                 {
-                    options.ViewEngines.Clear();
+                    //options.ViewEngines.Clear();
                     options.ViewEngines.Add(typeof(HairBandViewEngine));
 
                 });
 
-           
+
             // Uncomment the following line to add Web API services which makes it easier to port Web API 2 controllers.
             // You will also need to add the Microsoft.AspNet.Mvc.WebApiCompatShim package to the 'dependencies' section of project.json.
             // services.AddWebApiConventions();
@@ -104,7 +105,7 @@ namespace HairBand
             services.Add(new ServiceDescriptor(typeof(IPostDataProvider), typeof(PageDataProvider), ServiceLifetime.Singleton));
 
             services.Add(new ServiceDescriptor(typeof(ISiteDataProvider), typeof(SiteDataProvider), ServiceLifetime.Singleton));
-            services.Add(new ServiceDescriptor(typeof(IPageHtmlRender), typeof(PageHtmlRender), ServiceLifetime.Singleton));
+           // services.Add(new ServiceDescriptor(typeof(IPageHtmlRender), typeof(PageHtmlRender), ServiceLifetime.Singleton));
 
         }
 
@@ -132,9 +133,14 @@ namespace HairBand
 
             // Add static files to the request pipeline.
             app.UseStaticFiles();
+            //    .MapWhen(ctx => !ctx.Request.Path.HasValue || !ctx.Request.Path.Value.EndsWith(".html"), config =>
+            //{
+                
+            //});
 
             // Add cookie-based authentication to the request pipeline.
             app.UseIdentity();
+
 
             // Add authentication middleware to the request pipeline. You can configure options such as Id and Secret in the ConfigureServices method.
             // For more information see http://go.microsoft.com/fwlink/?LinkID=532715
@@ -143,32 +149,35 @@ namespace HairBand
             // app.UseMicrosoftAccountAuthentication();
             // app.UseTwitterAuthentication();
 
+
+           
+
             // Add MVC to the request pipeline.
             app.UseMvc(routes =>
             {
 
-             
+
 
                 routes.MapRoute(
                     name: "account",
                     template: "_account/{action}/{id?}",
-                    defaults: new { controller = "Account", action = "Login" });
+                    defaults: new { controller = "Account", action = "Login", area = "Account" });
 
 
                 routes.MapRoute(
                     name: "manage",
                     template: "_manage/{action}/{id?}",
-                    defaults: new { controller = "Manage", action = "Index" });
+                    defaults: new { controller = "Manage", action = "Index", area = "Manage" });
 
 
 
                 routes.MapRoute(
                     name: "admin",
                     template: "_admin/{action}/{id?}",
-                    defaults: new { controller = "Pages", action = "Admin", page = "home" });
+                    defaults: new { controller = "Admin", action = "Index", area = "Admin" });
 
 
-   
+
                 routes.MapRoute(
                    name: "error",
                    template: "_error",
@@ -186,14 +195,19 @@ namespace HairBand
 
 
                 routes.MapRoute(
-                     name: "PageList", 
-                     template: "pages", 
+                     name: "PageList",
+                     template: "pages",
                      defaults: new { controller = "Pages", action = "Index" });
 
+                //routes.MapRoute(
+                //   name: "HtmlPages",
+                //   template: "{page}.html",
+                //   defaults: new { controller = "Pages", action = "Page", page = "home" });
+
                 routes.MapRoute(
-                     name: "Pages", 
+                     name: "Pages",
                      template: "{*page}",
-                     defaults: new { controller = "Pages", action = "Page", page="home" } );
+                     defaults: new { controller = "Pages", action = "Page", page = "home" });
 
 
 
@@ -201,7 +215,10 @@ namespace HairBand
                 // routes.MapWebApiRoute("DefaultApi", "api/{controller}/{id?}");
             });
 
-           
+
+
+
+
         }
     }
 }

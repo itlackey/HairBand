@@ -12,6 +12,7 @@ using HairBand.Models;
 
 namespace HairBand.Controllers
 {
+    [Area("Manage")]
     [Authorize]
     public class ManageController : Controller
     {
