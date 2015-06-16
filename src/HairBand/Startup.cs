@@ -128,7 +128,7 @@ namespace HairBand
             {
                 // Add Error handling middleware which catches all application specific errors and
                 // sends the request to the following path or controller action.
-                app.UseErrorHandler("/Home/Error");
+                app.UseErrorHandler("/Pages/Error");
             }
 
             // Add static files to the request pipeline.
@@ -181,23 +181,23 @@ namespace HairBand
                 routes.MapRoute(
                    name: "error",
                    template: "_error",
-                   defaults: new { controller = "Home", action = "Error" });
+                   defaults: new { controller = "Pages", action = "Error" });
 
-                routes.MapRoute(
-                  name: "PostList",
-                  template: "blog",
-                  defaults: new { controller = "Blog", action = "Index" });
+                ////routes.MapRoute(
+                ////  name: "PostList",
+                ////  template: "blog",
+                ////  defaults: new { controller = "Pages", action = "PostIndex" });
 
                 routes.MapRoute(
                   name: "Post",
                   template: "blog/{post}",
-                  defaults: new { controller = "Blog", action = "Post" });
+                  defaults: new { controller = "Pages", action = "Post" });
 
 
-                routes.MapRoute(
-                     name: "PageList",
-                     template: "pages",
-                     defaults: new { controller = "Pages", action = "Index" });
+                ////routes.MapRoute(
+                ////     name: "PageList",
+                ////     template: "pages",
+                ////     defaults: new { controller = "Pages", action = "Index" });
 
                 //routes.MapRoute(
                 //   name: "HtmlPages",

@@ -19,29 +19,35 @@ namespace HairBand.Controllers
     public class PagesController : Controller
     {
 
-        private readonly IPageDataProvider _provider;
+        private readonly IPageDataProvider _pageProvider;
         private ISiteDataProvider _siteProvider;
         private IUserStore<BandMember> _userStore;
+        private IPostDataProvider _postProvider;
 
         public PagesController(
             IUserStore<BandMember> userStore,
-            IPageDataProvider provider,
+            IPageDataProvider pageProvider,
+            IPostDataProvider postProvider,
             ISiteDataProvider siteProvider)
         {
-            this._provider = provider;
+            this._pageProvider = pageProvider;
+
+            this._postProvider = postProvider;
+
             this._siteProvider = siteProvider;
+
             this._userStore = userStore;
 
         }
 
-        // GET: /<controller>/
-        public async Task<IActionResult> Index()
-        {
-            var pages = await this._provider.GetPages();
+        //// GET: /<controller>/
+        //public async Task<IActionResult> Index()
+        //{
+        //    var pages = await this._pageProvider.GetPages();
 
 
-            return View(pages);
-        }
+        //    return View(pages);
+        //}
 
 
         public async Task<IActionResult> Page(string page)
@@ -50,20 +56,49 @@ namespace HairBand.Controllers
             if (page.StartsWith("_") || page.StartsWith("app_data"))
                 return HttpNotFound();
 
+            await PopulateViewContext(page);
+
+            var model = await this._pageProvider.GetData(page);
+            ViewBag.Page = model;
+
+            return View();
+        }
+
+
+        public async Task<IActionResult> Post(string page)
+        {
+
+            if (page.StartsWith("_") || page.StartsWith("app_data"))
+                return HttpNotFound();
+
+            await PopulateViewContext(page);
+
+            var model = await this._postProvider.GetPost(page);
+            ViewBag.Page = model;
+
+            return View();
+        }
+
+
+        public IActionResult Error()
+        {
+            return View("~/Views/Shared/Error.cshtml");
+        }
+
+
+
+        private async Task PopulateViewContext(string page)
+        {
             BandMember user = null;
 
             if (User.Identity.IsAuthenticated)
                 user = await _userStore.FindByNameAsync(User.Identity.Name, CancellationToken.None);
 
-            var model = await this._provider.GetData(page);
+
             var site = await this._siteProvider.GetSiteDataAsync();
 
-            ViewBag.Page = model;
             ViewBag.User = user;
             ViewBag.Site = site;
-
-            return View();
         }
-
     }
 }
