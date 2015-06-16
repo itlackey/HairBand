@@ -38,7 +38,6 @@
     "frameworks": {
         "dnx451": {
             "dependencies": {
-                //"DotLiquid": "1.0.0-*"
             }
         },
         "dnxcore50": {

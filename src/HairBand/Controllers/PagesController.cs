@@ -20,33 +20,19 @@ namespace HairBand.Controllers
     {
 
         private readonly IPageDataProvider _provider;
-       // private IPageHtmlRender _renderer;
         private ISiteDataProvider _siteProvider;
         private IUserStore<BandMember> _userStore;
 
         public PagesController(
-            //IPageHtmlRender renderer,
             IUserStore<BandMember> userStore,
             IPageDataProvider provider,
-            ISiteDataProvider siteProvider) //, 
-                                            //IOptions<AppSettings> appSettings, 
-                                            //IHostingEnvironment host)
+            ISiteDataProvider siteProvider)
         {
             this._provider = provider;
             this._siteProvider = siteProvider;
-
-            //this.AppSettings = appSettings;
-            //this.Host = host;
-
-            //this._renderer = renderer;
             this._userStore = userStore;
 
         }
-
-        //public IOptions<AppSettings> AppSettings { get; private set; }
-        //public IHostingEnvironment Host { get; private set; }
-
-        //public string ThemePath { get; private set; }
 
         // GET: /<controller>/
         public async Task<IActionResult> Index()
@@ -71,73 +57,13 @@ namespace HairBand.Controllers
 
             var model = await this._provider.GetData(page);
             var site = await this._siteProvider.GetSiteDataAsync();
-  
+
             ViewBag.Page = model;
             ViewBag.User = user;
             ViewBag.Site = site;
-            return View(); 
+
+            return View();
         }
 
-
-
-        //public async Task<IActionResult> Posts(string page)
-        //{
-
-        //    if (page.StartsWith("_") || page.StartsWith("app_data"))
-        //        return HttpNotFound();
-
-        //    BandMember user = null;
-
-        //    if (User.Identity.IsAuthenticated)
-        //        user = await _userStore.FindByNameAsync(User.Identity.Name, CancellationToken.None);
-
-        //    var model = await this._provider.GetData(page);
-        //    var site = this._siteProvider.GetSiteData();
-
-
-
-        //    ViewBag.Page = model;
-        //    ViewBag.User = user;
-        //    ViewBag.Site = site;
-        //    return View(); 
-        //}
-
-
-
-        //[Authorize(Roles = "Administrators")]
-        public async Task<IActionResult> Admin()
-        {
-            BandMember user = null;
-
-            if (User.Identity.IsAuthenticated)
-                user = await _userStore.FindByNameAsync(User.Identity.Name, CancellationToken.None);
-
-
-            //var model = await this._provider.GetData(page);
-            //var html = await this._renderer.GetHtmlAsync("_admin/home", user);
-
-            //ViewBag.Content = html;
-
-            return View(); // model: html);
-
-        }
-
-        //public string RenderRazorViewToString(string viewName, object model)
-        //{
-        //    ViewData.Model = model;
-        //    using (var sw = new StringWriter())
-        //    {
-          
-        //        var viewResult = ViewEngines.Engines.FindPartialView(ControllerContext, viewName);
-
-        //        var viewContext = new ViewContext(ControllerContext, viewResult.View, ViewData, TempData, sw);
-
-        //        viewResult.View.Render(viewContext, sw);
-
-        //        viewResult.ViewEngine.ReleaseView(ControllerContext, viewResult.View);
-
-        //        return sw.GetStringBuilder().ToString();
-        //    }
-        //}
     }
 }

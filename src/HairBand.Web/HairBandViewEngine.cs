@@ -58,26 +58,6 @@ namespace HairBand.Web
             else
                 throw new FileNotFoundException("View cannot be located.");
 
-
-            //if (viewName.EndsWith(".html"))
-            //{
-
-            //}
-            //else
-            ////if (viewName != "default.html")
-            //{
-            //    if (!viewName.StartsWith("_"))
-            //        viewName = String.Format("_{0}", viewName);
-
-            //    if (!viewName.EndsWith(".liquid") || !viewName.EndsWith(".html"))
-            //        viewName += ".liquid";
-
-            //}
-
-
-
-
-
             return new HairBandView(path);
         }
 

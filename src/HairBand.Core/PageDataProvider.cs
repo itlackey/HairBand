@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.ObjectFactories;
 using YamlDotNet.Serialization.NamingConventions;
+using Microsoft.AspNet.FileProviders;
 
 namespace HairBand
 {
@@ -43,25 +44,15 @@ namespace HairBand
             foreach (var item in files)
             {
 
-                var page = await GetData(Path.GetFileNameWithoutExtension(item.Name).Replace('_', '/'));
+                var filePath = Path.GetFileNameWithoutExtension(item.Name).Replace('_', '/');
+
+                var page = await GetData(filePath);
 
                 page.Date = item.LastModified.Date;
+
                 page.Path = item.PhysicalPath;
 
-                var defaultUrl = Path.GetFileNameWithoutExtension(page.Path).Replace('_', '/');
-
-                if (page.Url == null || !page.Url.Contains(defaultUrl))
-                {
-                    var urls = new List<string>();
-
-                    urls.Add(defaultUrl);
-
-                    if (page.Url != null)
-                        urls.AddRange(page.Url);
-
-                    page.Url = urls;
-                }
-
+                SetPageUrls(page);
 
                 pages.Add(page);
             }
@@ -71,25 +62,23 @@ namespace HairBand
 
         }
 
-        //private string GetDirectoryPath(string url)
-        //{
-        //    var pageType = url.TrimStart('/', '_');
+        private static void SetPageUrls(PageData page)
+        {
+            var defaultUrl = Path.GetFileNameWithoutExtension(page.Path).Replace('_', '/');
 
+            if (page.Url == null || !page.Url.Contains(defaultUrl))
+            {
+                var urls = new List<string>();
 
-        //    if (pageType.StartsWith("admin"))
-        //    {
-        //        return _rootDataDirectory;
-        //        // return String.Format("{0}{1}", this._rootDataDirectory, this._adminDirectory);
-        //    }
-        //    else if (pageType.StartsWith("post"))
-        //    {
-        //        return String.Format("{0}{1}", this._rootDataDirectory, this._postDirectory);
-        //    }
-        //    else
-        //    {
-        //        return String.Format("{0}{1}", this._rootDataDirectory, this._pageDirectory);
-        //    }
-        //}
+                urls.Add(defaultUrl);
+
+                if (page.Url != null)
+                    urls.AddRange(page.Url);
+
+                page.Url = urls;
+            }
+        }
+
 
         public async Task<PageData> GetData(string url)
         {
@@ -115,42 +104,47 @@ namespace HairBand
                 if (!markdown.Contains("---\r\n"))
                     throw new ArgumentException("This is not a valid page. Page's must conain metadata.");
 
-                //var markdown = File.ReadAllText(file.PhysicalPath);
-
-                var headerString = markdown.Substring(markdown.IndexOf("---\r\n"), markdown.LastIndexOf("---") - 2);
-
-                var des = new Deserializer(
-                    new DefaultObjectFactory(),
-                    new UnderscoredNamingConvention(),
-                    false);
-
-                var s = des.Deserialize(new StringReader(headerString));
-
 
                 var settings = new PageData();
 
-                var settingLines = headerString.Split('\r', '\n');
+               await PopulateData(file, settings);
+
+                ////var markdown = File.ReadAllText(file.PhysicalPath);
+
+                //var headerString = markdown.Substring(markdown.IndexOf("---\r\n"), markdown.LastIndexOf("---") - 2);
+
+                //var des = new Deserializer(
+                //    new DefaultObjectFactory(),
+                //    new UnderscoredNamingConvention(),
+                //    false);
+
+                //var s = des.Deserialize(new StringReader(headerString));
 
 
-                foreach (var line in settingLines)
-                {
-                    if (line.Contains(":"))
-                    {
-                        var data = line.Split(':');
+                //var settings = new PageData();
 
-                        settings[data.First()] = data.Last();
-
-                    }
-                }
+                //var settingLines = headerString.Split('\r', '\n');
 
 
-                var body = markdown.Substring(markdown.LastIndexOf("---") + 5);
+                //foreach (var line in settingLines)
+                //{
+                //    if (line.Contains(":"))
+                //    {
+                //        var data = line.Split(':');
 
-                var html = CommonMarkConverter.Convert(body);
+                //        settings[data.First()] = data.Last();
 
-                settings["content"] = html;
+                //    }
+                //}
 
-                //SetRequiredProperties(url, settings);
+
+                //var body = markdown.Substring(markdown.LastIndexOf("---") + 5);
+
+                //var html = CommonMarkConverter.Convert(body);
+
+                //settings["content"] = html;
+
+                ////SetRequiredProperties(url, settings);
 
                 return settings;
             }
@@ -159,25 +153,6 @@ namespace HairBand
 
 
         }
-
-        //private string GetFilePath(string url)
-        //{
-        //    //var pageDirectory = "_pages/";
-
-        //    //if (url.StartsWith("_admin"))
-        //    //    pageDirectory = string.Empty;
-        //    var fileName = url.TrimEnd('/');
-
-        //    if (!url.StartsWith("_"))
-        //        fileName = fileName.Replace('/', '-');
-
-        //    if (!Path.HasExtension(fileName))
-        //        fileName += ".md";
-
-        //    var path = this.GetDirectoryPath(url) + fileName;
-
-        //    return path;
-        //}
 
         public async Task<PostData> GetPost(string url)
         {
@@ -201,7 +176,7 @@ namespace HairBand
 
         }
 
-        private static async Task PopulateData(Microsoft.AspNet.FileProviders.IFileInfo file, DynamicDictionaryObject settings)
+        private static async Task PopulateData(IFileInfo file, DynamicDictionaryObject settings)
         {
             string markdown = string.Empty;
             using (var reader = new StreamReader(file.CreateReadStream()))
@@ -218,22 +193,29 @@ namespace HairBand
                 new UnderscoredNamingConvention(),
                 false);
 
-            var s = des.Deserialize(new StringReader(headerString));
+            var s = des.Deserialize<Dictionary<object, object>>(new StringReader(headerString));
 
+            if (s == null)
+                throw new InvalidDataException("Page does not contain valid meta data: " + file.Name);
 
-            var settingLines = headerString.Split('\r', '\n');
-
-
-            foreach (var line in settingLines)
+            foreach (var item in s)
             {
-                if (line.Contains(":"))
-                {
-                    var data = line.Split(':');
-
-                    settings[data.First()] = data.Last();
-
-                }
+                settings[item.Key.ToString()] = item.Value;
             }
+
+            //var settingLines = headerString.Split('\r', '\n');
+
+
+            //foreach (var line in settingLines)
+            //{
+            //    if (line.Contains(":"))
+            //    {
+            //        var data = line.Split(':');
+
+            //        settings[data.First()] = data.Last();
+
+            //    }
+            //}
 
 
             var body = markdown.Substring(markdown.LastIndexOf("---") + 5);
