@@ -41,9 +41,9 @@ namespace HairBand.Controllers
 
             this._userStore = userStore;
 
-            var config = configProvider.GetConfiguration();// .GetSubKey("AppSettings");
-            config.AdminEnabled = true;
-            configProvider.UpdateConfiguration(config);
+            //var config = configProvider.GetConfiguration();// .GetSubKey("AppSettings");
+            //config.AdminEnabled = true;
+            //configProvider.UpdateConfiguration(config);
 
         }
 

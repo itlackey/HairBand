@@ -41,7 +41,9 @@ namespace HairBand
                 configuration.AddUserSecrets();
             }
             configuration.AddEnvironmentVariables();
+
             configuration.AddJsonFile(env.WebRootPath + "/app_data/settings.json");
+
             Configuration = configuration;
         }
 
