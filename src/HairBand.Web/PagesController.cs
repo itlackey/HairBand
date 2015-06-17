@@ -17,7 +17,7 @@ using Microsoft.Framework.ConfigurationModel;
 
 namespace HairBand.Controllers
 {
-    public class PagesController : Controller
+   public class PagesController : Controller
     {
 
         private readonly IPageDataProvider _pageProvider;
@@ -29,9 +29,7 @@ namespace HairBand.Controllers
             IUserStore<BandMember> userStore,
             IPageDataProvider pageProvider,
             IPostDataProvider postProvider,
-            ISiteDataProvider siteProvider,
-            ISiteConfigurationProvider configProvider,
-            IConfiguration conProv)
+            ISiteDataProvider siteProvider)
         {
             this._pageProvider = pageProvider;
 
@@ -64,6 +62,12 @@ namespace HairBand.Controllers
                 return HttpNotFound();
 
             await PopulateViewContext(page);
+
+            //ToDo refactor this into action filter...
+            var site = ViewBag.Site as SiteData;
+
+            if (!site.InstallCompleted)
+               return RedirectToAction("install", new { controller = "admin", area = "admin" });
 
             var model = await this._pageProvider.GetPageAsync(page);
             ViewBag.Page = model;

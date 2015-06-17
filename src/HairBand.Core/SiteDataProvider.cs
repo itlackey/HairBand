@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
@@ -25,7 +26,7 @@ namespace HairBand
         {
 
             //Todo caching, static_files, pages, posts, related_posts, html_page, data, documents, categories, tags
-           
+
             var path = this._host.WebRootPath + "/app_data/_config.yml";
 
             var des = new Deserializer(new DefaultObjectFactory(), new PascalCaseNamingConvention(), true);
@@ -40,14 +41,35 @@ namespace HairBand
             if (String.IsNullOrEmpty(data.Name))
                 throw new ArgumentNullException("Site name must be set.");
 
-           
+
             data.RootPath = this._host.WebRootPath;
 
             var pages = await _pageProvider.GetPagesAsync();
 
             data.Pages = pages.ToList();
-            
+
             return data;
+
+        }
+
+        public async Task UpdateSiteDataAsync(SiteData data)
+        {
+
+            var currentData = await GetSiteDataAsync();
+
+            foreach (var item in currentData)
+            {
+                if (!data.ContainsKey(item.Key) || data[item.Key] == null || String.IsNullOrEmpty(data[item.Key].ToString()))
+                    data[item.Key] = item.Value;
+            }
+
+            var serializer = new Serializer(SerializationOptions.None, new UnderscoredNamingConvention());
+
+            var path = this._host.WebRootPath + "/app_data/_config.yml";
+            var builder = new StringBuilder();
+
+            serializer.Serialize(new StringWriter(builder), data);
+            File.WriteAllText(path, builder.ToString());
 
         }
     }

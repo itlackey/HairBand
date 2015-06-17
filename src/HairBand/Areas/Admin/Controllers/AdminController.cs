@@ -11,10 +11,34 @@ namespace HairBand.Controllers
     [Area("Admin")]
     public class AdminController : Controller
     {
+        private ISiteDataProvider _siteDataProvider;
+
+        public AdminController(ISiteDataProvider siteDataProvider)
+        {
+            this._siteDataProvider = siteDataProvider;
+        }
+
         // GET: /<controller>/
         public IActionResult Index()
         {
             return View();
         }
+
+        public async Task<IActionResult> Install()
+        {
+            return View();
+        }
+
+        [HttpPost(Name ="Install")]
+        public async Task<IActionResult> Install(SiteData model)
+        {
+            model.InstallCompleted = true;
+
+            await _siteDataProvider.UpdateSiteDataAsync(model);
+
+            return Redirect("~/");
+        }
+
+
     }
 }

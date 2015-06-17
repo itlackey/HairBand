@@ -14,6 +14,7 @@
                 <li><a href="{{c_page.url[0]}}">{{c_page.title}}</a></li>
                 {% endfor %}
             </ul>
+            {% if site.admin_enabled == true %}
             {% if user != null %}
             <form action="/_account/logoff" method="post" id="logoutForm" class="navbar-right">
                 <ul class="nav navbar-nav navbar-right">
@@ -29,6 +30,7 @@
                 <li><a id="loginLink" href="/_account/login">Log in</a></li>
             </ul>
             {% endif %}
+            {%endif%}
         </div>
     </div>
 </div>

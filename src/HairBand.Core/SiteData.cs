@@ -24,6 +24,7 @@ namespace HairBand
             this.Categories = new Dictionary<string, PostData>();
             this.Tags = new Dictionary<string, PostData>();
             this.RootPath = string.Empty;
+            this.InstallCompleted = false;
         }
 
         public string Name
@@ -139,6 +140,17 @@ namespace HairBand
         {
             get { return this["theme"].ToString(); }
             set { this["theme"] = value; }
+        }
+
+        public bool InstallCompleted
+        {
+            get { return Convert.ToBoolean(this["install_completed"]); }
+            set { this["install_completed"] = value; }
+        }
+
+        public bool AdminEnabled {
+            get { return Convert.ToBoolean(this["admin_enabled"]); }
+            set { this["admin_enabled"] = value; }
         }
 
         #endregion

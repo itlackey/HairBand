@@ -111,8 +111,10 @@ namespace HairBand
             services.Add(new ServiceDescriptor(typeof(ISiteDataProvider), typeof(SiteDataProvider), ServiceLifetime.Singleton));
             // services.Add(new ServiceDescriptor(typeof(IPageHtmlRender), typeof(PageHtmlRender), ServiceLifetime.Singleton));
 
-            services.Add(new ServiceDescriptor(typeof(IConfiguration), Configuration));
-            services.Add(new ServiceDescriptor(typeof(ISiteConfigurationProvider), typeof(SiteConfigurationProvider), ServiceLifetime.Singleton));
+            //services.Add(new ServiceDescriptor(typeof(IConfiguration), Configuration));
+            //services.Add(new ServiceDescriptor(typeof(ISiteConfigurationProvider), typeof(SiteConfigurationProvider), ServiceLifetime.Singleton));
+
+            
 
         }
 
@@ -157,7 +159,7 @@ namespace HairBand
             // app.UseTwitterAuthentication();
 
 
-           
+
 
             // Add MVC to the request pipeline.
             app.UseMvc(routes =>
@@ -222,7 +224,7 @@ namespace HairBand
                 // routes.MapWebApiRoute("DefaultApi", "api/{controller}/{id?}");
             });
 
-
+            
 
 
 
