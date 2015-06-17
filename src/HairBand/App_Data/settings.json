@@ -1,0 +1,13 @@
+﻿{
+  "Data": {
+    "DefaultConnection": {
+      "ConnectionString": "Server=(localdb)\\MSSQLLocalDB;Database=_CHANGE_ME;Trusted_Connection=True;"
+    }
+  },
+  "AppSettings": {
+    "Title": "Hair Band",
+    "InstallationCompleted": "false",
+    "AdminEnabled": "false",
+    "Test": "overriden"
+  }
+}

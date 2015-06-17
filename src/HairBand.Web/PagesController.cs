@@ -11,6 +11,7 @@ using System.IO;
 using Microsoft.AspNet.Identity;
 using System.Threading;
 using Microsoft.AspNet.Authorization;
+using Microsoft.Framework.ConfigurationModel;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -28,7 +29,9 @@ namespace HairBand.Controllers
             IUserStore<BandMember> userStore,
             IPageDataProvider pageProvider,
             IPostDataProvider postProvider,
-            ISiteDataProvider siteProvider)
+            ISiteDataProvider siteProvider,
+            ISiteConfigurationProvider configProvider,
+            IConfiguration conProv)
         {
             this._pageProvider = pageProvider;
 
@@ -37,6 +40,10 @@ namespace HairBand.Controllers
             this._siteProvider = siteProvider;
 
             this._userStore = userStore;
+
+            var config = configProvider.GetConfiguration();// .GetSubKey("AppSettings");
+            config.AdminEnabled = true;
+            configProvider.UpdateConfiguration(config);
 
         }
 

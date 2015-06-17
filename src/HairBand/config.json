@@ -1,7 +1,8 @@
 {
   "AppSettings": {
     "Title": "Hair Band",
-    "Theme": "Happy",
-    "Example": "Example test"
+    "InstallationCompleted": "false",
+    "AdminEnabled": "false",
+    "Test": "default"
   }
 }

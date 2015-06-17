@@ -41,6 +41,7 @@ namespace HairBand
                 configuration.AddUserSecrets();
             }
             configuration.AddEnvironmentVariables();
+            configuration.AddJsonFile(env.WebRootPath + "/app_data/settings.json");
             Configuration = configuration;
         }
 
@@ -100,6 +101,7 @@ namespace HairBand
             // You will also need to add the Microsoft.AspNet.Mvc.WebApiCompatShim package to the 'dependencies' section of project.json.
             // services.AddWebApiConventions();
 
+
             services.Add(new ServiceDescriptor(typeof(IPageDataProvider), typeof(PageDataProvider), ServiceLifetime.Singleton));
 
             services.Add(new ServiceDescriptor(typeof(IPostDataProvider), typeof(PageDataProvider), ServiceLifetime.Singleton));
@@ -107,7 +109,8 @@ namespace HairBand
             services.Add(new ServiceDescriptor(typeof(ISiteDataProvider), typeof(SiteDataProvider), ServiceLifetime.Singleton));
             // services.Add(new ServiceDescriptor(typeof(IPageHtmlRender), typeof(PageHtmlRender), ServiceLifetime.Singleton));
 
-            services.Add(new ServiceDescriptor(typeof(ISiteConfigurationProvider), typeof(ISiteConfigurationProvider), ServiceLifetime.Singleton));
+            services.Add(new ServiceDescriptor(typeof(IConfiguration), Configuration));
+            services.Add(new ServiceDescriptor(typeof(ISiteConfigurationProvider), typeof(SiteConfigurationProvider), ServiceLifetime.Singleton));
 
         }
 
