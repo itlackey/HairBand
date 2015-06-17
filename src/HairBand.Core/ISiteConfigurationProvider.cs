@@ -7,9 +7,9 @@ namespace HairBand
 {
     public interface ISiteConfigurationProvider
     {
-        Task<DynamicDictionaryObject> GetConfigurationAsync();
+        AppSettings GetConfiguration();
 
-        Task UpdateConfigurationAsync(string key, string value);
+        void UpdateConfiguration(AppSettings config);
 
     }
 }
