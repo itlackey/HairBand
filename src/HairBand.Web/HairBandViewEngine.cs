@@ -37,28 +37,42 @@ namespace HairBand.Web
 
         private HairBandView CreateView(ActionContext context, string viewName)
         {
+            HairBandView view = null;
 
-            var siteData = _siteDataProvider.GetSiteData();
-            var themePath = String.Format("{0}/themes/{1}/", siteData.RootPath, siteData.Theme ?? "Default");
-            var path = string.Empty;
+            Task.Run(async () =>
+            {
+
+                var siteData = await _siteDataProvider.GetSiteDataAsync();
 
 
-            if (File.Exists(Path.Combine(themePath, viewName)))
-                path = Path.Combine(themePath, viewName);
+                var themePath = String.Format("{0}/themes/{1}/", siteData.RootPath, siteData.Theme ?? "Default");
+                var path = string.Empty;
 
-            else if (File.Exists(Path.Combine(themePath, viewName + ".html")))
-                path = Path.Combine(themePath, viewName + ".html");
 
-            else if (File.Exists(Path.Combine(themePath, "_" + viewName)))
-                path = Path.Combine(themePath, "_" + viewName);
+                if (File.Exists(Path.Combine(themePath, viewName)))
+                    path = Path.Combine(themePath, viewName);
 
-            else if (File.Exists(Path.Combine(themePath, "_" + viewName + ".liquid")))
-                path = Path.Combine(themePath, "_" + viewName + ".liquid");
+                else if (File.Exists(Path.Combine(themePath, viewName + ".html")))
+                    path = Path.Combine(themePath, viewName + ".html");
 
-            else
-                throw new FileNotFoundException("View cannot be located.");
+                else if (File.Exists(Path.Combine(themePath, "_" + viewName)))
+                    path = Path.Combine(themePath, "_" + viewName);
 
-            return new HairBandView(path);
+                else if (File.Exists(Path.Combine(themePath, "_" + viewName + ".liquid")))
+                    path = Path.Combine(themePath, "_" + viewName + ".liquid");
+
+                else
+                    throw new FileNotFoundException("View cannot be located.");
+
+                return new HairBandView(path);
+
+            }).ContinueWith(task =>
+            {
+                view = task.Result;
+
+            }).Wait();
+
+            return view;
         }
 
 

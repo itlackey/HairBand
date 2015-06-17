@@ -7,8 +7,6 @@ namespace HairBand
 {
     public interface ISiteDataProvider
     {
-        SiteData GetSiteData();
-
         Task<SiteData> GetSiteDataAsync();
     }
 }

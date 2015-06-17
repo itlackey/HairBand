@@ -58,7 +58,7 @@ namespace HairBand.Controllers
 
             await PopulateViewContext(page);
 
-            var model = await this._pageProvider.GetData(page);
+            var model = await this._pageProvider.GetPageAsync(page);
             ViewBag.Page = model;
 
             return View();
@@ -73,7 +73,7 @@ namespace HairBand.Controllers
 
             await PopulateViewContext(page);
 
-            var model = await this._postProvider.GetPost(page);
+            var model = await this._postProvider.GetPostAsync(page);
             ViewBag.Page = model;
 
             return View();

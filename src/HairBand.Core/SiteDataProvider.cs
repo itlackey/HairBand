@@ -21,32 +21,6 @@ namespace HairBand
             this._pageProvider = pageProvider;
         }
 
-        public SiteData GetSiteData()
-        {
-            var path = this._host.WebRootPath + "/app_data/_config.yml";
-
-            var des = new Deserializer(new DefaultObjectFactory(), new PascalCaseNamingConvention(), true);
-
-            var s = des.Deserialize(new StringReader(File.ReadAllText(path))) as Dictionary<object, object>;
-
-            var data = new SiteData();
-
-            foreach (var item in s)
-                data[item.Key.ToString()] = item.Value;
-
-            if (String.IsNullOrEmpty(data.Name))
-                throw new ArgumentNullException("Site name must be set.");
-
-
-            data.RootPath = this._host.WebRootPath;
-
-            //var pages =  _pageProvider.GetPages();
-
-            //data.Pages = pages.ToList();
-
-            return data;
-        }
-
         public async Task<SiteData> GetSiteDataAsync()
         {
 
@@ -69,7 +43,7 @@ namespace HairBand
            
             data.RootPath = this._host.WebRootPath;
 
-            var pages = await _pageProvider.GetPages();
+            var pages = await _pageProvider.GetPagesAsync();
 
             data.Pages = pages.ToList();
             

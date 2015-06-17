@@ -30,7 +30,7 @@ namespace HairBand
         }
 
 
-        public async Task<IEnumerable<PageData>> GetPages()
+        public async Task<IEnumerable<PageData>> GetPagesAsync()
         {
             //ToDo does this move to site?
 
@@ -46,7 +46,7 @@ namespace HairBand
 
                 var filePath = Path.GetFileNameWithoutExtension(item.Name).Replace('_', '/');
 
-                var page = await GetData(filePath);
+                var page = await GetPageAsync(filePath);
 
                 page.Date = item.LastModified.Date;
 
@@ -80,7 +80,7 @@ namespace HairBand
         }
 
 
-        public async Task<PageData> GetData(string url)
+        public async Task<PageData> GetPageAsync(string url)
         {
 
             var fileName = GetFilename(url);
@@ -154,7 +154,7 @@ namespace HairBand
 
         }
 
-        public async Task<PostData> GetPost(string url)
+        public async Task<PostData> GetPostAsync(string url)
         {
             var fileName = GetFilename(url);
 
@@ -240,7 +240,7 @@ namespace HairBand
             return fileName;
         }
 
-        public async Task<IEnumerable<PostData>> GetPosts()
+        public async Task<IEnumerable<PostData>> GetPostsAsync()
         {
             //ToDo does this move to site?
 
@@ -254,7 +254,7 @@ namespace HairBand
             foreach (var item in files)
             {
 
-                var post = await GetPost(Path.GetFileNameWithoutExtension(item.Name).Replace('-', '/'));
+                var post = await GetPostAsync(Path.GetFileNameWithoutExtension(item.Name).Replace('-', '/'));
 
                 post.Date = item.LastModified.Date;
                 post.Path = item.PhysicalPath;

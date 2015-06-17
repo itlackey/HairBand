@@ -7,8 +7,8 @@ namespace HairBand
 {
     public interface IPostDataProvider
     {
-        Task<PostData> GetPost(string url);
+        Task<PostData> GetPostAsync(string url);
 
-        Task<IEnumerable<PostData>> GetPosts();
+        Task<IEnumerable<PostData>> GetPostsAsync();
     }
 }

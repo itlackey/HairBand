@@ -7,8 +7,8 @@ namespace HairBand
     {
         //Task<PageData> GetPageData(string url);
 
-        Task<PageData> GetData(string url);
+        Task<PageData> GetPageAsync(string url);
 
-        Task<IEnumerable<PageData>> GetPages();
+        Task<IEnumerable<PageData>> GetPagesAsync();
     }
 }
