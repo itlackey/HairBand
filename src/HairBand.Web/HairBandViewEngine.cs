@@ -68,6 +68,9 @@ namespace HairBand.Web
 
             }).ContinueWith(task =>
             {
+                if (task.Exception != null)
+                    throw task.Exception;
+
                 view = task.Result;
 
             }).Wait();

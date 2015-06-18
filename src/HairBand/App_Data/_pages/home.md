@@ -10,3 +10,4 @@ Pages are working...
 {{user.email}}
 
 Site: {{site.name}}
+Enabled: {{site.admin_enabled}}

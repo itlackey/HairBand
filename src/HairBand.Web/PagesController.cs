@@ -17,7 +17,8 @@ using Microsoft.Framework.ConfigurationModel;
 
 namespace HairBand.Controllers
 {
-   public class PagesController : Controller
+    [ProtectedFolders]
+    public class PagesController : Controller
     {
 
         private readonly IPageDataProvider _pageProvider;
@@ -39,35 +40,18 @@ namespace HairBand.Controllers
 
             this._userStore = userStore;
 
-            //var config = configProvider.GetConfiguration();// .GetSubKey("AppSettings");
-            //config.AdminEnabled = true;
-            //configProvider.UpdateConfiguration(config);
-
         }
-
-        //// GET: /<controller>/
-        //public async Task<IActionResult> Index()
-        //{
-        //    var pages = await this._pageProvider.GetPages();
-
-
-        //    return View(pages);
-        //}
-
+        
 
         public async Task<IActionResult> Page(string page)
         {
-
-            if (page.StartsWith("_") || page.StartsWith("app_data"))
-                return HttpNotFound();
-
             await PopulateViewContext(page);
 
             //ToDo refactor this into action filter...
             var site = ViewBag.Site as SiteData;
 
             if (!site.InstallCompleted)
-               return RedirectToAction("install", new { controller = "admin", area = "admin" });
+                return RedirectToAction("setup", new { controller = "admin", area = "admin" });
 
             var model = await this._pageProvider.GetPageAsync(page);
             ViewBag.Page = model;
@@ -78,10 +62,7 @@ namespace HairBand.Controllers
 
         public async Task<IActionResult> Post(string page)
         {
-
-            if (page.StartsWith("_") || page.StartsWith("app_data"))
-                return HttpNotFound();
-
+            
             await PopulateViewContext(page);
 
             var model = await this._postProvider.GetPostAsync(page);

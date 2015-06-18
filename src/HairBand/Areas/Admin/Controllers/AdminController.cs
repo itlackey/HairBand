@@ -24,13 +24,13 @@ namespace HairBand.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Install()
+        public async Task<IActionResult> Setup()
         {
             return View();
         }
 
-        [HttpPost(Name ="Install")]
-        public async Task<IActionResult> Install(SiteData model)
+        [HttpPost(Name ="Setup")]
+        public async Task<IActionResult> Setup(SiteData model)
         {
             model.InstallCompleted = true;
 
