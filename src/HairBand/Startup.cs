@@ -42,8 +42,6 @@ namespace HairBand
             }
             configuration.AddEnvironmentVariables();
 
-            configuration.AddJsonFile(env.WebRootPath + "/app_data/settings.json");
-
             Configuration = configuration;
         }
 
@@ -166,24 +164,24 @@ namespace HairBand
             {
 
 
-
+                
                 routes.MapRoute(
                     name: "account",
                     template: "_account/{action}/{id?}",
-                    defaults: new { controller = "Account", action = "Login", area = "Account" });
+                    defaults: new { controller = "Account", action = "Login", area = "Users" });
 
 
                 routes.MapRoute(
                     name: "manage",
                     template: "_manage/{action}/{id?}",
-                    defaults: new { controller = "Manage", action = "Index", area = "Manage" });
+                    defaults: new { controller = "Manage", action = "Index", area = "Users" });
 
 
 
-                routes.MapRoute(
-                    name: "admin",
-                    template: "_admin/{action}/{id?}",
-                    defaults: new { controller = "Admin", action = "Index", area = "Admin" });
+                //routes.MapRoute(
+                //    name: "admin",
+                //    template: "_admin/{action}/{id?}",
+                //    defaults: new { controller = "Admin", action = "Index", area = "Admin" });
 
 
 

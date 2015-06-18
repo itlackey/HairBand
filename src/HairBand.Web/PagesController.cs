@@ -51,7 +51,7 @@ namespace HairBand.Controllers
             var site = ViewBag.Site as SiteData;
 
             if (!site.InstallCompleted)
-                return RedirectToAction("setup", new { controller = "admin", area = "admin" });
+                return RedirectToAction("install", new { controller = "admin", area = "admin" });
 
             var model = await this._pageProvider.GetPageAsync(page);
             ViewBag.Page = model;

@@ -14,7 +14,8 @@ using HairBand.Models;
 
 namespace HairBand.Controllers
 {
-    [Area("Account")]
+    [Area("Users")]
+    [Route("_account/[action]")]
     [Authorize]
     public class AccountController : Controller
     {
@@ -104,7 +105,8 @@ namespace HairBand.Controllers
                     //await MessageServices.SendEmailAsync(model.Email, "Confirm your account",
                     //    "Please confirm your account by clicking this link: <a href=\"" + callbackUrl + "\">link</a>");
                     await SignInManager.SignInAsync(user, isPersistent: false);
-                    return RedirectToAction("Index", "Home");
+                    //return RedirectToAction("Index", "Home");
+                    return Redirect("~/");
                 }
                 AddErrors(result);
             }
@@ -120,7 +122,7 @@ namespace HairBand.Controllers
         public IActionResult LogOff()
         {
             SignInManager.SignOut();
-            return RedirectToAction("Index", "Home");
+            return Redirect("~/");
         }
 
         //
@@ -442,7 +444,7 @@ namespace HairBand.Controllers
             }
             else
             {
-                return RedirectToAction("Index", "Home");
+                return Redirect("~/");
             }
         }
 

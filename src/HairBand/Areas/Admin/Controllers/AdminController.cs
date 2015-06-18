@@ -9,6 +9,7 @@ using Microsoft.AspNet.Mvc;
 namespace HairBand.Controllers
 {
     [Area("Admin")]
+    [Route("_admin/[action]")]
     public class AdminController : Controller
     {
         private ISiteDataProvider _siteDataProvider;
@@ -24,13 +25,29 @@ namespace HairBand.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Setup()
+        public async Task<IActionResult> Install()
         {
             return View();
         }
 
-        [HttpPost(Name ="Setup")]
-        public async Task<IActionResult> Setup(SiteData model)
+        
+        [HttpPost(Name = "Install")]
+        public async Task<IActionResult> Install(SiteData model)
+        {
+            model.InstallCompleted = true;
+
+            await _siteDataProvider.UpdateSiteDataAsync(model);
+
+            return Redirect("~/");
+        }
+
+        public async Task<IActionResult> Settings()
+        {
+            return View();
+        }
+
+        [HttpPost(Name ="Settings")]
+        public async Task<IActionResult> Settings(SiteData model)
         {
             model.InstallCompleted = true;
 
