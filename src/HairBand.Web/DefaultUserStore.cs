@@ -39,7 +39,9 @@ namespace HairBand.Web
 
         public async Task<IdentityResult> CreateAsync(BandMember user, CancellationToken cancellationToken)
         {
-            if (this.Users.Contains(user))
+            var path = base.GetFilePathFromUsername(user.UserName);
+
+            if (!String.IsNullOrEmpty(path) ||  this.Users.Contains(user))
             {
                 return IdentityResult.Failed(
                         new IdentityError() { Code = "Exists", Description = "User already exists" });
@@ -131,10 +133,13 @@ namespace HairBand.Web
         #endregion
 
         #region IUserPasswordStore
-        public async Task SetPasswordHashAsync(BandMember user, string passwordHash, CancellationToken cancellationToken)
+        public Task SetPasswordHashAsync(BandMember user, string passwordHash, CancellationToken cancellationToken)
         {
             user.PasswordHash = passwordHash;
-            await base.SaveItemAsync(user);
+
+            return Task.FromResult<object>(null);
+
+            //await base.SaveItemAsync(user);
         }
 
         public Task<string> GetPasswordHashAsync(BandMember user, CancellationToken cancellationToken)

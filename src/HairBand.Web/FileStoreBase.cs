@@ -96,7 +96,7 @@ namespace HairBand.Web
                 return string.Empty;
 
         }
-        private string GetFilePathFromUsername(string username)
+        protected string GetFilePathFromUsername(string username)
         {
             var files = Directory.GetFiles(_rootPath, "*#" + username);
 
