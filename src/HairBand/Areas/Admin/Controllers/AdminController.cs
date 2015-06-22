@@ -9,7 +9,7 @@ using Microsoft.AspNet.Mvc;
 namespace HairBand.Controllers
 {
     [Area("Admin")]
-    [Route("_admin/[action]")]
+    //[Route("_admin/[action]")]
     public class AdminController : Controller
     {
         private ISiteDataProvider _siteDataProvider;

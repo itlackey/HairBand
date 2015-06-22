@@ -15,11 +15,11 @@
                 {% endfor %}
             </ul>
             {% if site.admin_enabled == "true" %}
-            {% if user != null %}
+            {% if user.username != null %}
             <form action="/_account/logoff" method="post" id="logoutForm" class="navbar-right">
                 <ul class="nav navbar-nav navbar-right">
                     <li>
-                        <a href="/_account/manage" title="Manage">Hello {{user.name}})!</a>
+                        <a href="/_account/manage" title="Manage">Hello {{user.username}}!</a>
                     </li>
                     <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
                 </ul>

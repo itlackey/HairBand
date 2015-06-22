@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using Microsoft.AspNet.Identity;
 using System.Security.Claims;
+using DotLiquid;
 
 namespace HairBand
 {
-    public class BandMember :  IItem<Guid>, IEquatable<Guid>
+    public class BandMember : IItem<Guid>, IEquatable<Guid> //, DotLiquid.ILiquidizable
     {
         public BandMember()
         {
@@ -106,8 +107,13 @@ namespace HairBand
 
         public bool Equals(Guid other)
         {
-           return Id == other;
+            return Id == other;
         }
+
+        //public object ToLiquid()
+        //{
+        //    return Hash.FromAnonymousObject(new { UserName = this.UserName });
+        //}
     }
 
 
@@ -121,5 +127,5 @@ namespace HairBand
 
 
 
-  
+
 }

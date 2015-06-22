@@ -112,7 +112,7 @@ namespace HairBand
             //services.Add(new ServiceDescriptor(typeof(IConfiguration), Configuration));
             //services.Add(new ServiceDescriptor(typeof(ISiteConfigurationProvider), typeof(SiteConfigurationProvider), ServiceLifetime.Singleton));
 
-            
+
 
         }
 
@@ -142,7 +142,7 @@ namespace HairBand
             app.UseStaticFiles();
             //    .MapWhen(ctx => !ctx.Request.Path.HasValue || !ctx.Request.Path.Value.EndsWith(".html"), config =>
             //{
-                
+
             //});
 
             // Add cookie-based authentication to the request pipeline.
@@ -163,25 +163,30 @@ namespace HairBand
             app.UseMvc(routes =>
             {
 
+                routes.MapRoute(
+                           name: "manage",
+                           template: "_account/manage/{action}/{id?}",
+                           defaults: new { controller = "Manage", action = "Index", area = "Users" });
 
-                
+
+                routes.MapRoute(
+                      name: "logoff",
+                      template: "_account/logoff",
+                      defaults: new { controller = "Account", action = "LogOff", area = "Users" });
+
+
+
                 routes.MapRoute(
                     name: "account",
                     template: "_account/{action}/{id?}",
                     defaults: new { controller = "Account", action = "Login", area = "Users" });
 
 
+
                 routes.MapRoute(
-                    name: "manage",
-                    template: "_manage/{action}/{id?}",
-                    defaults: new { controller = "Manage", action = "Index", area = "Users" });
-
-
-
-                //routes.MapRoute(
-                //    name: "admin",
-                //    template: "_admin/{action}/{id?}",
-                //    defaults: new { controller = "Admin", action = "Index", area = "Admin" });
+                    name: "admin",
+                    template: "_admin/{action}/{id?}",
+                    defaults: new { controller = "Admin", action = "Index", area = "Admin" });
 
 
 
@@ -222,7 +227,7 @@ namespace HairBand
                 // routes.MapWebApiRoute("DefaultApi", "api/{controller}/{id?}");
             });
 
-            
+
 
 
 

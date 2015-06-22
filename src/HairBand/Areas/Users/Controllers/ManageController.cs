@@ -13,7 +13,7 @@ using HairBand.Models;
 namespace HairBand.Controllers
 {
     [Area("Users")]
-    [Route("_account/manage/[action]")]
+    //[Route("_account/manage/[action]")]
     [Authorize]
     public class ManageController : Controller
     {
@@ -30,7 +30,7 @@ namespace HairBand.Controllers
         //
         // GET: /Account/Index
         [HttpGet]
-        [Route("_account/manage")]
+        //[Route("_account/manage")]
         public async Task<IActionResult> Index(ManageMessageId? message = null)
         {
             ViewBag.StatusMessage =

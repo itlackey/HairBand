@@ -7,7 +7,8 @@ more_stuff: more more more
 
 Pages are working...
 
-{{user.email}}
+User: {{user.username}}
 
 Site: {{site.name}}
+
 Enabled: {{site.admin_enabled}}

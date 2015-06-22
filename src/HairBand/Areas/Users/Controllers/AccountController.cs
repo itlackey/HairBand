@@ -15,7 +15,7 @@ using HairBand.Models;
 namespace HairBand.Controllers
 {
     [Area("Users")]
-    [Route("_account/[action]")]
+    //[Route("_account/[action]")]
     [Authorize]
     public class AccountController : Controller
     {
@@ -118,7 +118,7 @@ namespace HairBand.Controllers
         //
         // POST: /Account/LogOff
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public IActionResult LogOff()
         {
             SignInManager.SignOut();
