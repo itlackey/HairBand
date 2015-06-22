@@ -89,7 +89,7 @@ namespace HairBand.Controllers
 
             var site = await this._siteProvider.GetSiteDataAsync();
 
-            ViewBag.User = user;
+            ViewBag.User = Hash.FromAnonymousObject(user);
             ViewBag.Site = site;
         }
     }
