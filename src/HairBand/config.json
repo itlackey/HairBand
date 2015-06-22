@@ -1,8 +1,5 @@
 {
   "AppSettings": {
-    "Title": "Hair Band",
-    "InstallationCompleted": "false",
-    "AdminEnabled": "false",
-    "Test": "default"
+    "Title": "Hair Band"
   }
 }

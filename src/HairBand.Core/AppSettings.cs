@@ -7,11 +7,8 @@ namespace HairBand
 {
     public class AppSettings
     {
-        public bool InstallationComplete { get; set; }
 
-        public bool AdminEnabled { get; set; }
-
-        public string Test { get; set; }
+        public string Title { get; set; }
 
     }
 }
