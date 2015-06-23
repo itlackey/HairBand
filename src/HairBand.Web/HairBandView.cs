@@ -41,6 +41,7 @@ namespace HairBand.Web
 
             Template.FileSystem = new LocalThemeFileSystem(themePath);
 
+            Template.RegisterTag<Riff>("riff");
 
             string fileContents = GetTemplateConents(this.Path);
 

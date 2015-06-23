@@ -1,4 +1,4 @@
-/// <binding AfterBuild='copy, copy_themes, copy_pages' Clean='clean, clean_themes, clean_pages' />
+/// <binding AfterBuild='copy, copy_themes, copy_pages, copy_site_data' Clean='clean, clean_themes, clean_pages, copy_site_data' />
 var gulp = require("gulp"),
   rimraf = require("rimraf"),
   less = require("gulp-less"),
