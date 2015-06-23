@@ -4,7 +4,22 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{{page.title}} - {{site.name}}</title>
-    <link rel="stylesheet" href="{{theme_folder}}/bootstrap.min.css" />
+    <link rel="stylesheet" href="{{theme_folder}}/css/bootstrap.min.css" />
+    <style type="text/css">
+        body {
+            padding-top: 50px;
+            padding-bottom: 20px;
+        }
+
+
+        /* Wrapping element */
+        /* Set some basic padding to keep content from hitting the edges */
+
+        .body-content {
+            padding-left: 15px;
+            padding-right: 15px;
+        }
+    </style>
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -52,10 +67,10 @@
 
         <hr />
         <footer>
-            <p>&copy; My Year {{site.time}} - {{site.name}}</p>
+            <p>&copy; {{site.name}} {{ site.time | date: "yyyy" }}</p>
         </footer>
         <script src="{{lib_folder}}/jquery/jquery.js"></script>
         <script src="{{lib_folder}}/bootstrap/js/bootstrap.js"></script>
-     </div>
+    </div>
 </body>
 </html>

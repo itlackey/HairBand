@@ -2,24 +2,9 @@
 title: Home
 ---
 <link rel="stylesheet" href="{{lib_folder}}/bootstrap-touch-carousel/css/bootstrap-touch-carousel.css" />
-
-<style>
-     /* 
-    body {
-        padding-top: 50px;
-        padding-bottom: 20px;
-    }
-    */
-
-    /* Wrapping element */
-    /* Set some basic padding to keep content from hitting the edges */
-   /*
-     .body-content {
-        padding-left: 15px;
-        padding-right: 15px;
-    }
-    */
-    /* Carousel */
+<style type="text/css">       
+    
+    /* Carousel  */
     .carousel-caption {
         z-index: 10 !important;
     }
@@ -36,6 +21,8 @@ title: Home
     }
 
 </style>
+
+## Welcome to the Hair Band
 <div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="6000">
     <ol class="carousel-indicators">
         <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
@@ -97,5 +84,15 @@ title: Home
             </div>
         </div>
     </div>
+
+  <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+    <span class="sr-only">Previous</span>
+  </a>
+  <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+    <span class="sr-only">Next</span>
+  </a>
+
 </div>
 <script src="{{lib_folder}}/bootstrap-touch-carousel/js/bootstrap-touch-carousel.js"></script>
