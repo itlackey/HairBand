@@ -11,7 +11,7 @@ namespace HairBand.Web
     public class DefaultRoleStore : FileStoreBase<Role, Guid>, IRoleStore<Role>
     {
         public DefaultRoleStore(IHostingEnvironment host)
-            : base(host, "secure/roles")
+            : base(host, "_secure/roles")
         {
 
         }

@@ -61,6 +61,12 @@ namespace HairBand.Web
                 else if (File.Exists(Path.Combine(themePath, "_" + viewName + ".liquid")))
                     path = Path.Combine(themePath, "_" + viewName + ".liquid");
 
+                else if (File.Exists(Path.Combine(themePath, "default.liquid")))
+                    path = Path.Combine(themePath, "default.liquid");
+
+                else if (File.Exists(Path.Combine(themePath, "default.html")))
+                    path = Path.Combine(themePath, "default.html");
+
                 else
                     throw new FileNotFoundException("View cannot be located.");
 

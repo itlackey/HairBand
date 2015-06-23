@@ -1,14 +1,101 @@
 ---
 title: Home
-custom_stuff: Stuff is here
-more_stuff: more more more
 ---
-## This is Home
+<link rel="stylesheet" href="{{lib_folder}}/bootstrap-touch-carousel/css/bootstrap-touch-carousel.css" />
 
-Pages are working...
+<style>
+     /* 
+    body {
+        padding-top: 50px;
+        padding-bottom: 20px;
+    }
+    */
 
-User: {{user.username}}
+    /* Wrapping element */
+    /* Set some basic padding to keep content from hitting the edges */
+   /*
+     .body-content {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+    */
+    /* Carousel */
+    .carousel-caption {
+        z-index: 10 !important;
+    }
 
-Site: {{site.name}}
+        .carousel-caption p {
+            font-size: 20px;
+            line-height: 1.4;
+        }
 
-Enabled: {{site.admin_enabled}}
+    @media (min-width: 768px) {
+        .carousel-caption {
+            z-index: 10 !important;
+        }
+    }
+
+</style>
+<div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="6000">
+    <ol class="carousel-indicators">
+        <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+        <li data-target="#myCarousel" data-slide-to="1"></li>
+        <li data-target="#myCarousel" data-slide-to="2"></li>
+        <li data-target="#myCarousel" data-slide-to="3"></li>
+    </ol>
+    <div class="carousel-inner" role="listbox">
+        <div class="item active">
+            <img src="{{images_folder}}/ASP-NET-Banners-01.png" alt="ASP.NET" class="img-responsive">
+            <div class="container">
+                <div class="carousel-caption">
+                    <p>
+                        Learn how to build ASP.NET apps that can run anywhere.
+                        <a class="btn btn-default btn-default" href="http://go.microsoft.com/fwlink/?LinkID=525028&clcid=0x409">
+                            Learn More
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="item">
+            <img src="{{images_folder}}/Banner-02-VS.png" alt="Visual Studio" class="img-responsive">
+            <div class="container">
+                <div class="carousel-caption">
+                    <p>
+                        There are powerful new features in Visual Studio for building modern web apps.
+                        <a class="btn btn-default btn-default" href="http://go.microsoft.com/fwlink/?LinkID=525030&clcid=0x409">
+                            Learn More
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="item">
+            <img src="{{images_folder}}/ASP-NET-Banners-02.png" alt="Package Management" class="img-responsive">
+            <div class="container">
+                <div class="carousel-caption">
+                    <p>
+                        Bring in libraries from NuGet, Bower, and npm, and automate tasks using Grunt or Gulp.
+                        <a class="btn btn-default btn-default" href="http://go.microsoft.com/fwlink/?LinkID=525029&clcid=0x409">
+                            Learn More
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="item">
+            <img src="{{images_folder}}/Banner-01-Azure.png" alt="Microsoft Azure" class="img-responsive">
+            <div class="container">
+                <div class="carousel-caption">
+                    <p>
+                        Learn how Microsoft's Azure cloud platform allows you to build, deploy, and scale web apps.
+                        <a class="btn btn-default btn-default" href="http://go.microsoft.com/fwlink/?LinkID=525027&clcid=0x409">
+                            Learn More
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="{{lib_folder}}/bootstrap-touch-carousel/js/bootstrap-touch-carousel.js"></script>

@@ -1,4 +1,4 @@
-/// <binding AfterBuild='copy, copy_themes' Clean='clean, clean_themes, clean_site_data' />
+/// <binding AfterBuild='copy, copy_themes, copy_pages' Clean='clean, clean_themes, clean_pages' />
 var gulp = require("gulp"),
   rimraf = require("rimraf"),
   fs = require("fs");
@@ -9,7 +9,11 @@ var paths = {
     bower: "./bower_components/",
     lib: "./" + project.webroot + "/lib/",
     themes: "./" + project.webroot + "/themes/",
-    data_root: "./" + project.webroot + "/app_data/"
+    data_root: "./" + project.webroot + "/app_data/",
+    pages: "./" + project.webroot + "/app_data/_pages",
+    drafts: "./" + project.webroot + "/app_data/_drafts",
+    posts: "./" + project.webroot + "/app_data/_posts",
+    secure: "./" + project.webroot + "/app_data/_secure"
 };
 
 gulp.task("clean", function (cb) {
@@ -41,11 +45,39 @@ gulp.task("copy_themes", function () {
         .pipe(gulp.dest(paths.themes));
 });
 
+
+gulp.task("clean_pages", function (cb) {
+    rimraf(paths.pages, function () { });
+    rimraf(paths.drafts, function () { });
+    rimraf(paths.posts, cb);       
+});
+
+gulp.task("copy_pages", function () {
+    gulp.src("./app_data/_pages/**")
+        .pipe(gulp.dest(paths.pages));
+
+    gulp.src("./app_data/_drafts/**")
+      .pipe(gulp.dest(paths.drafts));
+
+    gulp.src("./app_data/_posts/**")
+        .pipe(gulp.dest(paths.posts));
+});
+
 gulp.task("clean_site_data", function (cb) {
-    rimraf(paths.data_root, cb);
+    rimraf(paths.data_root + "_config.yml", function () { });
+    rimraf(paths.secure, cb);
 });
 
 gulp.task("copy_site_data", function () {
-    gulp.src("./app_data/**")
+    gulp.src("./app_data/_config.yml")
         .pipe(gulp.dest(paths.data_root));
 });
+
+//gulp.task("clean_app_data", function (cb) {
+//    rimraf(paths.data_root, cb);
+//});
+
+//gulp.task("copy_app_data", function () {
+//    gulp.src("./app_data/**")
+//        .pipe(gulp.dest(paths.data_root));
+//});

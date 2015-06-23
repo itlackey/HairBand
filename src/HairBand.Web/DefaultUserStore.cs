@@ -21,7 +21,7 @@ namespace HairBand.Web
     {
 
         public DefaultUserStore(IHostingEnvironment host)
-            : base(host, "secure/users")
+            : base(host, "_secure/users")
         {
         }
 

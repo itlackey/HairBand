@@ -87,6 +87,11 @@ namespace HairBand.Web
             if (siteData != null)
                 localVars.Add("theme_folder", "/themes/" + siteData.Theme);
 
+            if (siteData != null)
+                localVars.Add("lib_folder", "/lib");
+
+            localVars.Add("images_folder", "/images");
+
 
             if (pageData != null)
                 localVars.Add("content", GetContent(pageData, localVars));

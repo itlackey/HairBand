@@ -1,7 +1,8 @@
-/*/*/*/App_Data/secure
-**/wwwroot/app_data/*
-/*/*/*/lib
-/*/*/*/themes
+
+**/wwwroot/app_data/_config.yml
+**/wwwroot/app_data
+**/lib
+**/wwwroot/themes/*
 _*.js
 *.nuspec
 
