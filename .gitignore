@@ -1,8 +1,8 @@
 
-**/wwwroot/app_data/_config.yml
+**/_examples
 **/wwwroot/app_data
-**/lib
 **/wwwroot/themes/*
+**/lib
 _*.js
 *.nuspec
 
