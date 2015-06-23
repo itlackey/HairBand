@@ -3,6 +3,8 @@
   "version": "0.0.0",
   "devDependencies": {
     "gulp": "3.8.11",
-    "rimraf": "2.2.8"
+    "rimraf": "2.2.8",
+    "gulp-less": "3.0.3",
+    "gulp-plumber": "1.0.1"
   }
 }

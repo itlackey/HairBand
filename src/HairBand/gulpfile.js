@@ -1,6 +1,9 @@
 /// <binding AfterBuild='copy, copy_themes, copy_pages' Clean='clean, clean_themes, clean_pages' />
 var gulp = require("gulp"),
   rimraf = require("rimraf"),
+  less = require("gulp-less"),
+  path = require("path"),
+  plumber = require('gulp-plumber'),
   fs = require("fs");
 
 eval("var project = " + fs.readFileSync("./project.json"));
@@ -40,7 +43,27 @@ gulp.task("clean_themes", function (cb) {
     rimraf(paths.themes, cb);
 });
 
+//gulp.task('less', function () {
+
+//    return gulp.src('./Themes/**/*.less')
+//        .pipe(plumber())
+//        .pipe(less({
+//              paths: [path.join(__dirname, 'less', 'includes')]
+//        }))
+//        .pipe(gulp.dest('./wwwroot/themes'));
+//});
+
+
 gulp.task("copy_themes", function () {
+    
+    gulp.src('./Themes/**/*.less')
+        .pipe(plumber())
+        .pipe(less({
+            compress: true,
+            paths: [path.join(__dirname, 'less', 'includes')]
+        }))
+        .pipe(gulp.dest('./themes'));
+
     gulp.src("./themes/**")
         .pipe(gulp.dest(paths.themes));
 });
