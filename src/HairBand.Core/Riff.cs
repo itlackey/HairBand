@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using DotLiquid;
 using Microsoft.AspNet.Hosting;
+using DotLiquid.FileSystems;
 
 namespace HairBand
 {
@@ -12,13 +13,13 @@ namespace HairBand
     {
         private string _name;
 
-        
+
 
         public override void Initialize(string tagName, string markup, List<string> tokens)
         {
             base.Initialize(tagName, markup, tokens);
 
-            _name = markup;
+            _name = markup.Trim();
         }
 
         protected override void Parse(List<string> tokens)
@@ -28,16 +29,27 @@ namespace HairBand
 
         public override void Render(Context context, TextWriter result)
         {
+            base.Render(context, result);
 
             var host = new HttpContextAccessor().HttpContext.ApplicationServices.GetService
                   (typeof(IHostingEnvironment)) as IHostingEnvironment;
 
             var riffFolder = host.WebRootPath + "/app_data/_riffs/";
 
-            var fileName = String.Format("{0}{1}.riff", riffFolder, _name);
+            var fileName = Path.Combine(riffFolder, String.Format("{0}.html", _name));
+            
+            var riffContents = File.ReadAllText(fileName);
 
-        
-            base.Render(context, result);
+            var riffContext = new Context(context.Environments, context.Scopes.FirstOrDefault(), context.Registers, true);
+
+            Template.FileSystem = new HairBandFileSystem(riffFolder);
+
+            var template = Template.Parse(riffContents);
+
+            var output = template.Render(new RenderParameters() { Context = riffContext });
+
+            result.Write(output);
+
         }
 
     }

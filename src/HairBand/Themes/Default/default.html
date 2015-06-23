@@ -22,43 +22,7 @@
     </style>
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a href="/" class="navbar-brand">{{site.name}}</a>
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    {% for c_page in site.pages %}
-                    <li><a href="{{c_page.url[0]}}">{{c_page.title}}</a></li>
-                    {% endfor %}
-                </ul>
-                {% if site.admin_enabled == "true" %}
-                {% if user.username != null %}
-                <form action="/_account/logoff" method="post" id="logoutForm" class="navbar-right">
-                    <ul class="nav navbar-nav navbar-right">
-                        <li>
-                            <a href="/_account/manage" title="Manage">Hello {{user.username}}!</a>
-                        </li>
-                        <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
-                    </ul>
-                </form>
-                {%  else %}
-                <ul class="nav navbar-nav navbar-right">
-                    <li><a id="registerLink" href="/_account/register">Register</a></li>
-                    <li><a id="loginLink" href="/_account/login">Log in</a></li>
-                </ul>
-                {% endif %}
-                {%endif%}
-            </div>
-        </div>
-    </div>
-    {% riff menu  %}
+    {% riff navbar  %}
     <div class="container body-content">
         <h1>{{page.title}}</h1>
 

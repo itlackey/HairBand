@@ -1,4 +1,4 @@
-/// <binding AfterBuild='copy, copy_themes, copy_pages, copy_site_data' Clean='clean, clean_themes, clean_pages, copy_site_data' />
+/// <binding AfterBuild='copy, copy_themes, copy_pages, copy_riffs' Clean='clean, clean_themes, clean_pages, copy_site_data, clean_riffs' />
 var gulp = require("gulp"),
   rimraf = require("rimraf"),
   less = require("gulp-less"),
@@ -16,7 +16,8 @@ var paths = {
     pages: "./" + project.webroot + "/app_data/_pages",
     drafts: "./" + project.webroot + "/app_data/_drafts",
     posts: "./" + project.webroot + "/app_data/_posts",
-    secure: "./" + project.webroot + "/app_data/_secure"
+    secure: "./" + project.webroot + "/app_data/_secure",
+    riffs: "./" + project.webroot + "/app_data/_riffs"
 };
 
 gulp.task("clean", function (cb) {
@@ -68,6 +69,16 @@ gulp.task("copy_themes", function () {
         .pipe(gulp.dest(paths.themes));
 });
 
+
+gulp.task("clean_riffs", function (cb) {
+    rimraf(paths.riffs, cb);
+});
+
+gulp.task("copy_riffs", function () {
+    gulp.src("./app_data/_riffs/**")
+        .pipe(gulp.dest(paths.riffs));
+
+});
 
 gulp.task("clean_pages", function (cb) {
     rimraf(paths.pages, function () { });
