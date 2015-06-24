@@ -57,7 +57,7 @@ namespace HairBand
                 pages.Add(page);
             }
 
-            return pages;
+            return pages.OrderBy(p => p["Order"]).ThenBy(p => p.Title);
 
 
         }
