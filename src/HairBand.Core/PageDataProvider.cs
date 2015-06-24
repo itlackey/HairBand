@@ -54,21 +54,35 @@ namespace HairBand
 
                 SetPageUrls(page);
 
+
                 pages.Add(page);
             }
 
-            return pages.OrderBy(p => p["Order"]).ThenBy(p => p.Title);
+
+            pages = pages.Select(p =>
+              {
+                  p.ChildrenCount = pages.Count(x => x.Parent == p.Title);
+                  return p;
+              }).ToList();
+
+            return pages.OrderBy(p => p.Order).ThenBy(p => p.Title);
 
 
         }
 
-        private static void SetPageUrls(PageData page)
+        private  void SetPageUrls(PageData page)
         {
             var defaultUrl = Path.GetFileNameWithoutExtension(page.Path).Replace('_', '/');
 
             if (page.Url == null || !page.Url.Contains(defaultUrl))
             {
                 var urls = new List<string>();
+
+                //if(!String.IsNullOrEmpty(page.Parent))
+                //{
+                //    var parent =await GetPageAsync(page.Parent);
+                //    defaultUrl = parent.Url.FirstOrDefault() + "/" + defaultUrl;
+                //}
 
                 urls.Add(defaultUrl);
 

@@ -46,7 +46,7 @@ namespace HairBand
 
             var pages = await _pageProvider.GetPagesAsync();
 
-            data.Pages = pages.ToList();
+            data.Pages = pages.OrderBy(p => p.Order).ThenBy(p => p.Title).ToList();
 
             return data;
 
