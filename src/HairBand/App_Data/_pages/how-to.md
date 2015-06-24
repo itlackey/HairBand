@@ -1,5 +1,6 @@
 ﻿---
 title: How-To
+order: 2
 ---
 # How To have a Hair Band
 
@@ -7,4 +8,4 @@ title: How-To
 2. Step 2
 3. Step 3
 
-{{riff example_scale}}
+{% riff example_scale %}

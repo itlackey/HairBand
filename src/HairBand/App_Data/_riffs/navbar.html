@@ -10,7 +10,7 @@
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                {% for c_page in site.pages %}
+                {% for c_page in site.pages | sort: 'order', 'title' %}
                 <li><a href="{{c_page.url[0]}}">{{c_page.title}}</a></li>
                 {% endfor %}
             </ul>
