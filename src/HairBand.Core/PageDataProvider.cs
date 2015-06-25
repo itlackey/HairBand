@@ -44,7 +44,7 @@ namespace HairBand
             foreach (var item in files)
             {
 
-                var filePath = Path.GetFileNameWithoutExtension(item.Name).Replace('_', '/');
+                var filePath = Path.GetFileNameWithoutExtension(item.Name).Replace('-', '/');
 
                 var page = await GetPageAsync(filePath);
 
@@ -59,20 +59,16 @@ namespace HairBand
             }
 
 
-            pages = pages.Select(p =>
-              {
-                  p.ChildrenCount = pages.Count(x => x.Parent == p.Title);
-                  return p;
-              }).ToList();
-
             return pages.OrderBy(p => p.Order).ThenBy(p => p.Title);
 
 
         }
 
-        private  void SetPageUrls(PageData page)
+        private void SetPageUrls(PageData page)
         {
-            var defaultUrl = Path.GetFileNameWithoutExtension(page.Path).Replace('_', '/');
+            var defaultUrl = Path.GetFileNameWithoutExtension(page.Path)
+                //.Replace('_', '/')
+                .Replace("-", "/");
 
             if (page.Url == null || !page.Url.Contains(defaultUrl))
             {
@@ -121,7 +117,7 @@ namespace HairBand
 
                 var settings = new PageData();
 
-               await PopulateData(file, settings);
+                await PopulateData(file, settings);
 
                 ////var markdown = File.ReadAllText(file.PhysicalPath);
 
@@ -201,21 +197,33 @@ namespace HairBand
             }
 
             var headerString = markdown.Substring(markdown.IndexOf("---\r\n"), markdown.LastIndexOf("---") - 2);
-
-            var des = new Deserializer(
-                new DefaultObjectFactory(),
-                new UnderscoredNamingConvention(),
-                false);
-
-            var s = des.Deserialize<Dictionary<object, object>>(new StringReader(headerString));
-
-            if (s == null)
-                throw new InvalidDataException("Page does not contain valid meta data: " + file.Name);
-
-            foreach (var item in s)
+            try
             {
-                settings[item.Key.ToString()] = item.Value;
+
+                var des = new Deserializer(
+                    new DefaultObjectFactory(),
+                    new UnderscoredNamingConvention(),
+                    false);
+
+                var s = des.Deserialize<Dictionary<object, object>>(new StringReader(headerString));
+
+                if (s == null)
+                    throw new InvalidDataException("Page does not contain valid meta data: " + file.Name);
+
+                foreach (var item in s)
+                {
+                    settings[item.Key.ToString()] = item.Value;
+                }
             }
+            catch  (InvalidDataException dataEx)
+            {
+                throw dataEx;
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidDataException("Page does not contain valid meta data: " + file.Name, ex);
+            }
+
 
             //var settingLines = headerString.Split('\r', '\n');
 
@@ -244,7 +252,7 @@ namespace HairBand
             var fileName = url.TrimEnd('/');
 
             if (!url.StartsWith("_"))
-                fileName = fileName.Replace('/', '_');
+                fileName = fileName.Replace('/', '-');
 
             if (!Path.HasExtension(fileName))
                 fileName += ".md";

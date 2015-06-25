@@ -25,8 +25,7 @@ namespace HairBand
             this.Previous = null;
 
             this.Order = decimal.MaxValue;
-            this.Parent = string.Empty;
-            this.ChildrenCount = 0;
+            this.Group = string.Empty;
 
         }
 
@@ -122,24 +121,17 @@ namespace HairBand
         }
 
 
-        public string Parent
+        public string Group
         {
             get
             {
-                return this["parent"].ToString();
+                return this["group"].ToString();
             }
-            set { this["parent"] = value; }
+            set { this["group"] = value; }
         }
 
 
-        public int ChildrenCount
-        {
-            get
-            {
-                return Convert.ToInt32(this["children_count"]);
-            }
-            set { this["children_count"] = value; }
-        }
+
 
         #endregion
 

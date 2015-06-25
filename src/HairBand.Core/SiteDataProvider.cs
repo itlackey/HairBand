@@ -36,7 +36,30 @@ namespace HairBand
             var data = new SiteData();
 
             foreach (var item in s)
-                data[item.Key.ToString()] = item.Value;
+            {
+                if (item.Key.ToString() == "groups")
+                {
+                    var groups = new List<Group>();
+
+                    foreach (var gr in item.Value as IEnumerable<object>)
+                    {
+                        var group = new Group();
+
+                        group.Merge(gr as IDictionary<object, object>);
+                    
+                        groups.Add(group);
+
+                    }
+                    data.Groups = groups;
+
+                }
+                else
+                {
+                    data[item.Key.ToString()] = item.Value;
+
+                }
+
+            }
 
             if (String.IsNullOrEmpty(data.Name))
                 throw new ArgumentNullException("Site name must be set.");
@@ -47,6 +70,17 @@ namespace HairBand
             var pages = await _pageProvider.GetPagesAsync();
 
             data.Pages = pages.OrderBy(p => p.Order).ThenBy(p => p.Title).ToList();
+
+            if (data.Groups != null)
+            {
+                data.Groups = data.Groups.OrderBy(g => g.Order).ThenBy(g => g.Name).ToList();
+                foreach (var item in data.Groups)
+                {
+                    item.Pages = data.Pages.Where(p => p.Group == item.Name).ToList();
+                }
+
+            }
+            //pages.Select(p => p.Group).Where(g => !String.IsNullOrEmpty(g)).Distinct().ToList();
 
             return data;
 

@@ -10,11 +10,11 @@
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                {% for c_page in site.pages %}
+                <!--{% for c_page in site.pages %}
                 {%if c_page.parent == '' %}
                 {%if c_page.children_count > 0 %}
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{c_page.title}} <span class="caret"></span></a>                  
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{c_page.title}} <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         {%for child in site.pages %}
                         {%if child.parent == c_page.title %}
@@ -29,7 +29,28 @@
                 {%endif%}
 
                 {% endif %}
-                {% endfor %}
+
+                {% endfor %}-->
+               
+                {%for item in site.pages %}
+                {%if item.group == null %}
+                {%if item.url == node.url %}
+                <li><a href="/{{item.url[0]}}" class="active">{{item.title}}</a></li>
+                {%else%}
+                <li><a href="/{{item.url[0]}}">{{item.title}}</a></li>
+                {%endif%}
+                {%endif%}
+                {%endfor%}
+
+                {%for gr in site.groups %}
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{gr.Name}} <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        {%assign pages = gr.pages %}
+                        {%riff page_list %}
+                    </ul>
+                </li>
+                {%endfor%}
             </ul>
             {% if site.admin_enabled == "true" %}
             {% if user.username != null %}

@@ -14,11 +14,24 @@ namespace HairBand
         public Dictionary<string, object> _properties = new Dictionary<string, object>();
 
 
+        public DynamicDictionaryObject()
+        {
+
+        }
+
+   
+
         public IDictionary<string, object> ToDictionary()
         {
             return this._properties;
         }
 
+        public void Merge(IDictionary<object, object> input)
+        {
+            foreach (var item in input)
+                this[item.Key.ToString()] = item.Value;
+
+        }
         public void Merge(IDictionary<string, object> input)
         {
             foreach (var item in input)

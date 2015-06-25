@@ -1,6 +1,6 @@
 ﻿---
 title: Settings
-parent: About
+group: about
 ---
 # About Hair Band
 

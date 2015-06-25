@@ -25,6 +25,12 @@ namespace HairBand
             this.Tags = new Dictionary<string, PostData>();
             this.RootPath = string.Empty;
             this.InstallCompleted = false;
+
+            this.Groups = new List<Group>();
+            //{
+            //    new Group() { Name = "Examples", Order = 1 },
+            //    new Group() { Name = "About", Order = 2 }
+            //};
         }
 
         public string Name
@@ -142,13 +148,26 @@ namespace HairBand
             set { this["theme"] = value; }
         }
 
+
+        public ICollection<Group> Groups
+        {
+            get
+            {
+                return this["groups"] as ICollection<Group>;
+            }
+            set { this["groups"] = value; }
+        }
+
+
+
         public bool InstallCompleted
         {
             get { return Convert.ToBoolean(this["install_completed"]); }
             set { this["install_completed"] = value; }
         }
 
-        public bool AdminEnabled {
+        public bool AdminEnabled
+        {
             get { return Convert.ToBoolean(this["admin_enabled"]); }
             set { this["admin_enabled"] = value; }
         }

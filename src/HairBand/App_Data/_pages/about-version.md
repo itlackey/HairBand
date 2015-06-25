@@ -1,6 +1,6 @@
 ﻿---
 title: Version
-parent: About
+group: about
 order: 1
 ---
 # Version Information
