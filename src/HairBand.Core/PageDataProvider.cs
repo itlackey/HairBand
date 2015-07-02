@@ -33,9 +33,7 @@ namespace HairBand
         private async Task<IEnumerable<PageData>> GetPageData(string path)
         {
             var items = _host.WebRootFileProvider.GetDirectoryContents(path);
-
-            //var urls = Directory.GetFiles(GetDirectoryPath("page"), "*.md")
-            //               .Select(p => Path.GetFileNameWithoutExtension(p).Replace('-', '/'));
+            
             var pages = new List<PageData>();
 
             foreach (var item in items)
@@ -47,32 +45,32 @@ namespace HairBand
                 }
                 else
                 {
-                    var filePath = Path.GetFileNameWithoutExtension(item.Name).Replace('-', '/');
+                   // var filePath = Path.GetFileNameWithoutExtension(item.Name).Replace('-', '/');
 
                     var page = await GetPageAsync(path + "/" + item.Name);
 
-                    page.Date = item.LastModified.Date;
+                    //page.Date = item.LastModified.Date;
 
-                    page.Path = item.PhysicalPath;
-                    
-
-                    var urlBuilder = new StringBuilder();
-                    urlBuilder.Append(path + "/" + item.Name);
-
-                    urlBuilder.Replace(".md", string.Empty);
-                    urlBuilder.Replace(".html", string.Empty);
-
-                    if (urlBuilder.ToString().EndsWith("index"))
-                        urlBuilder.Remove(urlBuilder.ToString().LastIndexOf("index"), 5);
-                    
-                    if (urlBuilder.ToString().Contains(_pageDirectory))
-                        urlBuilder.Replace(_pageDirectory, "");
-
-                    if (!urlBuilder.ToString().StartsWith("/"))
-                        urlBuilder.Insert(0, "/");
+                    //page.Path = item.PhysicalPath;
 
 
-                    page.Url = urlBuilder.ToString();
+                    //var urlBuilder = new StringBuilder();
+                    //urlBuilder.Append(path + "/" + item.Name);
+
+                    //urlBuilder.Replace(".md", string.Empty);
+                    //urlBuilder.Replace(".html", string.Empty);
+
+                    //if (urlBuilder.ToString().EndsWith("index"))
+                    //    urlBuilder.Remove(urlBuilder.ToString().LastIndexOf("index"), 5);
+
+                    //if (urlBuilder.ToString().Contains(_pageDirectory))
+                    //    urlBuilder.Replace(_pageDirectory, "");
+
+                    //if (!urlBuilder.ToString().StartsWith("/"))
+                    //    urlBuilder.Insert(0, "/");
+
+
+                    //page.Url = urlBuilder.ToString();
 
                     pages.Add(page);
                 }
@@ -88,48 +86,14 @@ namespace HairBand
         public async Task<IEnumerable<PageData>> GetPagesAsync()
         {
             //ToDo does this move to site?
-
-
-            // var path = _rootDataDirectory + _pageDirectory;
-
             var pages = await GetPageData(_pageDirectory);
 
             return pages;
 
         }
 
-        //private void SetPageUrls(PageData page)
-        //{
-        //    var defaultUrl = Path.GetFileNameWithoutExtension(page.Path)
-        //        //.Replace('_', '/')
-        //        .Replace("-", "/");
-
-        //    if (page.Url == null || !page.Url.Contains(defaultUrl))
-        //    {
-        //        var urls = new List<string>();
-
-        //        //if(!String.IsNullOrEmpty(page.Parent))
-        //        //{
-        //        //    var parent =await GetPageAsync(page.Parent);
-        //        //    defaultUrl = parent.Url.FirstOrDefault() + "/" + defaultUrl;
-        //        //}
-
-        //        urls.Add(defaultUrl);
-
-        //        if (page.Url != null)
-        //            urls.AddRange(page.Url);
-
-        //        page.Url = urls;
-        //    }
-        //}
-
-
         public async Task<PageData> GetPageAsync(string url)
         {
-
-            //var fileName = GetRelativePath(url);
-
-            //var path = String.Format("{0}/{1}", this._pageDirectory, fileName);
 
             var path = url;
 
@@ -145,7 +109,7 @@ namespace HairBand
 
             var file = _host.WebRootFileProvider.GetFileInfo(path);
 
-            if (file.Exists) // File.Exists(path))
+            if (file.Exists)
             {
 
                 string markdown = string.Empty;
@@ -157,53 +121,77 @@ namespace HairBand
                 }
 
                 if (!markdown.Contains("---\r\n"))
-                    throw new ArgumentException("This is not a valid page. Page's must conain metadata.");
+                    throw new ArgumentException("This is not a valid page. Page's must contain metadata.");
 
 
-                var settings = new PageData();
-
-                await PopulateData(file, settings);
-
-                settings.Url = url;
-
-                ////var markdown = File.ReadAllText(file.PhysicalPath);
-
-                //var headerString = markdown.Substring(markdown.IndexOf("---\r\n"), markdown.LastIndexOf("---") - 2);
-
-                //var des = new Deserializer(
-                //    new DefaultObjectFactory(),
-                //    new UnderscoredNamingConvention(),
-                //    false);
-
-                //var s = des.Deserialize(new StringReader(headerString));
+                var page = new PageData();
 
 
-                //var settings = new PageData();
+                var headerString = markdown.Substring(markdown.IndexOf("---\r\n"), markdown.LastIndexOf("---") - 2);
+                try
+                {
 
-                //var settingLines = headerString.Split('\r', '\n');
+                    var des = new Deserializer(
+                        new DefaultObjectFactory(),
+                        new UnderscoredNamingConvention(),
+                        false);
+
+                    var s = des.Deserialize<Dictionary<object, object>>(new StringReader(headerString));
+
+                    if (s == null)
+                        throw new InvalidDataException("Page does not contain valid meta data: " + file.Name);
+
+                    foreach (var item in s)
+                    {
+                        page[item.Key.ToString()] = item.Value;
+                    }
+                }
+                catch (InvalidDataException dataEx)
+                {
+                    throw dataEx;
+                }
+                catch (Exception ex)
+                {
+                    throw new InvalidDataException("Page does not contain valid meta data: " + file.Name, ex);
+                }
+
+                var body = markdown.Substring(markdown.LastIndexOf("---") + 5);
+
+                var html = CommonMarkConverter.Convert(body);
+
+                page["content"] = html;
+
+                page.Date = file.LastModified.Date;
+
+                page.Path = file.PhysicalPath;
 
 
-                //foreach (var line in settingLines)
-                //{
-                //    if (line.Contains(":"))
-                //    {
-                //        var data = line.Split(':');
+                var urlBuilder = new StringBuilder();
+                urlBuilder.Append(path); // + "/" + file.Name);
 
-                //        settings[data.First()] = data.Last();
+                urlBuilder.Replace(".md", string.Empty);
+                urlBuilder.Replace(".html", string.Empty);
 
-                //    }
-                //}
+                if (urlBuilder.ToString().EndsWith("index"))
+                    urlBuilder.Remove(urlBuilder.ToString().LastIndexOf("index"), 5);
+
+                if (urlBuilder.ToString().Contains(_pageDirectory))
+                    urlBuilder.Replace(_pageDirectory, "");
+
+                if (!urlBuilder.ToString().StartsWith("/"))
+                    urlBuilder.Insert(0, "/");
 
 
-                //var body = markdown.Substring(markdown.LastIndexOf("---") + 5);
+                page.Url = urlBuilder.ToString();
 
-                //var html = CommonMarkConverter.Convert(body);
+                // await PopulateData(file, page);
 
-                //settings["content"] = html;
 
-                ////SetRequiredProperties(url, settings);
 
-                return settings;
+
+                //settings.Url = url;
+
+                return page;
             }
             else
                 throw new FileNotFoundException("This page does not exist: " + file.PhysicalPath);
@@ -219,7 +207,7 @@ namespace HairBand
 
             var file = _host.WebRootFileProvider.GetFileInfo(path);
 
-            if (file.Exists) // File.Exists(path))
+            if (file.Exists)
             {
 
                 var settings = new PostData();
@@ -233,7 +221,7 @@ namespace HairBand
 
         }
 
-        private static async Task PopulateData(IFileInfo file, DynamicDictionaryObject settings)
+        private async Task PopulateData(IFileInfo file, PageData page)
         {
             string markdown = string.Empty;
             using (var reader = new StreamReader(file.CreateReadStream()))
@@ -259,7 +247,7 @@ namespace HairBand
 
                 foreach (var item in s)
                 {
-                    settings[item.Key.ToString()] = item.Value;
+                    page[item.Key.ToString()] = item.Value;
                 }
             }
             catch (InvalidDataException dataEx)
@@ -271,27 +259,35 @@ namespace HairBand
                 throw new InvalidDataException("Page does not contain valid meta data: " + file.Name, ex);
             }
 
-
-            //var settingLines = headerString.Split('\r', '\n');
-
-
-            //foreach (var line in settingLines)
-            //{
-            //    if (line.Contains(":"))
-            //    {
-            //        var data = line.Split(':');
-
-            //        settings[data.First()] = data.Last();
-
-            //    }
-            //}
-
-
             var body = markdown.Substring(markdown.LastIndexOf("---") + 5);
 
             var html = CommonMarkConverter.Convert(body);
 
-            settings["content"] = html;
+            page["content"] = html;
+
+            page.Date = file.LastModified.Date;
+
+            page.Path = file.PhysicalPath;
+
+
+            //var urlBuilder = new StringBuilder();
+            //urlBuilder.Append(path + "/" + file.Name);
+
+            //urlBuilder.Replace(".md", string.Empty);
+            //urlBuilder.Replace(".html", string.Empty);
+
+            //if (urlBuilder.ToString().EndsWith("index"))
+            //    urlBuilder.Remove(urlBuilder.ToString().LastIndexOf("index"), 5);
+
+            //if (urlBuilder.ToString().Contains(_pageDirectory))
+            //    urlBuilder.Replace(_pageDirectory, "");
+
+            //if (!urlBuilder.ToString().StartsWith("/"))
+            //    urlBuilder.Insert(0, "/");
+
+
+            //page.Url = urlBuilder.ToString();
+
         }
 
         private static string GetRelativePath(string url)
@@ -318,9 +314,6 @@ namespace HairBand
 
             var files = _host.WebRootFileProvider.GetDirectoryContents(_postDirectory);
 
-            //var urls = Directory.GetFiles(GetDirectoryPath("page"), "*.md")
-            //               .Select(p => Path.GetFileNameWithoutExtension(p).Replace('-', '/'));
-
             foreach (var item in files)
             {
 
@@ -334,80 +327,5 @@ namespace HairBand
 
             return posts;
         }
-
-        //protected void SetRequiredProperties(string url, Dictionary<string, object> settings)
-        //{
-        //    SetDefaultValue(settings, "title", String.Empty);
-
-        //    SetDefaultValue(settings, "excerpt", String.Empty);
-
-        //    SetDefaultValue(settings, "url", url);
-
-        //    SetDefaultValue(settings, "date", DateTime.Now);
-
-        //    SetDefaultValue(settings, "id", url);
-
-        //    SetDefaultValue(settings, "categories", new string[0]);
-
-        //    SetDefaultValue(settings, "tags", new string[0]);
-
-        //    SetDefaultValue(settings, "path", url);
-
-        //    SetDefaultValue(settings, "next", null);
-
-        //    SetDefaultValue(settings, "previous", null);
-        //}
-
-        //protected void SetDefaultValue(IDictionary<string, object> settings, string key, object defaultValue)
-        //{
-        //    if (!settings.ContainsKey(key))
-        //        settings.Add(key, defaultValue);
-        //}
-
-        //public async Task<PageData> GetPageData(string url)
-        //{
-        //    return await Task.Run(() =>
-        //    {
-
-        //        var path = this._host.WebRootPath + "/app_data/pages/" + url.TrimEnd('/').Replace('/', '-') + ".md";
-
-        //        if (File.Exists(path))
-        //        {
-        //            var md = File.ReadAllText(path);
-
-        //            var headerString = md.Substring(md.IndexOf("---\r\n"), md.LastIndexOf("---") - 2);
-
-        //            var settings = new Dictionary<string, object>();
-
-        //            var settingLines = headerString.Split('\r', '\n');
-
-        //            var metadata = new PageSettings();
-
-        //            foreach (var line in settingLines)
-        //            {
-        //                if (line.Contains(":"))
-        //                {
-        //                    var data = line.Split(':');
-
-        //                    settings.Add(data.First(), data.Last());
-
-        //                    metadata.AddProperty(data.First(), data.Last());
-
-        //                }
-        //            }
-
-        //            var body = md.Substring(md.LastIndexOf("---") + 5);
-
-        //            var html = CommonMarkConverter.Convert(body);
-
-        //            return new PageData() { Url = url.Replace('-', '/'), Content = html, Settings = settings, Metadata = metadata };
-        //        }
-        //        else
-        //            throw new FileNotFoundException("This page does not exist");
-
-        //    });
-
-        //}
-
     }
 }
