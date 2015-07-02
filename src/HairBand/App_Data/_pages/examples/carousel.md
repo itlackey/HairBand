@@ -1,5 +1,6 @@
 ---
 title: Carousel Example
+group: examples
 order: 1
 ---
 <link rel="stylesheet" href="{{lib_folder}}/bootstrap-touch-carousel/css/bootstrap-touch-carousel.css" />

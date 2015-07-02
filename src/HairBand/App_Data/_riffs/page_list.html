@@ -1,8 +1,10 @@
 ﻿
-{%for item in pages %}
+{%for item in site.pages %}
+{%if item.group == group  %}
 {%if item.url == node.url %}
-<li><a href="/{{item.url}}" class="active">{{item.title}}</a></li>
+<li><a href="{{item.url}}" class="active">{{item.title}}</a></li>
 {%else%}
-<li><a href="/{{item.url}}">{{item.title}}</a></li>
-{%endif%}
-{%endfor%}
+<li><a href="{{item.url}}">{{item.title}}</a></li>
+{%endif -%}
+{%endif -%}
+{%endfor -%}

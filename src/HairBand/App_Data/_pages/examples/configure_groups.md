@@ -1,7 +1,7 @@
 ﻿---
 title: Configure Menu Groups
 order: 1
-group: Examples
+group: examples
 ---
 ## How to set-up a menu
 

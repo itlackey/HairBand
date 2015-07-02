@@ -2,7 +2,9 @@
 title: About
 group: navbar
 ---
-## About Your HairBand
+# About Your HairBand
 
-{%assign group = "about" %}
-{% riff page_list %}
+{% assign group = 'about' %}
+<ul>
+    {% riff page_list %}
+</ul>

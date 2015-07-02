@@ -3,8 +3,6 @@ title: Home
 group: navbar
 order: 1
 ---
+# Welcome to the Hair Band
 
-
-## Welcome to the Hair Band
-
-** This is home **
+**This is home**

@@ -11,6 +11,7 @@ using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.ObjectFactories;
 using YamlDotNet.Serialization.NamingConventions;
 using Microsoft.AspNet.FileProviders;
+using System.Text;
 
 namespace HairBand
 {
@@ -26,20 +27,6 @@ namespace HairBand
         public PageDataProvider(IHostingEnvironment host)
         {
             this._host = host;
-
-        }
-
-
-        public async Task<IEnumerable<PageData>> GetPagesAsync()
-        {
-            //ToDo does this move to site?
-
-
-            // var path = _rootDataDirectory + _pageDirectory;
-
-            var pages = await GetPageData(_pageDirectory);
-
-            return pages;
 
         }
 
@@ -67,18 +54,25 @@ namespace HairBand
                     page.Date = item.LastModified.Date;
 
                     page.Path = item.PhysicalPath;
+                    
 
-                    //SetPageUrls(page);
+                    var urlBuilder = new StringBuilder();
+                    urlBuilder.Append(path + "/" + item.Name);
+
+                    urlBuilder.Replace(".md", string.Empty);
+                    urlBuilder.Replace(".html", string.Empty);
+
+                    if (urlBuilder.ToString().EndsWith("index"))
+                        urlBuilder.Remove(urlBuilder.ToString().LastIndexOf("index"), 5);
+                    
+                    if (urlBuilder.ToString().Contains(_pageDirectory))
+                        urlBuilder.Replace(_pageDirectory, "");
+
+                    if (!urlBuilder.ToString().StartsWith("/"))
+                        urlBuilder.Insert(0, "/");
 
 
-                    //var defaultUrl = Path.GetFileNameWithoutExtension(page.Path).Replace("-", "/");
-
-                    var defaultUrl = path + "/" + item.Name;
-
-                    if (defaultUrl.EndsWith("index"))
-                        defaultUrl.Remove(defaultUrl.LastIndexOf("index"), 5);
-
-                    page.Url = defaultUrl;
+                    page.Url = urlBuilder.ToString();
 
                     pages.Add(page);
                 }
@@ -87,6 +81,21 @@ namespace HairBand
 
 
             return pages.OrderBy(p => p.Order).ThenBy(p => p.Title);
+        }
+
+
+
+        public async Task<IEnumerable<PageData>> GetPagesAsync()
+        {
+            //ToDo does this move to site?
+
+
+            // var path = _rootDataDirectory + _pageDirectory;
+
+            var pages = await GetPageData(_pageDirectory);
+
+            return pages;
+
         }
 
         //private void SetPageUrls(PageData page)
@@ -122,15 +131,16 @@ namespace HairBand
 
             //var path = String.Format("{0}/{1}", this._pageDirectory, fileName);
 
-
-
             var path = url;
-
 
             if (!path.StartsWith(_pageDirectory))
                 path = _pageDirectory + "/" + path;
 
-            if (!Path.HasExtension(url))
+
+            if (path.EndsWith("/"))
+                path += "index.md";
+
+            if (!Path.HasExtension(path))
                 path += ".md";
 
             var file = _host.WebRootFileProvider.GetFileInfo(path);
@@ -153,6 +163,8 @@ namespace HairBand
                 var settings = new PageData();
 
                 await PopulateData(file, settings);
+
+                settings.Url = url;
 
                 ////var markdown = File.ReadAllText(file.PhysicalPath);
 
