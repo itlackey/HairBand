@@ -1,8 +1,8 @@
 ﻿
 {%for item in pages %}
 {%if item.url == node.url %}
-<li><a href="/{{item.url[0]}}" class="active">{{item.title}}</a></li>
+<li><a href="/{{item.url}}" class="active">{{item.title}}</a></li>
 {%else%}
-<li><a href="/{{item.url[0]}}">{{item.title}}</a></li>
+<li><a href="/{{item.url}}">{{item.title}}</a></li>
 {%endif%}
 {%endfor%}

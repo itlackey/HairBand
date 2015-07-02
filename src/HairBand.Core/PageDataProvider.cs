@@ -18,10 +18,10 @@ namespace HairBand
     {
         private IHostingEnvironment _host;
 
-        private string _rootDataDirectory = "/app_data";
-        private string _pageDirectory = "/_pages";
-        private string _postDirectory = "/_posts";
-        private string _adminDirectory = "/_admin";
+        // private string _rootDataDirectory = "/app_data";
+        private string _pageDirectory = "/app_data/_pages";
+        private string _postDirectory = "/app_data/_posts";
+        private string _adminDirectory = "/app_data/_admin";
 
         public PageDataProvider(IHostingEnvironment host)
         {
@@ -34,69 +34,104 @@ namespace HairBand
         {
             //ToDo does this move to site?
 
-            var pages = new List<PageData>();
 
-            var files = _host.WebRootFileProvider.GetDirectoryContents(_rootDataDirectory + _pageDirectory);
+            // var path = _rootDataDirectory + _pageDirectory;
+
+            var pages = await GetPageData(_pageDirectory);
+
+            return pages;
+
+        }
+
+        private async Task<IEnumerable<PageData>> GetPageData(string path)
+        {
+            var items = _host.WebRootFileProvider.GetDirectoryContents(path);
 
             //var urls = Directory.GetFiles(GetDirectoryPath("page"), "*.md")
             //               .Select(p => Path.GetFileNameWithoutExtension(p).Replace('-', '/'));
+            var pages = new List<PageData>();
 
-            foreach (var item in files)
+            foreach (var item in items)
             {
 
-                var filePath = Path.GetFileNameWithoutExtension(item.Name).Replace('-', '/');
+                if (item.IsDirectory)
+                {
+                    pages.AddRange(await GetPageData(path + "/" + item.Name));
+                }
+                else
+                {
+                    var filePath = Path.GetFileNameWithoutExtension(item.Name).Replace('-', '/');
 
-                var page = await GetPageAsync(filePath);
+                    var page = await GetPageAsync(path + "/" + item.Name);
 
-                page.Date = item.LastModified.Date;
+                    page.Date = item.LastModified.Date;
 
-                page.Path = item.PhysicalPath;
+                    page.Path = item.PhysicalPath;
 
-                SetPageUrls(page);
+                    //SetPageUrls(page);
 
 
-                pages.Add(page);
+                    //var defaultUrl = Path.GetFileNameWithoutExtension(page.Path).Replace("-", "/");
+
+                    var defaultUrl = path + "/" + item.Name;
+
+                    if (defaultUrl.EndsWith("index"))
+                        defaultUrl.Remove(defaultUrl.LastIndexOf("index"), 5);
+
+                    page.Url = defaultUrl;
+
+                    pages.Add(page);
+                }
+
             }
 
 
             return pages.OrderBy(p => p.Order).ThenBy(p => p.Title);
-
-
         }
 
-        private void SetPageUrls(PageData page)
-        {
-            var defaultUrl = Path.GetFileNameWithoutExtension(page.Path)
-                //.Replace('_', '/')
-                .Replace("-", "/");
+        //private void SetPageUrls(PageData page)
+        //{
+        //    var defaultUrl = Path.GetFileNameWithoutExtension(page.Path)
+        //        //.Replace('_', '/')
+        //        .Replace("-", "/");
 
-            if (page.Url == null || !page.Url.Contains(defaultUrl))
-            {
-                var urls = new List<string>();
+        //    if (page.Url == null || !page.Url.Contains(defaultUrl))
+        //    {
+        //        var urls = new List<string>();
 
-                //if(!String.IsNullOrEmpty(page.Parent))
-                //{
-                //    var parent =await GetPageAsync(page.Parent);
-                //    defaultUrl = parent.Url.FirstOrDefault() + "/" + defaultUrl;
-                //}
+        //        //if(!String.IsNullOrEmpty(page.Parent))
+        //        //{
+        //        //    var parent =await GetPageAsync(page.Parent);
+        //        //    defaultUrl = parent.Url.FirstOrDefault() + "/" + defaultUrl;
+        //        //}
 
-                urls.Add(defaultUrl);
+        //        urls.Add(defaultUrl);
 
-                if (page.Url != null)
-                    urls.AddRange(page.Url);
+        //        if (page.Url != null)
+        //            urls.AddRange(page.Url);
 
-                page.Url = urls;
-            }
-        }
+        //        page.Url = urls;
+        //    }
+        //}
 
 
         public async Task<PageData> GetPageAsync(string url)
         {
 
-            var fileName = GetFilename(url);
+            //var fileName = GetRelativePath(url);
 
-            var path = String.Format("{0}/{1}/{2}", this._rootDataDirectory, this._pageDirectory, fileName);
+            //var path = String.Format("{0}/{1}", this._pageDirectory, fileName);
 
+
+
+            var path = url;
+
+
+            if (!path.StartsWith(_pageDirectory))
+                path = _pageDirectory + "/" + path;
+
+            if (!Path.HasExtension(url))
+                path += ".md";
 
             var file = _host.WebRootFileProvider.GetFileInfo(path);
 
@@ -166,9 +201,9 @@ namespace HairBand
 
         public async Task<PostData> GetPostAsync(string url)
         {
-            var fileName = GetFilename(url);
+            var fileName = GetRelativePath(url);
 
-            var path = String.Format("{0}/{1}/{2}", this._rootDataDirectory, this._postDirectory, fileName);
+            var path = String.Format("{0}/{1}", this._postDirectory, fileName);
 
             var file = _host.WebRootFileProvider.GetFileInfo(path);
 
@@ -215,7 +250,7 @@ namespace HairBand
                     settings[item.Key.ToString()] = item.Value;
                 }
             }
-            catch  (InvalidDataException dataEx)
+            catch (InvalidDataException dataEx)
             {
                 throw dataEx;
             }
@@ -247,7 +282,7 @@ namespace HairBand
             settings["content"] = html;
         }
 
-        private static string GetFilename(string url)
+        private static string GetRelativePath(string url)
         {
             var fileName = url.TrimEnd('/');
 
@@ -256,6 +291,7 @@ namespace HairBand
 
             if (!Path.HasExtension(fileName))
                 fileName += ".md";
+
             else if (Path.HasExtension(fileName) && Path.GetExtension(fileName) == ".html")
                 fileName = Path.ChangeExtension(fileName, ".md");
 
@@ -268,7 +304,7 @@ namespace HairBand
 
             var posts = new List<PostData>();
 
-            var files = _host.WebRootFileProvider.GetDirectoryContents(_rootDataDirectory + _postDirectory);
+            var files = _host.WebRootFileProvider.GetDirectoryContents(_postDirectory);
 
             //var urls = Directory.GetFiles(GetDirectoryPath("page"), "*.md")
             //               .Select(p => Path.GetFileNameWithoutExtension(p).Replace('-', '/'));

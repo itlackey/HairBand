@@ -1,5 +1,6 @@
 ﻿---
 title: How-To
+group: navbar
 order: 2
 ---
 # How To have a Hair Band

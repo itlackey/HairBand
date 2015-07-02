@@ -219,7 +219,7 @@ namespace HairBand
                 routes.MapRoute(
                      name: "Pages",
                      template: "{*page}",
-                     defaults: new { controller = "Pages", action = "Page", page = "home" });
+                     defaults: new { controller = "Pages", action = "Page", page = "index" });
 
 
 
