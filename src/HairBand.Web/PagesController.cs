@@ -1,17 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNet.Mvc;
-using Microsoft.Framework.OptionsModel;
-using Microsoft.AspNet.Hosting;
 using DotLiquid;
-using DotLiquid.FileSystems;
-using System.IO;
 using Microsoft.AspNet.Identity;
 using System.Threading;
-using Microsoft.AspNet.Authorization;
-using Microsoft.Framework.ConfigurationModel;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 

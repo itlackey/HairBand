@@ -11,7 +11,11 @@ namespace HairBand
 {
     public class Riff : DotLiquid.Tag
     {
+        private const string _riffDirectory = "/app_data/_riffs/";
+
         private string _name;
+
+       // private List<string> _args = new List<string>();
 
 
 
@@ -19,12 +23,18 @@ namespace HairBand
         {
             base.Initialize(tagName, markup, tokens);
 
-            _name = markup.Trim();
-        }
+            //if (markup.Contains(','))
+            //{
+            //    var args = markup.Split(',');
+            //    _name = args.FirstOrDefault();
 
-        protected override void Parse(List<string> tokens)
-        {
-            base.Parse(tokens);
+            //    for (int i = 1; i < args.Count(); i++)
+            //    {
+            //        _args.Add(args.ElementAt(i));
+            //    }
+            //}
+            //else
+            _name = markup.Trim();
         }
 
         public override void Render(Context context, TextWriter result)
@@ -34,10 +44,10 @@ namespace HairBand
             var host = new HttpContextAccessor().HttpContext.ApplicationServices.GetService
                   (typeof(IHostingEnvironment)) as IHostingEnvironment;
 
-            var riffFolder = host.WebRootPath + "/app_data/_riffs/";
+            var riffFolder = host.WebRootPath + _riffDirectory;
 
             var fileName = Path.Combine(riffFolder, String.Format("{0}.html", _name));
-            
+
             var riffContents = File.ReadAllText(fileName);
 
             var riffContext = new Context(context.Environments, context.Scopes.FirstOrDefault(), context.Registers, true);

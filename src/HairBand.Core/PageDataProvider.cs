@@ -30,7 +30,7 @@ namespace HairBand
 
         }
 
-        private async Task<IEnumerable<PageData>> GetPageData(string path)
+        private async Task<IEnumerable<PageData>> GetPagesByFolder(string path)
         {
             var items = _host.WebRootFileProvider.GetDirectoryContents(path);
             
@@ -41,36 +41,11 @@ namespace HairBand
 
                 if (item.IsDirectory)
                 {
-                    pages.AddRange(await GetPageData(path + "/" + item.Name));
+                    pages.AddRange(await GetPagesByFolder(path + "/" + item.Name));
                 }
                 else
                 {
-                   // var filePath = Path.GetFileNameWithoutExtension(item.Name).Replace('-', '/');
-
                     var page = await GetPageAsync(path + "/" + item.Name);
-
-                    //page.Date = item.LastModified.Date;
-
-                    //page.Path = item.PhysicalPath;
-
-
-                    //var urlBuilder = new StringBuilder();
-                    //urlBuilder.Append(path + "/" + item.Name);
-
-                    //urlBuilder.Replace(".md", string.Empty);
-                    //urlBuilder.Replace(".html", string.Empty);
-
-                    //if (urlBuilder.ToString().EndsWith("index"))
-                    //    urlBuilder.Remove(urlBuilder.ToString().LastIndexOf("index"), 5);
-
-                    //if (urlBuilder.ToString().Contains(_pageDirectory))
-                    //    urlBuilder.Replace(_pageDirectory, "");
-
-                    //if (!urlBuilder.ToString().StartsWith("/"))
-                    //    urlBuilder.Insert(0, "/");
-
-
-                    //page.Url = urlBuilder.ToString();
 
                     pages.Add(page);
                 }
@@ -86,7 +61,7 @@ namespace HairBand
         public async Task<IEnumerable<PageData>> GetPagesAsync()
         {
             //ToDo does this move to site?
-            var pages = await GetPageData(_pageDirectory);
+            var pages = await GetPagesByFolder(_pageDirectory);
 
             return pages;
 
@@ -183,13 +158,7 @@ namespace HairBand
 
 
                 page.Url = urlBuilder.ToString();
-
-                // await PopulateData(file, page);
-
-
-
-
-                //settings.Url = url;
+                
 
                 return page;
             }
