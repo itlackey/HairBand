@@ -94,6 +94,9 @@ namespace HairBand.Web
             localVars.Add("images_folder", "/images");
 
 
+            localVars.Add("node", pageData);
+
+
             if (pageData != null)
                 localVars.Add("content", GetContent(pageData, localVars));
 
