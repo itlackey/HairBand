@@ -15,7 +15,7 @@ namespace HairBand
 
         private string _name;
 
-       // private List<string> _args = new List<string>();
+        private Dictionary<string, object> _args = new Dictionary<string, object>();
 
 
 
@@ -23,18 +23,27 @@ namespace HairBand
         {
             base.Initialize(tagName, markup, tokens);
 
-            //if (markup.Contains(','))
-            //{
-            //    var args = markup.Split(',');
-            //    _name = args.FirstOrDefault();
+            if (markup.Contains(','))
+            {
+                var args = markup.Split(',');
+                _name = args.FirstOrDefault().Trim();
 
-            //    for (int i = 1; i < args.Count(); i++)
-            //    {
-            //        _args.Add(args.ElementAt(i));
-            //    }
-            //}
-            //else
-            _name = markup.Trim();
+                for (int i = 1; i < args.Count(); i++)
+                {
+                    var item = args.ElementAt(i);
+                    if (item.Contains(':'))
+                    {
+                        var parts = item.Split(':');
+                        _args.Add(parts.First().Trim(), parts.Last().Trim());
+                    }
+                    else
+                    {
+                        _args.Add(i.ToString(), item);
+                    }
+                }
+            }
+            else
+                _name = markup.Trim();
         }
 
         public override void Render(Context context, TextWriter result)
@@ -51,6 +60,8 @@ namespace HairBand
             var riffContents = File.ReadAllText(fileName);
 
             var riffContext = new Context(context.Environments, context.Scopes.FirstOrDefault(), context.Registers, true);
+
+            context.Merge(Hash.FromDictionary(_args));
 
             Template.FileSystem = new HairBandFileSystem(riffFolder);
 

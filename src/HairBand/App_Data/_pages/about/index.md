@@ -4,7 +4,6 @@ group: navbar
 ---
 # About Your HairBand
 
-{% assign group = 'about' %}
 <ul>
-    {% riff page_list %}
+    {% riff page_list, group:about, class:list-group-item %}
 </ul>

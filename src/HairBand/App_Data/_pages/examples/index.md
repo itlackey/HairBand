@@ -4,7 +4,7 @@ group: navbar
 order: 3
 ---
 # Examples
-{% assign group = 'examples' %}
-<ul>
-{% riff page_list, 'examples',  123] %}
+
+<ul class="list-unstyled">
+{% riff page_list, group:examples, extra_info:123  %}
 </ul>

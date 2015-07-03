@@ -10,15 +10,7 @@
         </div>
         <div class="navbar-collapse collapse">            
             <ul class="nav navbar-nav">
-                {%for item in site.pages %}
-                {%if item.group == 'navbar' %}
-                {%if node.url contains item.url %}
-                <li class="active"><a href="{{item.url}}">{{item.title}}</a></li>
-                {%else -%}
-                <li><a href="{{item.url}}">{{item.title}}</a></li>
-                {%endif %}
-                {%endif %}
-                {%endfor %}
+                {% riff page_list, group:navbar %}
             </ul>
             {% if site.admin_enabled == "true" %}
             {% if user.username != null %}
@@ -40,3 +32,12 @@
         </div>
     </div>
 </div>
+<!--{%for item in site.pages %}
+{%if item.group == 'navbar' %}
+{%if node.url contains item.url %}
+<li class="active"><a href="{{item.url}}">{{item.title}}</a></li>
+{%else -%}
+<li><a href="{{item.url}}">{{item.title}}</a></li>
+{%endif %}
+{%endif %}
+{%endfor %}-->

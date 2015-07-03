@@ -39,7 +39,7 @@ namespace HairBand.Web
 
             var themePath = System.IO.Path.GetDirectoryName(Path); 
 
-            Template.FileSystem = new LocalThemeFileSystem(themePath);
+            Template.FileSystem = new HairBandFileSystem(themePath);
 
             Template.RegisterTag<Riff>("riff");
 
