@@ -3,6 +3,10 @@
   "version": -9998,
   "projectFileDependencyGroups": {
     "": [
+      "System.Collections >= 4.0.10-beta-22816",
+      "System.Linq >= 4.0.0-beta-22816",
+      "System.Threading >= 4.0.10-beta-22816",
+      "Microsoft.CSharp >= 4.0.0-beta-22816",
       "Microsoft.AspNet.Mvc >= 6.0.0-beta4",
       "Microsoft.AspNet.Mvc.TagHelpers >= 6.0.0-beta4",
       "Microsoft.AspNet.Authentication.Cookies >= 1.0.0-beta4",
@@ -20,13 +24,7 @@
       "Microsoft.Framework.CodeGenerators.Mvc >= 1.0.0-beta4",
       "Microsoft.Framework.Logging >= 1.0.0-beta4",
       "Microsoft.Framework.Logging.Console >= 1.0.0-beta4",
-      "Microsoft.VisualStudio.Web.BrowserLink.Loader >= 14.0.0-beta4",
-      "CommonMark.NET >= 0.9.0",
-      "HairBand.Core >= 1.0.0-*",
-      "HairBand.Web >= 1.0.0-*",
-      "DotLiquid >= 1.8.0",
-      "YamlDotNet >= 3.6.0",
-      "HairBand.Web.Admin >= 1.0.0-*"
+      "HairBand.Core "
     ],
     "DNX,Version=v4.5.1": [],
     "DNXCore,Version=v5.0": []
@@ -6172,72 +6170,6 @@
         "lib/net45/Microsoft.Net.WebSockets.xml"
       ]
     },
-    "Microsoft.VisualStudio.Web.BrowserLink.Loader/14.0.0-beta4": {
-      "serviceable": false,
-      "sha": "boV/2tq0MqUYeKowZQezkaq/VCQejrS8GTt56BbS1SlqIPxY8B4o/HG+0cA6CU4OG6LuxGgaE+y4OxKCWsGdCg==",
-      "frameworks": {
-        "DNX,Version=v4.5.1": {
-          "dependencies": {
-            "Microsoft.AspNet.Http": "1.0.0-beta4",
-            "Microsoft.AspNet.FileProviders": "1.0.0-beta4",
-            "Microsoft.Framework.Runtime.Interfaces": "1.0.0-beta4",
-            "Microsoft.AspNet.PageExecutionInstrumentation.Interfaces": "1.0.0-beta4"
-          },
-          "frameworkAssemblies": [
-            "mscorlib",
-            "System",
-            "System.Core",
-            "Microsoft.CSharp"
-          ],
-          "runtimeAssemblies": [
-            "lib/dnx451/Microsoft.VisualStudio.Web.BrowserLink.Loader.dll"
-          ],
-          "compileAssemblies": [
-            "lib/dnx451/Microsoft.VisualStudio.Web.BrowserLink.Loader.dll"
-          ]
-        },
-        "DNXCore,Version=v5.0": {
-          "dependencies": {
-            "Microsoft.AspNet.Http": "1.0.0-beta4",
-            "Microsoft.AspNet.FileProviders": "1.0.0-beta4",
-            "Microsoft.Framework.Runtime.Interfaces": "1.0.0-beta4",
-            "Microsoft.AspNet.PageExecutionInstrumentation.Interfaces": "1.0.0-beta4",
-            "System.Reflection.Extensions": "4.0.0-beta-22816",
-            "System.Runtime.InteropServices": "4.0.20-beta-22816",
-            "System.Threading": "4.0.10-beta-22816",
-            "System.Net.Sockets": "4.0.0-beta-22816",
-            "System.Collections": "4.0.10-beta-22816",
-            "Microsoft.Win32.Registry": "4.0.0-beta-22816"
-          },
-          "frameworkAssemblies": [],
-          "runtimeAssemblies": [
-            "lib/dnxcore50/Microsoft.VisualStudio.Web.BrowserLink.Loader.dll"
-          ],
-          "compileAssemblies": [
-            "lib/dnxcore50/Microsoft.VisualStudio.Web.BrowserLink.Loader.dll"
-          ]
-        },
-        "Asp.NetCore,Version=v5.0": {
-          "dependencies": {},
-          "frameworkAssemblies": [],
-          "runtimeAssemblies": [],
-          "compileAssemblies": []
-        },
-        ".NETFramework,Version=v4.5.1": {
-          "dependencies": {},
-          "frameworkAssemblies": [],
-          "runtimeAssemblies": [],
-          "compileAssemblies": []
-        }
-      },
-      "files": [
-        "Microsoft.VisualStudio.Web.BrowserLink.Loader.14.0.0-beta4.nupkg",
-        "Microsoft.VisualStudio.Web.BrowserLink.Loader.14.0.0-beta4.nupkg.sha512",
-        "Microsoft.VisualStudio.Web.BrowserLink.Loader.nuspec",
-        "lib/dnx451/Microsoft.VisualStudio.Web.BrowserLink.Loader.dll",
-        "lib/dnxcore50/Microsoft.VisualStudio.Web.BrowserLink.Loader.dll"
-      ]
-    },
     "Microsoft.Win32.Primitives/4.0.0-beta-22816": {
       "serviceable": false,
       "sha": "ldNL3JQPhkj7E/R0uLjsfnBT1ZKA/sUyDyxT4rAMbWvkrOUA9XUSz/HnEQOH2fIZOgAUOLmjUKVD8KoVRiuz5A==",
@@ -8371,48 +8303,6 @@
         "lib/portable-wpa81+wp80+win80+net45+aspnetcore50/System.Linq.dll"
       ]
     },
-    "System.Linq.Expressions/4.0.0-beta-23019": {
-      "serviceable": false,
-      "sha": "F+gr9tKGrIZo11f3RpfOXuoSU7dUZfnNmkDeYKgHSIG4Q4knnUhIHcbRlS+5vUbeBYsUXMMQWMryEiOOG3kJLw==",
-      "frameworks": {
-        "DNX,Version=v4.5.1": {
-          "dependencies": {},
-          "frameworkAssemblies": [],
-          "runtimeAssemblies": [],
-          "compileAssemblies": []
-        },
-        "DNXCore,Version=v5.0": {
-          "dependencies": {},
-          "frameworkAssemblies": [],
-          "runtimeAssemblies": [],
-          "compileAssemblies": []
-        },
-        "Asp.NetCore,Version=v5.0": {
-          "dependencies": {},
-          "frameworkAssemblies": [],
-          "runtimeAssemblies": [],
-          "compileAssemblies": []
-        },
-        ".NETFramework,Version=v4.5.1": {
-          "dependencies": {},
-          "frameworkAssemblies": [],
-          "runtimeAssemblies": [],
-          "compileAssemblies": []
-        }
-      },
-      "files": [
-        "License.rtf",
-        "System.Linq.Expressions.4.0.0-beta-23019.nupkg",
-        "System.Linq.Expressions.4.0.0-beta-23019.nupkg.sha512",
-        "System.Linq.Expressions.nuspec",
-        "lib/net45/_._",
-        "lib/win8/_._",
-        "ref/dotnet/System.Linq.Expressions.dll",
-        "ref/net45/_._",
-        "ref/netcore50/System.Linq.Expressions.dll",
-        "ref/win8/_._"
-      ]
-    },
     "System.Linq.Expressions/4.0.10-beta-22816": {
       "serviceable": false,
       "sha": "qTu/alZVoEBZRIrbLzVlFSndQyhIEXY+qoBockbsUu98TDtd1N9gYiyg7FHeW7Qx1vDGfz1PWfUlYBd4G/ZHkg==",
@@ -9011,48 +8901,6 @@
         "lib/contract/System.ObjectModel.dll",
         "lib/net45/System.ObjectModel.dll",
         "lib/portable-wpa81+wp80+win80+net45+aspnetcore50/System.ObjectModel.dll"
-      ]
-    },
-    "System.Reflection/4.0.0-beta-23019": {
-      "serviceable": false,
-      "sha": "6pXM3HhawTxVVDlSIkPwB6St+BHpKoCy9Q68cTTDXiuh7R+RCzLZ1WzLeDSJEOMe8rjKsd44EZAHYP97fW9i4w==",
-      "frameworks": {
-        "DNX,Version=v4.5.1": {
-          "dependencies": {},
-          "frameworkAssemblies": [],
-          "runtimeAssemblies": [],
-          "compileAssemblies": []
-        },
-        "DNXCore,Version=v5.0": {
-          "dependencies": {},
-          "frameworkAssemblies": [],
-          "runtimeAssemblies": [],
-          "compileAssemblies": []
-        },
-        "Asp.NetCore,Version=v5.0": {
-          "dependencies": {},
-          "frameworkAssemblies": [],
-          "runtimeAssemblies": [],
-          "compileAssemblies": []
-        },
-        ".NETFramework,Version=v4.5.1": {
-          "dependencies": {},
-          "frameworkAssemblies": [],
-          "runtimeAssemblies": [],
-          "compileAssemblies": []
-        }
-      },
-      "files": [
-        "License.rtf",
-        "System.Reflection.4.0.0-beta-23019.nupkg",
-        "System.Reflection.4.0.0-beta-23019.nupkg.sha512",
-        "System.Reflection.nuspec",
-        "lib/net45/_._",
-        "lib/win8/_._",
-        "ref/dotnet/System.Reflection.dll",
-        "ref/net45/_._",
-        "ref/netcore50/System.Reflection.dll",
-        "ref/win8/_._"
       ]
     },
     "System.Reflection/4.0.10-beta-22816": {

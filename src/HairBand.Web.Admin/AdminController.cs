@@ -43,7 +43,7 @@ namespace HairBand.Controllers
         }
         #endregion
 
-        public async Task<IActionResult> Install()
+        public IActionResult Install()
         {
             return View();
         }

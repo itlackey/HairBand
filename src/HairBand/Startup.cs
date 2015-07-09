@@ -166,20 +166,20 @@ namespace HairBand
                 routes.MapRoute(
                            name: "manage",
                            template: "_account/manage/{action}/{id?}",
-                           defaults: new { controller = "Manage", action = "Index", area = "Users" });
+                           defaults: new { controller = "Manage", action = "Index", area = "Admin" });
 
 
                 routes.MapRoute(
                       name: "logoff",
                       template: "_account/logoff",
-                      defaults: new { controller = "Account", action = "LogOff", area = "Users" });
+                      defaults: new { controller = "Account", action = "LogOff", area = "Admin" });
 
 
 
                 routes.MapRoute(
                     name: "account",
                     template: "_account/{action}/{id?}",
-                    defaults: new { controller = "Account", action = "Login", area = "Users" });
+                    defaults: new { controller = "Account", action = "Login", area = "Admin" });
 
 
 
