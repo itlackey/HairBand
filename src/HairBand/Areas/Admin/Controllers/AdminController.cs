@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Mvc;
+using Microsoft.AspNet.Hosting;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -13,10 +14,12 @@ namespace HairBand.Controllers
     public class AdminController : Controller
     {
         private ISiteDataProvider _siteDataProvider;
+        private IHostingEnvironment _host;
 
-        public AdminController(ISiteDataProvider siteDataProvider)
+        public AdminController(ISiteDataProvider siteDataProvider, IHostingEnvironment host)
         {
             this._siteDataProvider = siteDataProvider;
+            this._host = host;
         }
 
         // GET: /<controller>/
@@ -24,6 +27,21 @@ namespace HairBand.Controllers
         {
             return View();
         }
+
+        #region Files
+        public ActionResult Files()
+        {
+            return View();
+        } 
+
+        [Route("_admin/api/files/")]
+        public IActionResult GetFileSystemItems()
+        {
+            var items = _host.WebRootFileProvider.GetDirectoryContents("App_data");
+         
+            return new ObjectResult(items);
+        }
+        #endregion
 
         public async Task<IActionResult> Install()
         {

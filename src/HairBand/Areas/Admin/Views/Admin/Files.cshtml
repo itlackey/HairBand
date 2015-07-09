@@ -1,0 +1,51 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewBag.Title = "Manage Files";
+}
+
+<div>
+    <ul data-bind="foreach: items">
+        <li><span data-bind="text: $data.Name"></span></li>
+    </ul>
+
+    <button data-bind="click: getFiles">Items</button>
+</div>
+@section Scripts{
+   <script src="/lib/knockout/knockout.js"></script>
+    <script>
+        var viewModel = function () {
+
+            var instance = this;
+
+            this.selectedFolder = ko.observable('');
+            this.items = ko.observableArray([]);
+
+            this.getFiles = function (path) {
+
+                $.get('/_admin/api/files?dir=' + path)
+
+                .success(function (data) {
+                  
+                    for (var i = 0; i < data.length; i++) {
+                        instance.items.push(data[i]);
+
+                    }
+
+                })
+                .error(function (xhr) {
+
+
+
+                });
+            };
+
+        }
+
+ 
+        ko.applyBindings(viewModel);
+
+
+    </script>
+}
