@@ -4,7 +4,7 @@ time: 05/15/2015
 more_info: info for the site
 theme: readable
 install_completed: true
-admin_enabled: true
+admin_enabled: false
 groups:
 - order: 1
   name: Examples

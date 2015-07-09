@@ -157,8 +157,7 @@ namespace HairBand
             // app.UseTwitterAuthentication();
 
 
-
-
+        
             // Add MVC to the request pipeline.
             app.UseMvc(routes =>
             {
