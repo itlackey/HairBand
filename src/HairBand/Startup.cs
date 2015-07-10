@@ -22,6 +22,7 @@ using HairBand.Models;
 using HairBand.Web;
 using Microsoft.AspNet.Mvc;
 using Microsoft.AspNet.StaticFiles;
+using System.Reflection;
 
 namespace HairBand
 {
@@ -43,7 +44,24 @@ namespace HairBand
             configuration.AddEnvironmentVariables();
 
             Configuration = configuration;
+
+            //ToDo --- how to load these in coreclr?
+            _bootstrappers.Add(new CoreBootstrapper());
+            _bootstrappers.Add(new AdminBootstrapper());
+
+            //List in config file?
+           // Activator.CreateInstance(Type.GetType(""));
+
+            foreach (var item in _bootstrappers)
+            {
+                item.Initialize(Configuration);
+            }
+
+
         }
+
+        private List<IBootstrapper> _bootstrappers = new List<IBootstrapper>();
+
 
         public IConfiguration Configuration { get; set; }
 
@@ -53,64 +71,16 @@ namespace HairBand
             // Add Application settings to the services container.
             services.Configure<AppSettings>(Configuration.GetSubKey("AppSettings"));
 
-            //// Add EF services to the services container.
-            //services.AddEntityFramework()
-            //    .AddSqlServer()
-            //    .AddDbContext<ApplicationDbContext>(options =>
-            //        options.UseSqlServer(Configuration["Data:DefaultConnection:ConnectionString"]));
+       
 
-            //// Add Identity services to the services container.
-            //services.AddIdentity<ApplicationUser, IdentityRole>()
-            //    .AddEntityFrameworkStores<ApplicationDbContext>()
-            //    .AddDefaultTokenProviders();
-
-            services.AddIdentity<BandMember, Role>(options =>
-            {
-
-            })
-            .AddUserStore<DefaultUserStore>()
-            .AddRoleStore<DefaultRoleStore>();
-
-
-            // Configure the options for the authentication middleware.
-            // You can add options for Google, Twitter and other middleware as shown below.
-            // For more information see http://go.microsoft.com/fwlink/?LinkID=532715
-            services.Configure<FacebookAuthenticationOptions>(options =>
-            {
-                options.AppId = Configuration["Authentication:Facebook:AppId"];
-                options.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
-            });
-
-            services.Configure<MicrosoftAccountAuthenticationOptions>(options =>
-            {
-                options.ClientId = Configuration["Authentication:MicrosoftAccount:ClientId"];
-                options.ClientSecret = Configuration["Authentication:MicrosoftAccount:ClientSecret"];
-            });
-
-            // Add MVC services to the services container.
-            services.AddMvc()
-                .Configure<MvcOptions>(options =>
-                {
-                    //options.ViewEngines.Clear();
-                    options.ViewEngines.Add(typeof(HairBandViewEngine));
-
-                });
 
 
             // Uncomment the following line to add Web API services which makes it easier to port Web API 2 controllers.
             // You will also need to add the Microsoft.AspNet.Mvc.WebApiCompatShim package to the 'dependencies' section of project.json.
             // services.AddWebApiConventions();
-
-
-            services.Add(new ServiceDescriptor(typeof(IPageDataProvider), typeof(PageDataProvider), ServiceLifetime.Singleton));
-
-            services.Add(new ServiceDescriptor(typeof(IPostDataProvider), typeof(PageDataProvider), ServiceLifetime.Singleton));
-
-            services.Add(new ServiceDescriptor(typeof(ISiteDataProvider), typeof(SiteDataProvider), ServiceLifetime.Singleton));
-            // services.Add(new ServiceDescriptor(typeof(IPageHtmlRender), typeof(PageHtmlRender), ServiceLifetime.Singleton));
-
-            //services.Add(new ServiceDescriptor(typeof(IConfiguration), Configuration));
-            //services.Add(new ServiceDescriptor(typeof(ISiteConfigurationProvider), typeof(SiteConfigurationProvider), ServiceLifetime.Singleton));
+      
+            foreach (var item in _bootstrappers)
+                item.ConfigureServices(services);
 
 
 
@@ -119,116 +89,9 @@ namespace HairBand
         // Configure is called after ConfigureServices is called.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerfactory)
         {
-            // Configure the HTTP request pipeline.
-
-            // Add the console logger.
-            loggerfactory.AddConsole(minLevel: LogLevel.Warning);
-
-            // Add the following to the request pipeline only in development environment.
-            if (env.IsEnvironment("Development"))
-            {
-                app.UseBrowserLink();
-                app.UseErrorPage(ErrorPageOptions.ShowAll);
-                // app.UseDatabaseErrorPage(DatabaseErrorPageOptions.ShowAll);
-            }
-            else
-            {
-                // Add Error handling middleware which catches all application specific errors and
-                // sends the request to the following path or controller action.
-                app.UseErrorHandler("/Pages/Error");
-            }
-
-            // Add static files to the request pipeline.
-            app.UseStaticFiles();
-            //    .MapWhen(ctx => !ctx.Request.Path.HasValue || !ctx.Request.Path.Value.EndsWith(".html"), config =>
-            //{
-
-            //});
-
-            // Add cookie-based authentication to the request pipeline.
-            app.UseIdentity();
-
-
-            // Add authentication middleware to the request pipeline. You can configure options such as Id and Secret in the ConfigureServices method.
-            // For more information see http://go.microsoft.com/fwlink/?LinkID=532715
-            // app.UseFacebookAuthentication();
-            // app.UseGoogleAuthentication();
-            // app.UseMicrosoftAccountAuthentication();
-            // app.UseTwitterAuthentication();
-
-
-        
-            // Add MVC to the request pipeline.
-            app.UseMvc(routes =>
-            {
-
-                routes.MapRoute(
-                           name: "manage",
-                           template: "_account/manage/{action}/{id?}",
-                           defaults: new { controller = "Manage", action = "Index", area = "Admin" });
-
-
-                routes.MapRoute(
-                      name: "logoff",
-                      template: "_account/logoff",
-                      defaults: new { controller = "Account", action = "LogOff", area = "Admin" });
-
-
-
-                routes.MapRoute(
-                    name: "account",
-                    template: "_account/{action}/{id?}",
-                    defaults: new { controller = "Account", action = "Login", area = "Admin" });
-
-
-
-                routes.MapRoute(
-                    name: "admin",
-                    template: "_admin/{action}/{id?}",
-                    defaults: new { controller = "Admin", action = "Index", area = "Admin" });
-
-
-
-                routes.MapRoute(
-                   name: "error",
-                   template: "_error",
-                   defaults: new { controller = "Pages", action = "Error" });
-
-                ////routes.MapRoute(
-                ////  name: "PostList",
-                ////  template: "blog",
-                ////  defaults: new { controller = "Pages", action = "PostIndex" });
-
-                routes.MapRoute(
-                  name: "Post",
-                  template: "blog/{post}",
-                  defaults: new { controller = "Pages", action = "Post" });
-
-
-                ////routes.MapRoute(
-                ////     name: "PageList",
-                ////     template: "pages",
-                ////     defaults: new { controller = "Pages", action = "Index" });
-
-                //routes.MapRoute(
-                //   name: "HtmlPages",
-                //   template: "{page}.html",
-                //   defaults: new { controller = "Pages", action = "Page", page = "home" });
-
-                routes.MapRoute(
-                     name: "Pages",
-                     template: "{*page}",
-                     defaults: new { controller = "Pages", action = "Page", page = "index" });
-
-
-
-                // Uncomment the following line to add a route for porting Web API 2 controllers.
-                // routes.MapWebApiRoute("DefaultApi", "api/{controller}/{id?}");
-            });
-
-
-
-
+            
+            foreach (var item in _bootstrappers)
+                item.Configure(app, env, loggerfactory);
 
         }
     }

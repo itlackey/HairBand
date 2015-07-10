@@ -6170,6 +6170,72 @@
         "lib/net45/Microsoft.Net.WebSockets.xml"
       ]
     },
+    "Microsoft.VisualStudio.Web.BrowserLink.Loader/14.0.0-beta4": {
+      "serviceable": false,
+      "sha": "boV/2tq0MqUYeKowZQezkaq/VCQejrS8GTt56BbS1SlqIPxY8B4o/HG+0cA6CU4OG6LuxGgaE+y4OxKCWsGdCg==",
+      "frameworks": {
+        "DNX,Version=v4.5.1": {
+          "dependencies": {
+            "Microsoft.AspNet.Http": "1.0.0-beta4",
+            "Microsoft.AspNet.FileProviders": "1.0.0-beta4",
+            "Microsoft.Framework.Runtime.Interfaces": "1.0.0-beta4",
+            "Microsoft.AspNet.PageExecutionInstrumentation.Interfaces": "1.0.0-beta4"
+          },
+          "frameworkAssemblies": [
+            "mscorlib",
+            "System",
+            "System.Core",
+            "Microsoft.CSharp"
+          ],
+          "runtimeAssemblies": [
+            "lib/dnx451/Microsoft.VisualStudio.Web.BrowserLink.Loader.dll"
+          ],
+          "compileAssemblies": [
+            "lib/dnx451/Microsoft.VisualStudio.Web.BrowserLink.Loader.dll"
+          ]
+        },
+        "DNXCore,Version=v5.0": {
+          "dependencies": {
+            "Microsoft.AspNet.Http": "1.0.0-beta4",
+            "Microsoft.AspNet.FileProviders": "1.0.0-beta4",
+            "Microsoft.Framework.Runtime.Interfaces": "1.0.0-beta4",
+            "Microsoft.AspNet.PageExecutionInstrumentation.Interfaces": "1.0.0-beta4",
+            "System.Reflection.Extensions": "4.0.0-beta-22816",
+            "System.Runtime.InteropServices": "4.0.20-beta-22816",
+            "System.Threading": "4.0.10-beta-22816",
+            "System.Net.Sockets": "4.0.0-beta-22816",
+            "System.Collections": "4.0.10-beta-22816",
+            "Microsoft.Win32.Registry": "4.0.0-beta-22816"
+          },
+          "frameworkAssemblies": [],
+          "runtimeAssemblies": [
+            "lib/dnxcore50/Microsoft.VisualStudio.Web.BrowserLink.Loader.dll"
+          ],
+          "compileAssemblies": [
+            "lib/dnxcore50/Microsoft.VisualStudio.Web.BrowserLink.Loader.dll"
+          ]
+        },
+        "Asp.NetCore,Version=v5.0": {
+          "dependencies": {},
+          "frameworkAssemblies": [],
+          "runtimeAssemblies": [],
+          "compileAssemblies": []
+        },
+        ".NETFramework,Version=v4.5.1": {
+          "dependencies": {},
+          "frameworkAssemblies": [],
+          "runtimeAssemblies": [],
+          "compileAssemblies": []
+        }
+      },
+      "files": [
+        "Microsoft.VisualStudio.Web.BrowserLink.Loader.14.0.0-beta4.nupkg",
+        "Microsoft.VisualStudio.Web.BrowserLink.Loader.14.0.0-beta4.nupkg.sha512",
+        "Microsoft.VisualStudio.Web.BrowserLink.Loader.nuspec",
+        "lib/dnx451/Microsoft.VisualStudio.Web.BrowserLink.Loader.dll",
+        "lib/dnxcore50/Microsoft.VisualStudio.Web.BrowserLink.Loader.dll"
+      ]
+    },
     "Microsoft.Win32.Primitives/4.0.0-beta-22816": {
       "serviceable": false,
       "sha": "ldNL3JQPhkj7E/R0uLjsfnBT1ZKA/sUyDyxT4rAMbWvkrOUA9XUSz/HnEQOH2fIZOgAUOLmjUKVD8KoVRiuz5A==",
