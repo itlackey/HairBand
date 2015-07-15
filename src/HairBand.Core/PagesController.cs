@@ -41,8 +41,9 @@ namespace HairBand.Controllers
             //ToDo refactor this into action filter...
             var site = ViewBag.Site as SiteData;
 
-            if (!site.InstallCompleted)
-                return RedirectToAction("install", new { controller = "admin", area = "admin" });
+            //ToDo this should be handled by admin...
+            //if (!site.InstallCompleted)
+            //    return RedirectToAction("install", new { controller = "admin", area = "admin" });
 
             var model = await this._pageProvider.GetPageAsync(page);
             ViewBag.Page = model;
@@ -65,6 +66,7 @@ namespace HairBand.Controllers
 
         public IActionResult Error()
         {
+            //ToDo this error page no longer works
             return View("~/Views/Shared/Error.cshtml");
         }
 
@@ -72,6 +74,8 @@ namespace HairBand.Controllers
 
         private async Task PopulateViewContext(string page)
         {
+
+            //ToDo does this make sense if admin is not installed?
             BandMember user = null;
 
             if (User.Identity.IsAuthenticated)
